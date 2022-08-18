@@ -1,43 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/data/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
+import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
+import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
+import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 
 class BookingOverviewPage extends StatefulWidget {
-  const BookingOverviewPage({
+  const BookingOverviewPage(
+    this._bloc, {
     Key? key,
     required this.title,
-    required this.bookingProvider,
   }) : super(key: key);
 
   final String title;
-  final BookingProvider bookingProvider;
+  final BookingOverviewBloc _bloc;
 
   @override
   State<BookingOverviewPage> createState() => _BookingOverviewPageState();
 }
 
 class _BookingOverviewPageState extends State<BookingOverviewPage> {
-  late List<BookingEntry>? tableData;
+  late BookingOverviewBloc _bloc;
 
   @override
   void initState() {
-    _fillTableData();
+    _bloc = widget._bloc..add(const BookingOverviewInitEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: const Center(
-        child: Text('Tweede pagina'),
+    return BlocBuilder<BookingOverviewBloc, BookingOverviewState>(
+      bloc: _bloc,
+      builder: (BuildContext context, BookingOverviewState state) => Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: state is BookingOverviewReadyState
+              ? SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text('\nBookings on 16-9-2022\n'),
+                      ...state.bookings.map(
+                        (BookingEntry booking) =>
+                            Text('${booking.toString()}\n'),
+                      )
+                    ],
+                  ),
+                )
+              : state is BookingOverviewBusyState
+                  ? const CircularProgressIndicator()
+                  : const Text('Failed to fetch bookings'),
+        ),
       ),
     );
-  }
-
-  void _fillTableData() async {
-    tableData = await widget.bookingProvider.getReservation();
   }
 }

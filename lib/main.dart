@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:gorlaeus_bookings/data/booking_provider.dart';
+import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 
@@ -23,9 +24,11 @@ class GorlaeusBookingApp extends StatelessWidget {
       ),
       routes: {
         Routes.home: (context) => const HomePage(title: 'Home'),
-        Routes.bookingOverviewPage: (context) => const BookingOverviewPage(
+        Routes.bookingOverviewPage: (context) => BookingOverviewPage(
+              BookingOverviewBloc(
+                const BookingProvider(),
+              ),
               title: 'Overview',
-              bookingProvider: BookingProvider(),
             ),
       },
     );
