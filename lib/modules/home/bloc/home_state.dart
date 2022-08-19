@@ -12,10 +12,28 @@ class HomeBusyState extends HomeState {
 }
 
 class HomeReadyState extends HomeState {
-  const HomeReadyState(this.date);
+  const HomeReadyState({
+    required this.minimumDate,
+    required this.maximumDate,
+    required this.selectedDate,
+  });
 
-  final DateTime date;
+  final DateTime minimumDate;
+  final DateTime maximumDate;
+  final DateTime selectedDate;
+
+  HomeReadyState copyWith({required DateTime newSelectedDate}) {
+    return HomeReadyState(
+      minimumDate: minimumDate,
+      maximumDate: maximumDate,
+      selectedDate: newSelectedDate,
+    );
+  }
 
   @override
-  List<Object?> get props => <Object?>[date];
+  List<Object?> get props => <Object?>[
+        minimumDate,
+        maximumDate,
+        selectedDate,
+      ];
 }

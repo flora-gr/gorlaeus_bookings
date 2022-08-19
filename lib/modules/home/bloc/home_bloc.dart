@@ -5,14 +5,19 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc(this._dateTimeProvider) : super(const HomeBusyState()) {
-    on<HomeInitEvent>(
-      (event, emit) => emit(_handleInitEvent()),
-    );
+    on<HomeInitEvent>((event, emit) => emit(_handleInitEvent()));
+    on<HomeDateChangedEvent>((event, emit) =>
+        emit((state as HomeReadyState).copyWith(newSelectedDate: event.date)));
   }
 
   final DateTimeProvider _dateTimeProvider;
 
   HomeState _handleInitEvent() {
-    return HomeReadyState(_dateTimeProvider.getCurrentDateTime());
+    final DateTime currentDate = _dateTimeProvider.getCurrentDateTime();
+    return HomeReadyState(
+      minimumDate: currentDate,
+      maximumDate: currentDate.add(Duration(days: 365)),
+      selectedDate: currentDate,
+    );
   }
 }

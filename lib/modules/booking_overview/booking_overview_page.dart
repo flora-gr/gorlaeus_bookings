@@ -38,28 +38,36 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
         appBar: AppBar(
           title: const Text(Strings.bookingOverviewPageTitle),
         ),
-        body: Center(
-          child: state is BookingOverviewReadyState
-              ? SingleChildScrollView(
+        body: state is BookingOverviewReadyState
+            ? SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Text(
-                            '${Strings.bookingsOn} ${state.date.formatted}'),
+                          '${Strings.bookingsOn} ${state.date.formatted}',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
                       ),
-                      ...state.bookings.map(
-                        (BookingEntry booking) =>
-                            Text('${booking.toString()}\n'),
-                      )
+                      if (state.bookings.isNotEmpty)
+                        ...state.bookings.map(
+                          (BookingEntry booking) =>
+                              Text('${booking.toString()}\n'),
+                        )
+                      else
+                        const Text(Strings.noBookings),
                     ],
                   ),
-                )
-              : state is BookingOverviewBusyState
-                  ? const CircularProgressIndicator()
-                  : const Text(Strings.errorFetchingBookings),
-        ),
+                ),
+              )
+            : Center(
+                child: state is BookingOverviewBusyState
+                    ? const CircularProgressIndicator()
+                    : const Text(Strings.errorFetchingBookings),
+              ),
       ),
     );
   }

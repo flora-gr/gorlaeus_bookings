@@ -41,10 +41,13 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text(Strings.homePageText),
-              const SizedBox(height: 12),
+              Text(
+                Strings.homePageText,
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              const SizedBox(height: 16),
               if (state is HomeReadyState)
-                Text('${Strings.dateToCheck} ${state.date.formatted}')
+                _buildDateContent(state)
               else
                 const CircularProgressIndicator(),
             ],
@@ -54,13 +57,39 @@ class _HomePageState extends State<HomePage> {
             ? FloatingActionButton(
                 onPressed: () => Navigator.of(context).pushNamed(
                   Routes.bookingOverviewPage,
-                  arguments: state.date,
+                  arguments: state.selectedDate,
                 ),
                 tooltip: Strings.goToPageToolTip,
                 child: const Icon(Icons.control_point),
               )
             : null,
       ),
+    );
+  }
+
+  Widget _buildDateContent(HomeReadyState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text('${Strings.dateToCheck} ${state.selectedDate.formatted}'),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: ElevatedButton(
+            onPressed: () async {
+              final DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: state.selectedDate,
+                firstDate: state.minimumDate,
+                lastDate: state.maximumDate,
+              );
+              if (newDate != null) {
+                _bloc.add(HomeDateChangedEvent(newDate));
+              }
+            },
+            child: const Text(Strings.chooseADate),
+          ),
+        ),
+      ],
     );
   }
 }

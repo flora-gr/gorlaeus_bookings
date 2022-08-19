@@ -10,3 +10,12 @@ class HomeInitEvent extends HomeEvent {
   @override
   List<Object?> get props => <Object?>[];
 }
+
+class HomeDateChangedEvent extends HomeEvent {
+  const HomeDateChangedEvent(this.date);
+
+  final DateTime date;
+
+  @override
+  List<Object?> get props => <Object?>[date];
+}
