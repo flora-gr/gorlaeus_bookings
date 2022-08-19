@@ -16,7 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final DateTime currentDate = _dateTimeProvider.getCurrentDateTime();
     return HomeReadyState(
       minimumDate: currentDate,
-      maximumDate: currentDate.add(Duration(days: 365)),
+      maximumDate: currentDate.add(const Duration(days: 365)),
       selectedDate: currentDate,
     );
   }

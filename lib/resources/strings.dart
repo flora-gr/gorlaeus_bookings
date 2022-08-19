@@ -9,9 +9,9 @@ class Strings {
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
-  static const String errorFetchingBookings = 'Failed to fetch bookings';
+  static const String errorFetchingBookings = 'Failed to fetch bookings.';
   static const String bookingsOn = 'Bookings on';
-  static const String noBookings = 'No bookings found for this day';
+  static const String noBookings = 'No bookings found for this day.';
 
   // Shared
   static const String goToPageToolTip = 'Go to page';
