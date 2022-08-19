@@ -21,6 +21,7 @@ dependencies:
   bloc_test: ^9.0.3
   mockito: ^5.3.0
   html: ^0.15.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

@@ -9,21 +9,24 @@ class BookingOverviewBloc
   BookingOverviewBloc(this._bookingProvider)
       : super(const BookingOverviewBusyState()) {
     on<BookingOverviewInitEvent>(
-      (event, emit) => emit.forEach(_handleInitEvent(),
+      (event, emit) => emit.forEach(_handleInitEvent(event.date),
           onData: (BookingOverviewState state) => state),
     );
   }
 
   final BookingProvider _bookingProvider;
 
-  Stream<BookingOverviewState> _handleInitEvent() async* {
+  Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
     yield const BookingOverviewBusyState();
 
     try {
       final List<BookingEntry>? bookings =
-          await _bookingProvider.getReservations();
+          await _bookingProvider.getReservations(date);
       if (bookings != null) {
-        yield BookingOverviewReadyState(bookings);
+        yield BookingOverviewReadyState(
+          date: date,
+          bookings: bookings,
+        );
       } else {
         yield const BookingOverviewErrorState();
       }

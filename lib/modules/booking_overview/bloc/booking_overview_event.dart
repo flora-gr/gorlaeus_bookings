@@ -5,8 +5,10 @@ abstract class BookingOverviewEvent extends Equatable {
 }
 
 class BookingOverviewInitEvent extends BookingOverviewEvent {
-  const BookingOverviewInitEvent();
+  const BookingOverviewInitEvent(this.date);
+
+  final DateTime date;
 
   @override
-  List<Object?> get props => <Object?>[];
+  List<Object?> get props => <Object?>[date];
 }

@@ -4,16 +4,18 @@ import 'package:gorlaeus_bookings/data/booking_entry.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/resources/strings.dart';
+import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
 
 class BookingOverviewPage extends StatefulWidget {
   const BookingOverviewPage(
-    this._bloc, {
+    this._bloc,
+    this._date, {
     Key? key,
-    required this.title,
   }) : super(key: key);
 
-  final String title;
   final BookingOverviewBloc _bloc;
+  final DateTime _date;
 
   @override
   State<BookingOverviewPage> createState() => _BookingOverviewPageState();
@@ -24,7 +26,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
 
   @override
   void initState() {
-    _bloc = widget._bloc..add(const BookingOverviewInitEvent());
+    _bloc = widget._bloc..add(BookingOverviewInitEvent(widget._date));
     super.initState();
   }
 
@@ -34,7 +36,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
       bloc: _bloc,
       builder: (BuildContext context, BookingOverviewState state) => Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: const Text(Strings.bookingOverviewPageTitle),
         ),
         body: Center(
           child: state is BookingOverviewReadyState
@@ -42,7 +44,11 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Text('\nBookings on 16-9-2022\n'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Text(
+                            '${Strings.bookingsOn} ${state.date.formatted}'),
+                      ),
                       ...state.bookings.map(
                         (BookingEntry booking) =>
                             Text('${booking.toString()}\n'),
@@ -52,7 +58,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
                 )
               : state is BookingOverviewBusyState
                   ? const CircularProgressIndicator()
-                  : const Text('Failed to fetch bookings'),
+                  : const Text(Strings.errorFetchingBookings),
         ),
       ),
     );

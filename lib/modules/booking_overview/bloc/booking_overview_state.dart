@@ -13,12 +13,16 @@ class BookingOverviewBusyState extends BookingOverviewState {
 }
 
 class BookingOverviewReadyState extends BookingOverviewState {
-  const BookingOverviewReadyState(this.bookings);
+  const BookingOverviewReadyState({
+    required this.date,
+    required this.bookings,
+  });
 
+  final DateTime date;
   final List<BookingEntry> bookings;
 
   @override
-  List<Object?> get props => <Object?>[bookings];
+  List<Object?> get props => <Object?>[date, bookings];
 }
 
 class BookingOverviewErrorState extends BookingOverviewState {

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:gorlaeus_bookings/data/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/date_time_provider.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
+import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
+import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
-
-import 'modules/booking_overview/booking_overview_page.dart';
+import 'package:gorlaeus_bookings/resources/strings.dart';
 
 void main() {
   runApp(const GorlaeusBookingApp());
@@ -14,7 +16,6 @@ void main() {
 class GorlaeusBookingApp extends StatelessWidget {
   const GorlaeusBookingApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,15 +23,39 @@ class GorlaeusBookingApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      routes: {
-        Routes.home: (context) => const HomePage(title: 'Home'),
-        Routes.bookingOverviewPage: (context) => BookingOverviewPage(
-              BookingOverviewBloc(
-                const BookingProvider(),
+      initialRoute: Routes.home,
+      onGenerateRoute: (RouteSettings settings) {
+        debugPrint(settings.toString());
+        switch (settings.name) {
+          case Routes.bookingOverviewPage:
+            return getRoute(
+              BookingOverviewPage(
+                BookingOverviewBloc(
+                  const BookingProvider(),
+                ),
+                settings.arguments as DateTime,
               ),
-              title: 'Overview',
-            ),
+              settings,
+            );
+          case Routes.home:
+          default:
+            return getRoute(
+              HomePage(
+                HomeBloc(
+                  const DateTimeProvider(),
+                ),
+              ),
+              settings,
+            );
+        }
       },
+    );
+  }
+
+  MaterialPageRoute<void> getRoute(Widget page, RouteSettings settings) {
+    return MaterialPageRoute<void>(
+      builder: (_) => page,
+      settings: settings,
     );
   }
 }

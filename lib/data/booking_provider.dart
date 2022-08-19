@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/data/booking_entry.dart';
+import 'package:gorlaeus_bookings/utils/dom_element_extensions.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
@@ -8,14 +9,14 @@ import 'package:http/http.dart';
 class BookingProvider {
   const BookingProvider();
 
-  Future<List<BookingEntry>?> getReservations() async {
+  Future<List<BookingEntry>?> getReservations(DateTime date) async {
     final url = Uri.parse('https://zrs.leidenuniv.nl/ul/query.php');
     final Response response = await http.post(
       url,
       body: {
-        'day': '16',
-        'month': '9',
-        'year': '2022',
+        'day': date.day.toString(),
+        'month': date.month.toString(),
+        'year': date.year.toString(),
         'res_instantie': '_ALL_',
         'selgebouw': 'GORLB+GORLB - Gorlaeus Building',
         'zrssort': 'aanvangstijd',
@@ -44,12 +45,12 @@ class BookingProvider {
             !rowElements.first.innerHtml.startsWith('<font')) {
           listOfBookings.add(
             BookingEntry(
-              time: _parseElement(rowElements[0]),
-              room: _parseElement(rowElements[1]),
-              personCount: int.tryParse(_parseElement(rowElements[3])),
-              bookedOnBehalfOf: _parseElement(rowElements[4]),
-              activity: _parseElement(rowElements[6]),
-              user: _parseElement(rowElements[7]),
+              time: rowElements[0].parse(),
+              room: rowElements[1].parse(),
+              personCount: int.tryParse(rowElements[3].parse()),
+              bookedOnBehalfOf: rowElements[4].parse(),
+              activity: rowElements[6].parse(),
+              user: rowElements[7].parse(),
             ),
           );
         }
@@ -61,15 +62,5 @@ class BookingProvider {
       return listOfBookings;
     }
     return null;
-  }
-
-  String _parseElement(dom.Element element) {
-    return element.innerHtml
-        .replaceAll('&nbsp;', '')
-        .replaceAll('<p>', '')
-        .replaceAll('</p>', '')
-        .replaceAll('&amp;', '&')
-        .replaceAll('GORLB/', '')
-        .trim();
   }
 }
