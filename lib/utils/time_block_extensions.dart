@@ -21,12 +21,12 @@ extension TimeBlockExtension on TimeBlock {
     final double endTimeMinutes = _getMinutes(endTime);
     final double bookingStartTimeMinutes = _getMinutes(bookingTime.startTime);
     final double bookingEndTimeMinutes = _getMinutes(bookingTime.endTime);
-    return startTimeMinutes > bookingStartTimeMinutes &&
+    return startTimeMinutes >= bookingStartTimeMinutes &&
             startTimeMinutes < bookingEndTimeMinutes ||
         endTimeMinutes > bookingStartTimeMinutes &&
-            endTimeMinutes < bookingEndTimeMinutes ||
-        startTimeMinutes < bookingStartTimeMinutes &&
-            endTimeMinutes > bookingEndTimeMinutes;
+            endTimeMinutes <= bookingEndTimeMinutes ||
+        startTimeMinutes <= bookingStartTimeMinutes &&
+            endTimeMinutes >= bookingEndTimeMinutes;
   }
 
   double _getMinutes(TimeOfDay time) {
