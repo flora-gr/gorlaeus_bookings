@@ -7,7 +7,6 @@ import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
-import 'package:gorlaeus_bookings/resources/strings.dart';
 
 void main() {
   runApp(const GorlaeusBookingApp());

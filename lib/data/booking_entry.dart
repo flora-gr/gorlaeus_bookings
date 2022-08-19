@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:gorlaeus_bookings/data/time_block.dart';
 
 class BookingEntry extends Equatable {
   const BookingEntry({
@@ -10,7 +11,7 @@ class BookingEntry extends Equatable {
     required this.user,
   });
 
-  final String time;
+  final TimeBlock? time;
   final String room;
   final int? personCount;
   final String bookedOnBehalfOf;

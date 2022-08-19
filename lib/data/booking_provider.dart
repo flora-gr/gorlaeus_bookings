@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/data/booking_entry.dart';
 import 'package:gorlaeus_bookings/utils/dom_element_extensions.dart';
+import 'package:gorlaeus_bookings/utils/string_extensions.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
@@ -45,7 +46,7 @@ class BookingProvider {
             !rowElements.first.innerHtml.startsWith('<font')) {
           listOfBookings.add(
             BookingEntry(
-              time: rowElements[0].parse(),
+              time: rowElements[0].parse().toTimeBlock(),
               room: rowElements[1].parse(),
               personCount: int.tryParse(rowElements[3].parse()),
               bookedOnBehalfOf: rowElements[4].parse(),
