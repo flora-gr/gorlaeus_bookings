@@ -46,23 +46,27 @@ class _HomePageState extends State<HomePage> {
                 style: Theme.of(context).textTheme.headline6,
               ),
               const SizedBox(height: 16),
-              if (state is HomeReadyState)
-                _buildDateContent(state)
-              else
+              if (state is HomeReadyState) ...<Widget>[
+                _buildDateContent(state),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pushNamed(
+                    Routes.bookingOverviewPage,
+                    arguments: state.selectedDate,
+                  ),
+                  child: IntrinsicWidth(
+                    child: Row(
+                      children: const <Widget>[
+                        Text(Strings.goToPageButtonText),
+                        Icon(Icons.arrow_right)
+                      ],
+                    ),
+                  ),
+                ),
+              ] else
                 const CircularProgressIndicator(),
             ],
           ),
         ),
-        floatingActionButton: state is HomeReadyState
-            ? FloatingActionButton(
-                onPressed: () => Navigator.of(context).pushNamed(
-                  Routes.bookingOverviewPage,
-                  arguments: state.selectedDate,
-                ),
-                tooltip: Strings.goToPageToolTip,
-                child: const Icon(Icons.control_point),
-              )
-            : null,
       ),
     );
   }
@@ -74,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         Text('${Strings.dateToCheck} ${state.selectedDate.formatted}'),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: ElevatedButton(
+          child: OutlinedButton(
             onPressed: () async {
               final DateTime? newDate = await showDatePicker(
                 context: context,
