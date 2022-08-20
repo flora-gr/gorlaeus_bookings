@@ -21,7 +21,7 @@ class BookingOverviewBloc
 
     try {
       final List<BookingEntry>? bookings =
-          await _bookingProvider.getReservations(date);
+          await _bookingProvider.getBookings(date);
       if (bookings != null) {
         yield BookingOverviewReadyState(
           date: date,

@@ -10,7 +10,7 @@ import 'package:http/http.dart';
 class BookingProvider {
   const BookingProvider();
 
-  Future<List<BookingEntry>?> getReservations(DateTime date) async {
+  Future<List<BookingEntry>?> getBookings(DateTime date) async {
     final url = Uri.parse('https://zrs.leidenuniv.nl/ul/query.php');
     final Response response = await http.post(
       url,

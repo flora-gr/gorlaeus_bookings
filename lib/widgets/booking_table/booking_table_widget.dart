@@ -7,7 +7,7 @@ import 'package:gorlaeus_bookings/widgets/booking_table/booking_data_source.dart
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingTable extends StatelessWidget {
-  const BookingTable(this._bookings);
+  const BookingTable(this._bookings, {Key? key}) : super(key: key);
 
   final List<BookingEntry> _bookings;
 
