@@ -31,6 +31,7 @@ class GorlaeusBookingApp extends StatelessWidget {
               BookingOverviewPage(
                 BookingOverviewBloc(
                   const BookingProvider(),
+                  const DateTimeProvider(),
                 ),
                 settings.arguments as DateTime,
               ),

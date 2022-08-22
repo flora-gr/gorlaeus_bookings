@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gorlaeus_bookings/data/booking_entry.dart';
 import 'package:gorlaeus_bookings/data/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/date_time_provider.dart';
 import 'package:gorlaeus_bookings/data/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
@@ -11,8 +12,11 @@ import 'package:mocktail/mocktail.dart';
 
 class MockBookingProvider extends Mock implements BookingProvider {}
 
+class MockDateTimeProvider extends Mock implements DateTimeProvider {}
+
 void main() {
   late BookingProvider bookingProvider;
+  late DateTimeProvider dateTimeProvider;
   late BookingOverviewBloc sut;
 
   final DateTime date = DateTime.fromMillisecondsSinceEpoch(0);
@@ -32,7 +36,8 @@ void main() {
 
   setUp(() {
     bookingProvider = MockBookingProvider();
-    sut = BookingOverviewBloc(bookingProvider);
+    dateTimeProvider = MockDateTimeProvider();
+    sut = BookingOverviewBloc(bookingProvider, dateTimeProvider);
   });
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(

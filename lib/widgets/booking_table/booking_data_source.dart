@@ -9,6 +9,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 class BookingDataSource extends DataGridSource {
   BookingDataSource({
     required List<BookingEntry> bookings,
+    required this.onEmailButtonClicked,
     required this.context,
   }) {
     _bookingData = Rooms.all
@@ -20,7 +21,7 @@ class BookingDataSource extends DataGridSource {
                     value: bookings.any((BookingEntry booking) =>
                             booking.room == room &&
                             booking.time!.overlapsWith(bookingTime))
-                        ? '$room Taken'
+                        ? '$room Booked'
                         : '$room Free',
                     columnName: bookingTime.startTimeString(),
                   ),
@@ -31,7 +32,10 @@ class BookingDataSource extends DataGridSource {
         .toList();
   }
 
+  final void Function({required String time, required String room})
+      onEmailButtonClicked;
   final BuildContext context;
+
   List<DataGridRow> _bookingData = <DataGridRow>[];
 
   @override
@@ -42,19 +46,42 @@ class BookingDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>(
       (DataGridCell cell) {
+        final bool isFree = cell.value.endsWith('Free');
+        final String? room =
+            isFree ? cell.value!.replaceAll(' Free', '') : null;
         return InkWell(
           onTap: () {
             showDialog(
               builder: (_) => AlertDialog(
-                title: const Text('Want this room?'),
+                title: Text(isFree
+                    ? 'Want to book room $room at ${cell.columnName}?'
+                    : 'Sorry!'),
                 content: Text(
-                    'This room is ${cell.value.endsWith('Taken') ? 'taken.' : 'free.'}'),
+                    'This room is ${isFree ? 'available' : 'already booked'}.'),
+                actions: isFree
+                    ? <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            onEmailButtonClicked(
+                              time: cell.columnName,
+                              room: room!,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Yes, send email'),
+                        ),
+                      ]
+                    : null,
               ),
               context: context,
             );
           },
           child: Container(
-            color: cell.value.endsWith('Taken') ? Colors.red : Colors.green,
+            color: isFree ? Colors.green : Colors.red,
             alignment: Alignment.center,
             padding: const EdgeInsets.all(8.0),
             child: Text(cell.value),

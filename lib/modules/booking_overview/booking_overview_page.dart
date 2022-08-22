@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/data/time_block.dart';
 import 'package:gorlaeus_bookings/widgets/booking_table/booking_table_widget.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
@@ -52,7 +53,16 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
                       ),
                     ),
                     Expanded(
-                      child: BookingTable(state.bookings),
+                      child: BookingTable(
+                        state.bookings,
+                        onEmailButtonClicked: ({
+                          required String time,
+                          required String room,
+                        }) =>
+                            _bloc.add(
+                          BookingOverviewBookRoomEvent(time, room),
+                        ),
+                      ),
                     ),
                   ],
                 ),
