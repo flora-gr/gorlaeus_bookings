@@ -39,22 +39,22 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
           title: const Text(Strings.bookingOverviewPageTitle),
         ),
         body: state is BookingOverviewReadyState
-            ? SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Text(
-                          '${Strings.bookingsOn} ${state.date.formatted}',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
+            ? Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Text(
+                        '${Strings.bookingsOn} ${state.date.formatted}',
+                        style: Theme.of(context).textTheme.headline6,
                       ),
-                      BookingTable(state.bookings),
-                    ],
-                  ),
+                    ),
+                    Expanded(
+                      child: BookingTable(state.bookings),
+                    ),
+                  ],
                 ),
               )
             : Center(
