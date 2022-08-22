@@ -3,6 +3,7 @@ import 'package:gorlaeus_bookings/data/booking_entry.dart';
 import 'package:gorlaeus_bookings/data/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
+import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -21,8 +22,8 @@ class BookingDataSource extends DataGridSource {
                     value: bookings.any((BookingEntry booking) =>
                             booking.room == room &&
                             booking.time!.overlapsWith(bookingTime))
-                        ? '$room Booked'
-                        : '$room Free',
+                        ? '$room ${Strings.booked}'
+                        : '$room ${Strings.free}',
                     columnName: bookingTime.startTimeString(),
                   ),
                 )
@@ -46,23 +47,28 @@ class BookingDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>(
       (DataGridCell cell) {
-        final bool isFree = cell.value.endsWith('Free');
+        final bool isFree = cell.value.endsWith(Strings.free);
         final String? room =
-            isFree ? cell.value!.replaceAll(' Free', '') : null;
+            isFree ? cell.value!.replaceAll(' ${Strings.free}', '') : null;
         return InkWell(
           onTap: () {
             showDialog(
               builder: (_) => AlertDialog(
-                title: Text(isFree
-                    ? 'Want to book room $room at ${cell.columnName}?'
-                    : 'Sorry!'),
+                title: Text(
+                  isFree
+                      ? Strings.roomFreeDialogHeader
+                      : Strings.roomBookedDialogHeader,
+                ),
                 content: Text(
-                    'This room is ${isFree ? 'available' : 'already booked'}.'),
+                  isFree
+                      ? Strings.roomFreeDialogText(room!, cell.columnName)
+                      : Strings.roomBookedDialogText,
+                ),
                 actions: isFree
                     ? <Widget>[
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Cancel'),
+                          child: const Text(Strings.cancel),
                         ),
                         TextButton(
                           onPressed: () {
@@ -72,7 +78,7 @@ class BookingDataSource extends DataGridSource {
                             );
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Yes, send email'),
+                          child: const Text(Strings.yesBookRoom),
                         ),
                       ]
                     : null,

@@ -2,7 +2,7 @@ import 'package:html/dom.dart' as dom;
 
 extension DomElementExtensions on dom.Element {
   String parse() {
-    final bla = innerHtml
+    return innerHtml
         .replaceAll('&nbsp;', '')
         .replaceAll('<p>', '')
         .replaceAll('</p>', '')
@@ -11,6 +11,5 @@ extension DomElementExtensions on dom.Element {
         .replaceAll('VER', '')
         .replaceAll('SEM', '')
         .trim();
-    return bla;
   }
 }

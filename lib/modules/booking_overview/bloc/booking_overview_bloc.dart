@@ -4,10 +4,9 @@ import 'package:gorlaeus_bookings/data/booking_provider.dart';
 import 'package:gorlaeus_bookings/data/date_time_provider.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
-import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
-import 'package:mailto/mailto.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookingOverviewBloc
     extends Bloc<BookingOverviewEvent, BookingOverviewState> {
@@ -53,13 +52,34 @@ class BookingOverviewBloc
         date.isOnSameDateAs(_dateTimeProvider.getCurrentDateTime())
             ? 'today'
             : 'on ${date.formatted}';
-    final Mailto mailToLink = Mailto(
-      to: <String>['servicedesk@science.leidenuniv.nl'],
-      subject: 'Book room ${event.room}',
-      body: 'Hello,<br><br>'
-          'I would like to book room ${event.room} $dateString from ${event.time} for 2 hours.<br><br>'
-          'Thanks in advance!'
+
+    await launchUrl(_getEmailUri(
+        room: event.room, dateString: dateString, time: event.time));
+  }
+
+  _getEmailUri({
+    required String room,
+    required String dateString,
+    required String time,
+  }) {
+    return Uri(
+      scheme: 'mailto',
+      path: ConnectionUrls.serviceDeskEmail,
+      query: <String, String>{
+        'subject': 'Book room $room',
+        'body': 'Hello,\n\n'
+            'I would like to book room $room $dateString from $time to ...\n\n'
+            'Thanks in advance,\n'
+            'Coen van Hasselt',
+      }
+          .entries
+          .map(
+            (MapEntry<String, dynamic> entry) =>
+                '${Uri.encodeComponent(entry.key)}'
+                '='
+                '${Uri.encodeComponent(entry.value.toString())}',
+          )
+          .join('&'),
     );
-    await launchUrlString('$mailToLink');
   }
 }

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:gorlaeus_bookings/data/time_block.dart';
 
 abstract class BookingOverviewEvent extends Equatable {
   const BookingOverviewEvent();
