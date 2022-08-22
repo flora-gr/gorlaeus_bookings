@@ -4,7 +4,6 @@ class Strings {
   // Home page
   static const String homePageTitle = 'Gorlaeus Bookings';
   static const String dateToCheck = 'Date to check:';
-  static const String homePageText = 'Initial Home Page';
   static const String chooseADate = 'Choose a different date';
   static const String goToPageButtonText = 'Check bookings';
 
