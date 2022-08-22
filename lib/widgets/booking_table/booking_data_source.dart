@@ -22,7 +22,7 @@ class BookingDataSource extends DataGridSource {
                             booking.time!.overlapsWith(bookingTime))
                         ? '$room Taken'
                         : '$room Free',
-                    columnName: bookingTime.startDateString(),
+                    columnName: bookingTime.startTimeString(),
                   ),
                 )
                 .toList(),
