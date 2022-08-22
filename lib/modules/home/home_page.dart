@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+    return BlocBuilder<HomeBloc, HomeState>(
       bloc: _bloc,
       builder: (BuildContext context, HomeState state) => Scaffold(
         appBar: AppBar(

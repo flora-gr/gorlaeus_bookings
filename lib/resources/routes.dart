@@ -1,6 +1,6 @@
 class Routes {
   const Routes._();
 
-  static const home = '/';
-  static const bookingOverviewPage = 'bookingOverview';
+  static const String home = '/';
+  static const String bookingOverviewPage = 'bookingOverview';
 }
