@@ -5,6 +5,7 @@ import 'package:gorlaeus_bookings/data/date_time_provider.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
+import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,10 +68,7 @@ class BookingOverviewBloc
       path: ConnectionUrls.serviceDeskEmail,
       query: <String, String>{
         'subject': 'Book room $room',
-        'body': 'Hello,\n\n'
-            'I would like to book room $room $dateString from $time to ...\n\n'
-            'Thanks in advance,\n'
-            'Coen van Hasselt',
+        'body': Strings.bookRoomEmailBody(room, dateString, time),
       }
           .entries
           .map(
