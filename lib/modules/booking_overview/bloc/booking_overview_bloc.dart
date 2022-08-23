@@ -1,20 +1,32 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/data/booking_entry.dart';
 import 'package:gorlaeus_bookings/data/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/date_time_provider.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/resources/connection_urls.dart';
+import 'package:gorlaeus_bookings/resources/strings.dart';
+import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BookingOverviewBloc
     extends Bloc<BookingOverviewEvent, BookingOverviewState> {
-  BookingOverviewBloc(this._bookingProvider)
-      : super(const BookingOverviewBusyState()) {
+  BookingOverviewBloc(
+    this._bookingProvider,
+    this._dateTimeProvider,
+  ) : super(const BookingOverviewBusyState()) {
     on<BookingOverviewInitEvent>(
-      (event, emit) => emit.forEach(_handleInitEvent(event.date),
-          onData: (BookingOverviewState state) => state),
+      (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
+          emit.forEach(_handleInitEvent(event.date),
+              onData: (BookingOverviewState state) => state),
     );
+    on<BookingOverviewBookRoomEvent>((BookingOverviewBookRoomEvent event,
+            Emitter<BookingOverviewState> emit) =>
+        _handleBookRoomEvent(event));
   }
 
   final BookingProvider _bookingProvider;
+  final DateTimeProvider _dateTimeProvider;
 
   Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
     yield const BookingOverviewBusyState();
@@ -33,5 +45,39 @@ class BookingOverviewBloc
     } on Exception {
       yield const BookingOverviewErrorState();
     }
+  }
+
+  _handleBookRoomEvent(BookingOverviewBookRoomEvent event) async {
+    final DateTime date = (state as BookingOverviewReadyState).date;
+    final String dateString =
+        date.isOnSameDateAs(_dateTimeProvider.getCurrentDateTime())
+            ? 'today'
+            : 'on ${date.formatted}';
+
+    await launchUrl(_getEmailUri(
+        room: event.room, dateString: dateString, time: event.time));
+  }
+
+  _getEmailUri({
+    required String room,
+    required String dateString,
+    required String time,
+  }) {
+    return Uri(
+      scheme: 'mailto',
+      path: ConnectionUrls.serviceDeskEmail,
+      query: <String, String>{
+        'subject': 'Book room $room',
+        'body': Strings.bookRoomEmailBody(room, dateString, time),
+      }
+          .entries
+          .map(
+            (MapEntry<String, dynamic> entry) =>
+                '${Uri.encodeComponent(entry.key)}'
+                '='
+                '${Uri.encodeComponent(entry.value.toString())}',
+          )
+          .join('&'),
+    );
   }
 }

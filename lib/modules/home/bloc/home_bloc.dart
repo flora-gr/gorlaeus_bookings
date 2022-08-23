@@ -5,8 +5,10 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc(this._dateTimeProvider) : super(const HomeBusyState()) {
-    on<HomeInitEvent>((event, emit) => emit(_handleInitEvent()));
-    on<HomeDateChangedEvent>((event, emit) =>
+    on<HomeInitEvent>((HomeInitEvent event, Emitter<HomeState> emit) =>
+        emit(_handleInitEvent()));
+    on<HomeDateChangedEvent>((HomeDateChangedEvent event,
+            Emitter<HomeState> emit) =>
         emit((state as HomeReadyState).copyWith(newSelectedDate: event.date)));
   }
 

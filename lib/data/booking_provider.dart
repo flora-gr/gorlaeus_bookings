@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/data/booking_entry.dart';
+import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/utils/dom_element_extensions.dart';
 import 'package:gorlaeus_bookings/utils/string_extensions.dart';
 import 'package:html/dom.dart' as dom;
@@ -11,10 +12,9 @@ class BookingProvider {
   const BookingProvider();
 
   Future<List<BookingEntry>?> getBookings(DateTime date) async {
-    final url = Uri.parse('https://zrs.leidenuniv.nl/ul/query.php');
     final Response response = await http.post(
-      url,
-      body: {
+      ConnectionUrls.zrsSystemRequestUri,
+      body: <String, String>{
         'day': date.day.toString(),
         'month': date.month.toString(),
         'year': date.year.toString(),
@@ -26,7 +26,7 @@ class BookingProvider {
         'activiteit': '',
         'submit': 'Uitvoeren',
       },
-      headers: {
+      headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept':
             'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng, * /*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -40,7 +40,7 @@ class BookingProvider {
   }
 
   List<BookingEntry> _mapResponse(Response response) {
-    final List<BookingEntry> listOfBookings = [];
+    final List<BookingEntry> listOfBookings = <BookingEntry>[];
 
     final List<dom.Element> rows = parse(response.body)
         .getElementsByTagName('table')[0]

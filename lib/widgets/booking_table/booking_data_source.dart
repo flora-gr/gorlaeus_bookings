@@ -3,12 +3,14 @@ import 'package:gorlaeus_bookings/data/booking_entry.dart';
 import 'package:gorlaeus_bookings/data/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
+import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingDataSource extends DataGridSource {
   BookingDataSource({
     required List<BookingEntry> bookings,
+    required this.onEmailButtonClicked,
     required this.context,
   }) {
     _bookingData = Rooms.all
@@ -20,9 +22,9 @@ class BookingDataSource extends DataGridSource {
                     value: bookings.any((BookingEntry booking) =>
                             booking.room == room &&
                             booking.time!.overlapsWith(bookingTime))
-                        ? '$room Taken'
-                        : '$room Free',
-                    columnName: bookingTime.startDateString(),
+                        ? '$room ${Strings.booked}'
+                        : '$room ${Strings.free}',
+                    columnName: bookingTime.startTimeString(),
                   ),
                 )
                 .toList(),
@@ -31,7 +33,10 @@ class BookingDataSource extends DataGridSource {
         .toList();
   }
 
+  final void Function({required String time, required String room})
+      onEmailButtonClicked;
   final BuildContext context;
+
   List<DataGridRow> _bookingData = <DataGridRow>[];
 
   @override
@@ -42,19 +47,47 @@ class BookingDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>(
       (DataGridCell cell) {
+        final bool isFree = cell.value.endsWith(Strings.free);
+        final String? room =
+            isFree ? cell.value!.replaceAll(' ${Strings.free}', '') : null;
         return InkWell(
           onTap: () {
             showDialog(
               builder: (_) => AlertDialog(
-                title: const Text('Want this room?'),
+                title: Text(
+                  isFree
+                      ? Strings.roomFreeDialogHeader
+                      : Strings.roomBookedDialogHeader,
+                ),
                 content: Text(
-                    'This room is ${cell.value.endsWith('Taken') ? 'taken.' : 'free.'}'),
+                  isFree
+                      ? Strings.roomFreeDialogText(room!, cell.columnName)
+                      : Strings.roomBookedDialogText,
+                ),
+                actions: isFree
+                    ? <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text(Strings.cancel),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            onEmailButtonClicked(
+                              time: cell.columnName,
+                              room: room!,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(Strings.yesBookRoom),
+                        ),
+                      ]
+                    : null,
               ),
               context: context,
             );
           },
           child: Container(
-            color: cell.value.endsWith('Taken') ? Colors.red : Colors.green,
+            color: isFree ? Colors.green : Colors.red,
             alignment: Alignment.center,
             padding: const EdgeInsets.all(8.0),
             child: Text(cell.value),

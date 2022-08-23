@@ -8,11 +8,11 @@ class Rooms {
   static const String room5 = 'DM109';
   static const String room6 = 'DM115';
   static const String room7 = 'DM119';
-  static const String room8 = 'EM1.17 VER';
-  static const String room9 = 'EM1.19 VER';
-  static const String room10 = 'EM1.21 VER';
+  static const String room8 = 'EM1.17';
+  static const String room9 = 'EM1.19';
+  static const String room10 = 'EM1.21';
   static const String room11 = 'EM109';
-  static const String room12 = 'GM4.13 SEM';
+  static const String room12 = 'GM4.13';
 
   static const Iterable<String> all = <String>[
     room1,

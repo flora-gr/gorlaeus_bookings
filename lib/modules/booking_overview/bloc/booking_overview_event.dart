@@ -12,3 +12,16 @@ class BookingOverviewInitEvent extends BookingOverviewEvent {
   @override
   List<Object?> get props => <Object?>[date];
 }
+
+class BookingOverviewBookRoomEvent extends BookingOverviewEvent {
+  const BookingOverviewBookRoomEvent(
+    this.time,
+    this.room,
+  );
+
+  final String time;
+  final String room;
+
+  @override
+  List<Object?> get props => <Object?>[time, room];
+}

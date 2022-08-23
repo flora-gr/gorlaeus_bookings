@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+    return BlocBuilder<HomeBloc, HomeState>(
       bloc: _bloc,
       builder: (BuildContext context, HomeState state) => Scaffold(
         appBar: AppBar(
@@ -41,10 +41,6 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                Strings.homePageText,
-                style: Theme.of(context).textTheme.headline6,
-              ),
               const SizedBox(height: 16),
               if (state is HomeReadyState) ...<Widget>[
                 _buildDateContent(state),
@@ -75,7 +71,10 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('${Strings.dateToCheck} ${state.selectedDate.formatted}'),
+        Text(
+          '${Strings.dateToCheck} ${state.selectedDate.formatted}',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: OutlinedButton(
@@ -85,6 +84,10 @@ class _HomePageState extends State<HomePage> {
                 initialDate: state.selectedDate,
                 firstDate: state.minimumDate,
                 lastDate: state.maximumDate,
+                locale: const Locale('en', 'GB'),
+                selectableDayPredicate: (DateTime date) =>
+                    date.weekday != DateTime.saturday &&
+                    date.weekday != DateTime.sunday,
               );
               if (newDate != null) {
                 _bloc.add(HomeDateChangedEvent(newDate));

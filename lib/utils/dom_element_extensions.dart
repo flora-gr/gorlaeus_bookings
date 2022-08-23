@@ -8,6 +8,8 @@ extension DomElementExtensions on dom.Element {
         .replaceAll('</p>', '')
         .replaceAll('&amp;', '&')
         .replaceAll('GORLB/', '')
+        .replaceAll('VER', '')
+        .replaceAll('SEM', '')
         .trim();
   }
 }

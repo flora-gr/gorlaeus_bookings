@@ -7,6 +7,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const GorlaeusBookingApp());
@@ -22,33 +23,41 @@ class GorlaeusBookingApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales: const <Locale>[
+        Locale('en', 'GB'),
+      ],
       initialRoute: Routes.home,
-      onGenerateRoute: (RouteSettings settings) {
-        debugPrint(settings.toString());
-        switch (settings.name) {
-          case Routes.bookingOverviewPage:
-            return getRoute(
-              BookingOverviewPage(
-                BookingOverviewBloc(
-                  const BookingProvider(),
-                ),
-                settings.arguments as DateTime,
-              ),
-              settings,
-            );
-          case Routes.home:
-          default:
-            return getRoute(
-              HomePage(
-                HomeBloc(
-                  const DateTimeProvider(),
-                ),
-              ),
-              settings,
-            );
-        }
-      },
+      onGenerateRoute: _onGenerateRoute,
     );
+  }
+
+  MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
+    debugPrint(settings.toString());
+    switch (settings.name) {
+      case Routes.bookingOverviewPage:
+        return getRoute(
+          BookingOverviewPage(
+            BookingOverviewBloc(
+              const BookingProvider(),
+              const DateTimeProvider(),
+            ),
+            settings.arguments as DateTime,
+          ),
+          settings,
+        );
+      case Routes.home:
+      default:
+        return getRoute(
+          HomePage(
+            HomeBloc(
+              const DateTimeProvider(),
+            ),
+          ),
+          settings,
+        );
+    }
   }
 
   MaterialPageRoute<void> getRoute(Widget page, RouteSettings settings) {

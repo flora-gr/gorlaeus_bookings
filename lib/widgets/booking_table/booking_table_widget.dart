@@ -7,9 +7,17 @@ import 'package:gorlaeus_bookings/widgets/booking_table/booking_data_source.dart
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingTable extends StatelessWidget {
-  const BookingTable(this._bookings, {Key? key}) : super(key: key);
+  const BookingTable(
+    this._bookings, {
+    required this.onEmailButtonClicked,
+    Key? key,
+  }) : super(key: key);
 
   final List<BookingEntry> _bookings;
+  final void Function({
+    required String time,
+    required String room,
+  }) onEmailButtonClicked;
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +25,19 @@ class BookingTable extends StatelessWidget {
       columns: BookingTimes.all
           .map(
             (TimeBlock bookingTime) => GridColumn(
-              columnName: bookingTime.startDateString(),
+              columnName: bookingTime.startTimeString(),
               label: Container(
                   alignment: Alignment.bottomLeft,
                   child: Padding(
                     padding: const EdgeInsets.all(2),
-                    child: Text(bookingTime.startDateString()),
+                    child: Text(bookingTime.startTimeString()),
                   )),
             ),
           )
           .toList(),
       source: BookingDataSource(
         bookings: _bookings.toList(),
+        onEmailButtonClicked: onEmailButtonClicked,
         context: context,
       ),
     );
