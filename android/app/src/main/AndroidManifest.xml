@@ -3,7 +3,8 @@
    <application
         android:label="Gorlaeus Bookings"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:iconRound="@mipmap/ic_launcher_round">
         <activity
             android:name=".MainActivity"
             android:exported="true"
