@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                 initialDate: state.selectedDate,
                 firstDate: state.minimumDate,
                 lastDate: state.maximumDate,
-                locale: const Locale('en', 'GB'),
+                locale: const Locale('nl', 'NL'),
                 selectableDayPredicate: (DateTime date) =>
                     date.weekday != DateTime.saturday &&
                     date.weekday != DateTime.sunday,

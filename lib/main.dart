@@ -8,6 +8,7 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gorlaeus_bookings/resources/styles.dart';
 
 void main() {
   runApp(const GorlaeusBookingApp());
@@ -20,18 +21,32 @@ class GorlaeusBookingApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Gorlaeus Bookings',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+      theme: _themeData,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       supportedLocales: const <Locale>[
-        Locale('en', 'GB'),
+        Locale('nl', 'NL'),
       ],
       initialRoute: Routes.home,
       onGenerateRoute: _onGenerateRoute,
     );
   }
+
+  static final ThemeData _themeData = ThemeData(
+    colorScheme: ColorScheme.fromSwatch(
+      primarySwatch: Styles.primaryColorSwatch,
+    ).copyWith(
+      secondary: Styles.secondaryColorSwatch,
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        side: const BorderSide().copyWith(
+          color: Styles.outlinedButtonBorderColor,
+        ),
+      ),
+    ),
+    scaffoldBackgroundColor: Styles.backgroundColor,
+  );
 
   MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
     debugPrint(settings.toString());
