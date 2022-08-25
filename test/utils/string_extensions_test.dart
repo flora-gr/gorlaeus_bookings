@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gorlaeus_bookings/data/time_block.dart';
+import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/utils/string_extensions.dart';
 
 void main() {
@@ -33,6 +34,17 @@ void main() {
       expect(timeBlockStringNoInt.toTimeBlock(), null);
       expect(timeBlockStringTooManyColons.toTimeBlock(), null);
       expect(timeBlockStringNoColons.toTimeBlock(), null);
+    },
+  );
+
+  test(
+    'toRoomName swaps the zero for a C for certain rooms only',
+    () {
+      expect(Rooms.room17.toRoomName(), 'C1');
+      expect(Rooms.room18.toRoomName(), 'C2');
+      expect(Rooms.room19.toRoomName(), 'C3');
+      expect(Rooms.room20.toRoomName(), 'C4/5');
+      expect(Rooms.room15.toRoomName(), Rooms.room15);
     },
   );
 }
