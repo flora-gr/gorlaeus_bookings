@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/data/time_block.dart';
+import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 extension StringExtension on String {
+  static const List<String> _cRooms = <String>[
+    Rooms.room17,
+    Rooms.room18,
+    Rooms.room19,
+    Rooms.room20,
+  ];
+
   TimeBlock? toTimeBlock() {
     if (length == 11) {
       TimeOfDay? startTime = substring(0, 5).toTimeOfDay();
@@ -30,5 +38,12 @@ extension StringExtension on String {
       return null;
     }
     return null;
+  }
+
+  String toRoomName() {
+    if (_cRooms.contains(this)) {
+      return replaceAll('0', 'C');
+    }
+    return this;
   }
 }

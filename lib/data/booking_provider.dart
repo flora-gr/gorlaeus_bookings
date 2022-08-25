@@ -11,7 +11,36 @@ import 'package:http/http.dart';
 class BookingProvider {
   const BookingProvider();
 
+  static const String _building1 = 'GORLB+GORLB - Gorlaeus Building';
+  static const String _building2 = 'GORL+GORL - Gorlaeus Lecture Hall';
+
   Future<List<BookingEntry>?> getBookings(DateTime date) async {
+    final List<Future<List<BookingEntry>?>> bookingTasks =
+        <Future<List<BookingEntry>?>>[
+      _getBookings(date, _building1),
+      _getBookings(date, _building2)
+    ];
+
+    try {
+      final List<List<BookingEntry>?> bookings =
+          await Future.wait(bookingTasks);
+
+      if (bookings.isNotEmpty && bookings.length == 2) {
+        return <BookingEntry>[
+          if (bookings[0] != null) ...bookings[0]!,
+          if (bookings[1] != null) ...bookings[1]!,
+        ];
+      }
+    } on Exception {
+      return null;
+    }
+    return null;
+  }
+
+  Future<List<BookingEntry>?> _getBookings(
+    DateTime date,
+    String building,
+  ) async {
     final Response response = await http.post(
       ConnectionUrls.zrsSystemRequestUri,
       body: <String, String>{
@@ -19,7 +48,7 @@ class BookingProvider {
         'month': date.month.toString(),
         'year': date.year.toString(),
         'res_instantie': '_ALL_',
-        'selgebouw': 'GORLB+GORLB - Gorlaeus Building',
+        'selgebouw': building,
         'zrssort': 'aanvangstijd',
         'gebruiker': '',
         'aanvrager': '',
