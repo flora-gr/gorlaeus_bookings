@@ -6,6 +6,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class BookingOverviewPage extends StatefulWidget {
   const BookingOverviewPage(
@@ -68,7 +69,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
               )
             : Center(
                 child: state is BookingOverviewBusyState
-                    ? const CircularProgressIndicator()
+                    ? const LoadingWidget()
                     : const Text(Strings.errorFetchingBookings),
               ),
       ),

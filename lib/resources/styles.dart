@@ -41,5 +41,5 @@ class Styles {
 
   static Color freeRoomColor = Colors.lightGreen;
 
-  static Color? bookedRoomColor = Color(0xFFF08080);
+  static const Color bookedRoomColor = Color(0xFFF08080);
 }
