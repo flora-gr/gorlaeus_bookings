@@ -6,6 +6,16 @@ class Strings {
   static const String dateToCheck = 'Date to check:';
   static const String chooseADate = 'Choose a different date';
   static const String goToPageButtonText = 'Check bookings';
+  static const String disclaimerDialogTitle = 'Disclaimer';
+  static const String disclaimerDialogText1 = 'This app uses the ';
+  static const String disclaimerDialogText2 = 'https://zrs.leidenuniv.nl';
+  static const String disclaimerDialogText3 = ' website to fetch data. '
+      'It is a hobby project and although all data is presented in good faith, it may contain errors. '
+      'Usage of the booking system via this app is at your own risk.\n\n'
+      'Bug reports and feature requests can be made at our ';
+  static const String disclaimerDialogText4 = 'Github repository';
+  static const String disclaimerDialogText5 =
+      '.\n\nCheers, the development team!';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
@@ -28,4 +38,7 @@ class Strings {
   static const String roomBookedDialogText = 'This room is already booked.';
   static const String yesBookRoom = 'Yes, send email';
   static const String cancel = 'Cancel';
+
+  // Shared
+  static const String ok = 'OK';
 }

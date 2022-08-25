@@ -4,6 +4,7 @@ import 'package:gorlaeus_bookings/data/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
+import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -87,7 +88,7 @@ class BookingDataSource extends DataGridSource {
             );
           },
           child: Container(
-            color: isFree ? Colors.green : Colors.red,
+            color: isFree ? Styles.freeRoomColor : Styles.bookedRoomColor,
             alignment: Alignment.center,
             padding: const EdgeInsets.all(8.0),
             child: Text(cell.value),
