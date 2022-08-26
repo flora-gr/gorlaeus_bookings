@@ -15,7 +15,7 @@ class Strings {
       'Bug reports and feature requests can be made at our ';
   static const String disclaimerDialogText4 = 'Github repository';
   static const String disclaimerDialogText5 =
-      '.\n\nCheers, the development team!';
+      '.\n\nThanks for using Gorlaeus Bookings!';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
