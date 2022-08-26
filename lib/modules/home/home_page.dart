@@ -100,7 +100,10 @@ class _HomePageState extends State<HomePage> {
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    launchUrl(ConnectionUrls.zrsWebsiteLink);
+                    launchUrl(
+                      ConnectionUrls.zrsWebsiteLink,
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
               ),
               TextSpan(
@@ -112,7 +115,10 @@ class _HomePageState extends State<HomePage> {
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    launchUrl(ConnectionUrls.githubRepositoryLink);
+                    launchUrl(
+                      ConnectionUrls.githubRepositoryLink,
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
               ),
               TextSpan(
