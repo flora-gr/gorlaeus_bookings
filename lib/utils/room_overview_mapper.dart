@@ -5,10 +5,9 @@ import 'package:gorlaeus_bookings/resources/rooms.dart';
 class RoomsOverviewMapper {
   const RoomsOverviewMapper();
 
+  // TODO: unit tests
   Map<String, Iterable<TimeBlock?>> mapToRoomsOverview(
       List<BookingEntry> bookings) {
-    // TODO: filter out hidden rooms
-
     final Map<String, Iterable<TimeBlock?>> roomsOverview =
         <String, Iterable<TimeBlock?>>{};
     for (String room in Rooms.all) {

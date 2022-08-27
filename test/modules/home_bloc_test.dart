@@ -18,7 +18,8 @@ void main() {
 
   setUp(() {
     dateTimeProvider = MockDateTimeProvider();
-    when(() => dateTimeProvider.getCurrentDateTime()).thenAnswer((_) => today);
+    when(() => dateTimeProvider.getFirstWeekdayFromToday())
+        .thenAnswer((_) => today);
     sut = HomeBloc(dateTimeProvider);
   });
 

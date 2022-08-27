@@ -30,6 +30,8 @@ class GetFreeRoomNowBloc
   final RoomsOverviewMapper _mapper = const RoomsOverviewMapper();
   final Random _random = Random();
 
+  // TODO: unit tests
+
   Stream<GetFreeRoomNowState> _handleGetFreeRoomNowSearchEvent() async* {
     List<String>? currentFreeRooms;
     String? currentFreeRoom;
@@ -38,10 +40,6 @@ class GetFreeRoomNowBloc
       currentFreeRooms = (state as GetFreeRoomNowReadyState).freeRooms;
       currentFreeRoom = (state as GetFreeRoomNowReadyState).freeRoom;
     }
-
-    // TODO: preferred room first
-    // TODO: no rooms found state
-    // TODO: search for shorter times if full day not available
 
     yield GetFreeRoomNowBusyState(freeRoom: currentFreeRoom);
 
@@ -71,6 +69,7 @@ class GetFreeRoomNowBloc
                 false)
             .toList();
 
+        // TODO: no rooms found state
         yield GetFreeRoomNowReadyState(
           freeRooms: freeRooms,
           freeRoom: freeRooms[_random.nextInt(freeRooms.length)],
