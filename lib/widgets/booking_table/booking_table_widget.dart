@@ -27,11 +27,12 @@ class BookingTable extends StatelessWidget {
             (TimeBlock bookingTime) => GridColumn(
               columnName: bookingTime.startTimeString(),
               label: Container(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Text(bookingTime.startTimeString()),
-                  )),
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Text(bookingTime.startTimeString()),
+                ),
+              ),
             ),
           )
           .toList(),

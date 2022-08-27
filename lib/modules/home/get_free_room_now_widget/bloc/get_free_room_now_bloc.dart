@@ -8,7 +8,7 @@ import 'package:gorlaeus_bookings/data/date_time_provider.dart';
 import 'package:gorlaeus_bookings/data/time_block.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_state.dart';
-import 'package:gorlaeus_bookings/utils/room_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
 
 class GetFreeRoomNowBloc
@@ -29,8 +29,6 @@ class GetFreeRoomNowBloc
 
   final RoomsOverviewMapper _mapper = const RoomsOverviewMapper();
   final Random _random = Random();
-
-  // TODO: unit tests
 
   Stream<GetFreeRoomNowState> _handleGetFreeRoomNowSearchEvent() async* {
     List<String>? currentFreeRooms;

@@ -54,8 +54,13 @@ class BookingOverviewBloc
             ? Strings.today
             : Strings.onDay(date.formatted);
 
-    await launchUrl(_getEmailUri(
-        room: event.room, dateString: dateString, time: event.time));
+    await launchUrl(
+      _getEmailUri(
+        room: event.room,
+        dateString: dateString,
+        time: event.time,
+      ),
+    );
   }
 
   _getEmailUri({
