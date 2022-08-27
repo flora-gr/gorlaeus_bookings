@@ -81,9 +81,17 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
                   state.freeRoom!.toRoomName(),
                 ),
               ),
+            )
+          else if (state is GetFreeRoomNowEmptyState)
+            const Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: Text(Strings.noRoomFound),
+            )
+          else if (state is GetFreeRoomNowErrorState)
+            const Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: Text(Strings.getFreeRoomFailed),
             ),
-          if (state is GetFreeRoomNowErrorState)
-            const Text(Strings.getFreeRoomFailed),
         ],
       ),
     );

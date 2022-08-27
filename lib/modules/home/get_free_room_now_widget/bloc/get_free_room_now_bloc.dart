@@ -77,11 +77,14 @@ class GetFreeRoomNowBloc
                 false)
             .toList();
 
-        // TODO: no rooms found state
-        yield GetFreeRoomNowReadyState(
-          freeRooms: freeRooms,
-          freeRoom: freeRooms[_random.nextInt(freeRooms.length)],
-        );
+        if (freeRooms.isNotEmpty) {
+          yield GetFreeRoomNowReadyState(
+            freeRooms: freeRooms,
+            freeRoom: freeRooms[_random.nextInt(freeRooms.length)],
+          );
+        } else {
+          yield const GetFreeRoomNowEmptyState();
+        }
       } else {
         yield const GetFreeRoomNowErrorState();
       }

@@ -20,27 +20,40 @@ void main() {
   late BookingProvider bookingProvider;
   late GetFreeRoomNowBloc sut;
 
-  final DateTime today = DateTime.fromMillisecondsSinceEpoch(0);
+  final DateTime todayAtTwo = DateTime(2020, 1, 1, 14);
 
-  const List<BookingEntry> bookings = <BookingEntry>[
-    BookingEntry(
-      time: TimeBlock(
-          startTime: TimeOfDay(hour: 12, minute: 0),
-          endTime: TimeOfDay(hour: 13, minute: 0)),
-      room: Rooms.room1,
-      personCount: 10,
-      bookedOnBehalfOf: '',
-      activity: '',
-      user: '',
-    ),
-  ];
+  BookingEntry getBookingEntry({TimeBlock? time, String? room}) => BookingEntry(
+        time: time ??
+            const TimeBlock(
+              startTime: TimeOfDay(hour: 12, minute: 0),
+              endTime: TimeOfDay(hour: 13, minute: 0),
+            ),
+        room: room ?? Rooms.room1,
+        personCount: 10,
+        bookedOnBehalfOf: '',
+        activity: '',
+        user: '',
+      );
+
+  List<BookingEntry> defaultBookingResponse = <BookingEntry>[getBookingEntry()];
+
+  const TimeBlock overlappingTimeBlock = TimeBlock(
+    startTime: TimeOfDay(hour: 12, minute: 0),
+    endTime: TimeOfDay(hour: 18, minute: 0),
+  );
+
+  List<BookingEntry> fullyBookedResponse = Rooms.all
+      .map((String room) =>
+          getBookingEntry(time: overlappingTimeBlock, room: room))
+      .toList();
 
   setUp(() {
     dateTimeProvider = MockDateTimeProvider();
-    when(() => dateTimeProvider.getCurrentDateTime()).thenAnswer((_) => today);
+    when(() => dateTimeProvider.getCurrentDateTime())
+        .thenAnswer((_) => todayAtTwo);
     bookingProvider = MockBookingProvider();
     when(() => bookingProvider.getBookings(any()))
-        .thenAnswer((_) async => bookings);
+        .thenAnswer((_) async => defaultBookingResponse);
     sut = GetFreeRoomNowBloc(dateTimeProvider, bookingProvider);
   });
 
@@ -93,6 +106,19 @@ void main() {
     expect: () => <dynamic>[
       const GetFreeRoomNowBusyState(),
       const GetFreeRoomNowErrorState(),
+    ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'All rooms booked emits empty state',
+    setUp: () => when(() => bookingProvider.getBookings(any()))
+        .thenAnswer((_) async => fullyBookedResponse),
+    build: () => sut,
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSearchEvent()),
+    expect: () => <dynamic>[
+      const GetFreeRoomNowBusyState(),
+      const GetFreeRoomNowEmptyState(),
     ],
   );
 }

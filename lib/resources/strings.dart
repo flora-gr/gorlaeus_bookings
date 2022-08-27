@@ -28,7 +28,8 @@ class Strings {
   static const String notAvailableInWeekend = 'Not available on weekends';
   static String roomIsFree(String room) =>
       'Room $room is available until the end of the day.';
-  static const String getFreeRoomFailed = 'Failed to find a room.';
+  static const String getFreeRoomFailed = 'Something went wrong.';
+  static const String noRoomFound = 'No available room found.';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';

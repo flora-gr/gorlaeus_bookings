@@ -40,3 +40,10 @@ class GetFreeRoomNowErrorState extends GetFreeRoomNowState {
   @override
   List<Object?> get props => <Object?>[];
 }
+
+class GetFreeRoomNowEmptyState extends GetFreeRoomNowState {
+  const GetFreeRoomNowEmptyState();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
