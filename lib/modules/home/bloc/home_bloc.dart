@@ -15,11 +15,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final DateTimeProvider _dateTimeProvider;
 
   HomeState _handleInitEvent() {
-    final DateTime currentDate = _dateTimeProvider.getCurrentDateTime();
+    final DateTime initialDate = _dateTimeProvider.getFirstWeekdayFromToday();
     return HomeReadyState(
-      minimumDate: currentDate,
-      maximumDate: currentDate.add(const Duration(days: 365)),
-      selectedDate: currentDate,
+      minimumDate: initialDate,
+      maximumDate: initialDate.add(const Duration(days: 365)),
+      selectedDate: initialDate,
     );
   }
 }
