@@ -43,5 +43,5 @@ class Styles {
 
   static const Color bookedRoomColor = Color(0xFFF08080);
 
-  static const Color linkTextColor = Color(0xFF0000EE);
+  static BorderRadius borderRadius = BorderRadius.circular(6);
 }

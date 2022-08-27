@@ -1,5 +1,5 @@
 name: gorlaeus_bookings
-description: An app for booking lecture rooms in the Gorlaeus building of Leiden University
+description: An app for booking lecture rooms in the Gorlaeus building of Leiden University.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -11,19 +11,21 @@ environment:
   sdk: ">=2.17.6 <3.0.0"
 
 dependencies:
+  # flutter sdk
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  http: ^0.13.5
-  collection: ^1.16.0
-  flutter_bloc: ^8.0.1
-  equatable: ^2.0.3
+  # other
   bloc_test: ^9.0.3
+  collection: ^1.16.0
+  equatable: ^2.0.3
+  flutter_bloc: ^8.0.1
   html: ^0.15.0
+  http: ^0.13.5
   intl: ^0.17.0
-  syncfusion_flutter_datagrid: ^20.2.44
   mocktail: ^0.3.0
+  syncfusion_flutter_datagrid: ^20.2.44
   url_launcher: ^6.1.5
 
 dev_dependencies:

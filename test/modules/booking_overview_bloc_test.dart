@@ -24,8 +24,9 @@ void main() {
   const List<BookingEntry> bookings = <BookingEntry>[
     BookingEntry(
       time: TimeBlock(
-          startTime: TimeOfDay(hour: 12, minute: 0),
-          endTime: TimeOfDay(hour: 13, minute: 0)),
+        startTime: TimeOfDay(hour: 12, minute: 0),
+        endTime: TimeOfDay(hour: 13, minute: 0),
+      ),
       room: 'room',
       personCount: 10,
       bookedOnBehalfOf: '',

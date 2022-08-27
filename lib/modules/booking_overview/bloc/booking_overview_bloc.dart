@@ -16,10 +16,9 @@ class BookingOverviewBloc
     this._dateTimeProvider,
   ) : super(const BookingOverviewBusyState()) {
     on<BookingOverviewInitEvent>(
-      (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
-          emit.forEach(_handleInitEvent(event.date),
-              onData: (BookingOverviewState state) => state),
-    );
+        (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
+            emit.forEach(_handleInitEvent(event.date),
+                onData: (BookingOverviewState state) => state));
     on<BookingOverviewBookRoomEvent>((BookingOverviewBookRoomEvent event,
             Emitter<BookingOverviewState> emit) =>
         _handleBookRoomEvent(event));
@@ -51,11 +50,16 @@ class BookingOverviewBloc
     final DateTime date = (state as BookingOverviewReadyState).date;
     final String dateString =
         date.isOnSameDateAs(_dateTimeProvider.getCurrentDateTime())
-            ? 'today'
-            : 'on ${date.formatted}';
+            ? Strings.today
+            : Strings.onDay(date.formatted);
 
-    await launchUrl(_getEmailUri(
-        room: event.room, dateString: dateString, time: event.time));
+    await launchUrl(
+      _getEmailUri(
+        room: event.room,
+        dateString: dateString,
+        time: event.time,
+      ),
+    );
   }
 
   _getEmailUri({
@@ -67,7 +71,7 @@ class BookingOverviewBloc
       scheme: 'mailto',
       path: ConnectionUrls.serviceDeskEmail,
       query: <String, String>{
-        'subject': 'Book room $room',
+        'subject': Strings.bookRoomEmailSubject(room),
         'body': Strings.bookRoomEmailBody(room, dateString, time),
       }
           .entries

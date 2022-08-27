@@ -47,59 +47,60 @@ class BookingDataSource extends DataGridSource {
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
-        cells: row.getCells().map<Widget>(
-      (DataGridCell cell) {
-        final bool isFree = cell.value.endsWith(Strings.free);
-        final String? room =
-            isFree ? cell.value!.replaceAll(Strings.free, '') : null;
-        return InkWell(
-          onTap: () {
-            showDialog(
-              builder: (_) => AlertDialog(
-                title: Text(
-                  isFree
-                      ? Strings.roomFreeDialogHeader
-                      : Strings.roomBookedDialogHeader,
+      cells: row.getCells().map<Widget>(
+        (DataGridCell cell) {
+          final bool isFree = cell.value.endsWith(Strings.free);
+          final String? room =
+              isFree ? cell.value!.replaceAll(Strings.free, '') : null;
+          return InkWell(
+            onTap: () {
+              showDialog(
+                builder: (_) => AlertDialog(
+                  title: Text(
+                    isFree
+                        ? Strings.roomFreeDialogHeader
+                        : Strings.roomBookedDialogHeader,
+                  ),
+                  content: Text(
+                    isFree
+                        ? Strings.roomFreeDialogText(room!, cell.columnName)
+                        : Strings.roomBookedDialogText,
+                  ),
+                  actions: isFree
+                      ? <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text(Strings.cancel),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              onEmailButtonClicked(
+                                time: cell.columnName,
+                                room: room!,
+                              );
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(Strings.yesBookRoom),
+                          ),
+                        ]
+                      : null,
                 ),
-                content: Text(
-                  isFree
-                      ? Strings.roomFreeDialogText(room!, cell.columnName)
-                      : Strings.roomBookedDialogText,
-                ),
-                actions: isFree
-                    ? <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text(Strings.cancel),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            onEmailButtonClicked(
-                              time: cell.columnName,
-                              room: room!,
-                            );
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(Strings.yesBookRoom),
-                        ),
-                      ]
-                    : null,
+                context: context,
+              );
+            },
+            child: Container(
+              color: isFree ? Styles.freeRoomColor : Styles.bookedRoomColor,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                cell.value
+                    .replaceAll(Strings.free, '')
+                    .replaceAll(Strings.booked, ''),
               ),
-              context: context,
-            );
-          },
-          child: Container(
-            color: isFree ? Styles.freeRoomColor : Styles.bookedRoomColor,
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              cell.value
-                  .replaceAll(Strings.free, '')
-                  .replaceAll(Strings.booked, ''),
             ),
-          ),
-        );
-      },
-    ).toList());
+          );
+        },
+      ).toList(),
+    );
   }
 }
