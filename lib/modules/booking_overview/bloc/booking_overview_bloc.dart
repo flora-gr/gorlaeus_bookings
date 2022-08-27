@@ -51,8 +51,8 @@ class BookingOverviewBloc
     final DateTime date = (state as BookingOverviewReadyState).date;
     final String dateString =
         date.isOnSameDateAs(_dateTimeProvider.getCurrentDateTime())
-            ? 'today'
-            : 'on ${date.formatted}';
+            ? Strings.today
+            : Strings.onDay(date.formatted);
 
     await launchUrl(_getEmailUri(
         room: event.room, dateString: dateString, time: event.time));
@@ -67,7 +67,7 @@ class BookingOverviewBloc
       scheme: 'mailto',
       path: ConnectionUrls.serviceDeskEmail,
       query: <String, String>{
-        'subject': 'Book room $room',
+        'subject': Strings.bookRoomEmailSubject(room),
         'body': Strings.bookRoomEmailBody(room, dateString, time),
       }
           .entries

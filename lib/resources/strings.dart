@@ -23,10 +23,10 @@ class Strings {
       '.\n\nThanks for using Gorlaeus Bookings!';
 
   // Get me a free room tile
-  static const String getMeAFreeRoom = 'Find a free room now';
+  static const String getMeAFreeRoom = 'Find an available room now';
   static const String search = 'Search';
   static String roomIsFree(String room) =>
-      'Room $room is free until the end of the day.';
+      'Room $room is available until the end of the day.';
   static const String getFreeRoomFailed = 'Failed to find a room.';
 
   // Booking overview page
@@ -34,6 +34,9 @@ class Strings {
   static const String errorFetchingBookings = 'Failed to fetch bookings.';
   static const String bookingsOn = 'Bookings on';
   static const String noBookings = 'No bookings found for this day.';
+  static const String today = 'today';
+  static String onDay(String day) => 'on $day';
+  static String bookRoomEmailSubject(String room) => 'Book room $room';
   static String bookRoomEmailBody(
           String room, String dateString, String time) =>
       'Hello,\n\n'
@@ -41,9 +44,9 @@ class Strings {
       'Thanks in advance\n';
 
   // Booking table
-  static const String free = 'Free';
+  static const String free = 'Available';
   static const String booked = 'Booked';
-  static const String roomFreeDialogHeader = 'This room is free';
+  static const String roomFreeDialogHeader = 'This room is available';
   static const String roomBookedDialogHeader = 'Sorry!';
   static String roomFreeDialogText(String room, String time) =>
       'Do you want to book room $room at $time?';
