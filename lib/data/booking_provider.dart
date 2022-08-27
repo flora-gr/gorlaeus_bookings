@@ -41,29 +41,33 @@ class BookingProvider {
     DateTime date,
     String building,
   ) async {
-    final Response response = await http.post(
-      ConnectionUrls.zrsSystemRequestUri,
-      body: <String, String>{
-        'day': date.day.toString(),
-        'month': date.month.toString(),
-        'year': date.year.toString(),
-        'res_instantie': '_ALL_',
-        'selgebouw': building,
-        'zrssort': 'aanvangstijd',
-        'gebruiker': '',
-        'aanvrager': '',
-        'activiteit': '',
-        'submit': 'Uitvoeren',
-      },
-      headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept':
-            'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng, * /*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        'Accept-Encoding': 'gzip, deflate, br',
-      },
-    );
-    if (response.statusCode == 200) {
-      return _mapResponse(response);
+    try {
+      final Response response = await http.post(
+        ConnectionUrls.zrsSystemRequestUri,
+        body: <String, String>{
+          'day': date.day.toString(),
+          'month': date.month.toString(),
+          'year': date.year.toString(),
+          'res_instantie': '_ALL_',
+          'selgebouw': building,
+          'zrssort': 'aanvangstijd',
+          'gebruiker': '',
+          'aanvrager': '',
+          'activiteit': '',
+          'submit': 'Uitvoeren',
+        },
+        headers: <String, String>{
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept':
+              'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng, * /*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+          'Accept-Encoding': 'gzip, deflate, br',
+        },
+      ).timeout(const Duration(seconds: 30));
+      if (response.statusCode == 200) {
+        return _mapResponse(response);
+      }
+    } on Exception {
+      return null;
     }
     return null;
   }
