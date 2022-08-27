@@ -25,7 +25,10 @@ class GetFreeRoomNowBloc
   final BookingProvider _bookingProvider;
 
   Stream<GetFreeRoomNowState> _handleGetFreeRoomNowSearchEvent() async* {
-    yield const GetFreeRoomNowBusyState();
+    String? currentFreeRoom = state is GetFreeRoomNowReadyState
+        ? (state as GetFreeRoomNowReadyState).freeRoom
+        : null;
+    yield GetFreeRoomNowBusyState(freeRoom: currentFreeRoom);
 
     final DateTime now = _dateTimeProvider.getCurrentDateTime();
     final List<BookingEntry>? bookings =

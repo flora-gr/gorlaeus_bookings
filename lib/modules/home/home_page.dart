@@ -203,11 +203,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildGetMeAFreeRoomNowTile(HomeState state) {
-    return ItemBox(
-      title: Strings.getMeAFreeRoom,
-      child: GetFreeRoomNowWidget(
-        widget.dateTimeProvider,
-        widget.bookingProvider,
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 200),
+      alignment: Alignment.topCenter,
+      child: ItemBox(
+        title: Strings.getMeAFreeRoom,
+        child: GetFreeRoomNowWidget(
+          widget.dateTimeProvider,
+          widget.bookingProvider,
+        ),
       ),
     );
   }

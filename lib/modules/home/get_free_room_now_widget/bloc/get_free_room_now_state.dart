@@ -13,11 +13,11 @@ class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
   List<Object?> get props => <Object?>[];
 }
 
-class GetFreeRoomNowBusyState extends GetFreeRoomNowState {
-  const GetFreeRoomNowBusyState();
+class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
+  const GetFreeRoomNowBusyState({String? freeRoom}) : super(freeRoom: freeRoom);
 
   @override
-  List<Object?> get props => <Object?>[];
+  List<Object?> get props => <Object?>[...super.props];
 }
 
 class GetFreeRoomNowErrorState extends GetFreeRoomNowState {

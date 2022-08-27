@@ -47,7 +47,9 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  state is GetFreeRoomNowErrorState
+                  state is GetFreeRoomNowErrorState ||
+                          state is GetFreeRoomNowReadyState &&
+                              state.freeRoom != null
                       ? Strings.tryAgain
                       : Strings.search,
                 ),
