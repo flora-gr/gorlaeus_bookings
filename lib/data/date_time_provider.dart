@@ -7,9 +7,9 @@ class DateTimeProvider {
 
   DateTime getFirstWeekdayFromToday() {
     final DateTime today = getCurrentDateTime();
-    if (today.day == DateTime.saturday) {
+    if (today.weekday == DateTime.saturday) {
       return today.add(const Duration(days: 2));
-    } else if (today.day == DateTime.sunday) {}
+    } else if (today.weekday == DateTime.sunday) {}
     return today;
   }
 }
