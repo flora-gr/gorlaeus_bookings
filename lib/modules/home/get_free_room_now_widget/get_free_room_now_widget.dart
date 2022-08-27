@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/data/booking_provider.dart';
 import 'package:gorlaeus_bookings/data/date_time_provider.dart';
@@ -7,6 +6,7 @@ import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
+import 'package:gorlaeus_bookings/utils/string_extensions.dart';
 
 class GetFreeRoomNowWidget extends StatefulWidget {
   const GetFreeRoomNowWidget(
@@ -74,7 +74,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
               padding: const EdgeInsets.only(top: 12),
               child: Text(
                 Strings.roomIsFree(
-                  state.freeRoom!,
+                  state.freeRoom!.toRoomName(),
                 ),
               ),
             ),

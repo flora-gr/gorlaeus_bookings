@@ -5,16 +5,23 @@ abstract class GetFreeRoomNowState extends Equatable {
 }
 
 class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
-  const GetFreeRoomNowReadyState({this.freeRoom});
+  const GetFreeRoomNowReadyState({
+    this.freeRooms,
+    this.freeRoom,
+  });
 
+  final List<String>? freeRooms;
   final String? freeRoom;
 
   @override
-  List<Object?> get props => <Object?>[];
+  List<Object?> get props => <Object?>[freeRooms, freeRoom];
 }
 
 class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
-  const GetFreeRoomNowBusyState({String? freeRoom}) : super(freeRoom: freeRoom);
+  const GetFreeRoomNowBusyState({
+    List<String>? freeRooms,
+    String? freeRoom,
+  }) : super(freeRooms: freeRooms, freeRoom: freeRoom);
 
   @override
   List<Object?> get props => <Object?>[...super.props];
