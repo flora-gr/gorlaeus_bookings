@@ -7,4 +7,7 @@ extension DateTimeExtensions on DateTime {
 
   bool isOnSameDateAs(DateTime date) =>
       year == date.year && month == date.month && day == date.day;
+
+  bool isWeekendDay() =>
+      weekday == DateTime.saturday || weekday == DateTime.sunday;
 }

@@ -8,6 +8,7 @@ import 'package:gorlaeus_bookings/data/date_time_provider.dart';
 import 'package:gorlaeus_bookings/data/time_block.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_state.dart';
+import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
 
@@ -17,11 +18,13 @@ class GetFreeRoomNowBloc
     this._dateTimeProvider,
     this._bookingProvider,
   ) : super(const GetFreeRoomNowReadyState()) {
+    on<GetFreeRoomNowInitEvent>(
+        (GetFreeRoomNowInitEvent event, Emitter<GetFreeRoomNowState> emit) =>
+            emit(_handleGetFreeRoomInitEvent()));
     on<GetFreeRoomNowSearchEvent>(
-      (GetFreeRoomNowSearchEvent event, Emitter<GetFreeRoomNowState> emit) =>
-          emit.forEach(_handleGetFreeRoomNowSearchEvent(),
-              onData: (GetFreeRoomNowState state) => state),
-    );
+        (GetFreeRoomNowSearchEvent event, Emitter<GetFreeRoomNowState> emit) =>
+            emit.forEach(_handleGetFreeRoomNowSearchEvent(),
+                onData: (GetFreeRoomNowState state) => state));
   }
 
   final DateTimeProvider _dateTimeProvider;
@@ -29,6 +32,14 @@ class GetFreeRoomNowBloc
 
   final RoomsOverviewMapper _mapper = const RoomsOverviewMapper();
   final Random _random = Random();
+
+  GetFreeRoomNowState _handleGetFreeRoomInitEvent() {
+    if (_dateTimeProvider.getCurrentDateTime().isWeekendDay()) {
+      return const GetFreeRoomNowWeekendState();
+    } else {
+      return const GetFreeRoomNowReadyState();
+    }
+  }
 
   Stream<GetFreeRoomNowState> _handleGetFreeRoomNowSearchEvent() async* {
     List<String>? currentFreeRooms;
@@ -42,7 +53,6 @@ class GetFreeRoomNowBloc
     yield GetFreeRoomNowBusyState(freeRoom: currentFreeRoom);
 
     if (currentFreeRooms == null) {
-      // TODO: weekend state
       final DateTime now = _dateTimeProvider.getCurrentDateTime();
       final List<BookingEntry>? bookings =
           await _bookingProvider.getBookings(now);

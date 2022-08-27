@@ -16,10 +16,9 @@ class BookingOverviewBloc
     this._dateTimeProvider,
   ) : super(const BookingOverviewBusyState()) {
     on<BookingOverviewInitEvent>(
-      (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
-          emit.forEach(_handleInitEvent(event.date),
-              onData: (BookingOverviewState state) => state),
-    );
+        (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
+            emit.forEach(_handleInitEvent(event.date),
+                onData: (BookingOverviewState state) => state));
     on<BookingOverviewBookRoomEvent>((BookingOverviewBookRoomEvent event,
             Emitter<BookingOverviewState> emit) =>
         _handleBookRoomEvent(event));

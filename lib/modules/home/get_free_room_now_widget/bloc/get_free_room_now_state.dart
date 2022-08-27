@@ -4,6 +4,13 @@ abstract class GetFreeRoomNowState extends Equatable {
   const GetFreeRoomNowState();
 }
 
+class GetFreeRoomNowWeekendState extends GetFreeRoomNowState {
+  const GetFreeRoomNowWeekendState();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
+
 class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
   const GetFreeRoomNowReadyState({
     this.freeRooms,

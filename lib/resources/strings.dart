@@ -25,6 +25,7 @@ class Strings {
   // Get me a free room tile
   static const String getMeAFreeRoom = 'Find an available room now';
   static const String search = 'Search';
+  static const String notAvailableInWeekend = 'Not available on weekends';
   static String roomIsFree(String room) =>
       'Room $room is available until the end of the day.';
   static const String getFreeRoomFailed = 'Failed to find a room.';

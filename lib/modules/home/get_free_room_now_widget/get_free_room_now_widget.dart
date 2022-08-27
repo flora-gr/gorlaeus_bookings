@@ -30,7 +30,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
     _bloc = GetFreeRoomNowBloc(
       widget.dateTimeProvider,
       widget.bookingProvider,
-    );
+    )..add(const GetFreeRoomNowInitEvent());
     super.initState();
   }
 
@@ -42,16 +42,20 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ElevatedButton(
-            onPressed: () => _bloc.add(const GetFreeRoomNowSearchEvent()),
+            onPressed: state is GetFreeRoomNowWeekendState
+                ? null
+                : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  state is GetFreeRoomNowErrorState ||
-                          state is GetFreeRoomNowReadyState &&
-                              state.freeRoom != null
-                      ? Strings.tryAgain
-                      : Strings.search,
+                  state is GetFreeRoomNowWeekendState
+                      ? Strings.notAvailableInWeekend
+                      : state is GetFreeRoomNowErrorState ||
+                              state is GetFreeRoomNowReadyState &&
+                                  state.freeRoom != null
+                          ? Strings.tryAgain
+                          : Strings.search,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 12),
