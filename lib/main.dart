@@ -60,14 +60,17 @@ class GorlaeusBookingApp extends StatelessWidget {
   );
 
   MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
+    const BookingProvider bookingProvider = BookingProvider();
+    const DateTimeProvider dateTimeProvider = DateTimeProvider();
+
     debugPrint(settings.toString());
     switch (settings.name) {
       case Routes.bookingOverviewPage:
         return getRoute(
           BookingOverviewPage(
             BookingOverviewBloc(
-              const BookingProvider(),
-              const DateTimeProvider(),
+              bookingProvider,
+              dateTimeProvider,
             ),
             settings.arguments as DateTime,
           ),
@@ -78,8 +81,10 @@ class GorlaeusBookingApp extends StatelessWidget {
         return getRoute(
           HomePage(
             HomeBloc(
-              const DateTimeProvider(),
+              dateTimeProvider,
             ),
+            dateTimeProvider,
+            bookingProvider,
           ),
           settings,
         );

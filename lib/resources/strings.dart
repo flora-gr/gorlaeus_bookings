@@ -3,9 +3,14 @@ class Strings {
 
   // Home page
   static const String homePageTitle = 'Gorlaeus Bookings';
+
+  // Booking overview tile
+  static const String bookingOverview = 'Booking overview';
   static const String dateToCheck = 'Date to check:';
   static const String chooseADate = 'Choose a different date';
   static const String goToPageButtonText = 'Check bookings';
+
+  // Disclaimer dialog
   static const String disclaimerDialogTitle = 'Disclaimer';
   static const String disclaimerDialogText1 = 'This app uses the ';
   static const String disclaimerDialogText2 = 'https://zrs.leidenuniv.nl';
@@ -16,6 +21,13 @@ class Strings {
   static const String disclaimerDialogText4 = 'Github repository';
   static const String disclaimerDialogText5 =
       '.\n\nThanks for using Gorlaeus Bookings!';
+
+  // Get me a free room tile
+  static const String getMeAFreeRoom = 'Find a free room now';
+  static const String search = 'Search';
+  static String roomIsFree(String room) =>
+      'Room $room is free until the end of the day.';
+  static const String getFreeRoomFailed = 'Failed to find a room.';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
@@ -41,4 +53,5 @@ class Strings {
 
   // Shared
   static const String ok = 'OK';
+  static const String tryAgain = 'Try again';
 }

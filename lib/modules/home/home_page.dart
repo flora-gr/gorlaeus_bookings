@@ -1,23 +1,32 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/data/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/date_time_provider.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
+import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/get_free_room_now_widget.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/widgets/item_box.dart';
+import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(
-    this.bloc, {
+    this.bloc,
+    this.dateTimeProvider,
+    this.bookingProvider, {
     Key? key,
   }) : super(key: key);
 
   final HomeBloc bloc;
+  final DateTimeProvider dateTimeProvider;
+  final BookingProvider bookingProvider;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -46,33 +55,26 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(height: 16),
-              if (state is HomeReadyState) ...<Widget>[
-                _buildDateContent(state),
-                ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushNamed(
-                    Routes.bookingOverviewPage,
-                    arguments: state.selectedDate,
-                  ),
-                  child: IntrinsicWidth(
-                    child: Row(
-                      children: const <Widget>[
-                        Text(Strings.goToPageButtonText),
-                        Icon(Icons.arrow_right)
+        body: state is HomeReadyState
+            ? SizedBox(
+                width: double.infinity,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: <Widget>[
+                        ...<Widget>[
+                          _buildBookingOverviewTile(state),
+                          _buildGetMeAFreeRoomNowTile(state),
+                        ],
                       ],
                     ),
                   ),
                 ),
-              ] else
-                const CircularProgressIndicator(),
-            ],
-          ),
-        ),
+              )
+            : const Center(
+                child: LoadingWidget(),
+              ),
       ),
     );
   }
@@ -80,7 +82,7 @@ class _HomePageState extends State<HomePage> {
   void _openDisclaimerDialog() {
     final TextStyle? defaultTextStyle = Theme.of(context).textTheme.bodyText2;
     final TextStyle? linkTextStyle = defaultTextStyle?.copyWith(
-      color: Styles.linkTextColor,
+      color: Styles.secondaryColorSwatch,
       decoration: TextDecoration.underline,
     );
     showDialog(
@@ -139,16 +141,44 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildBookingOverviewTile(HomeReadyState state) {
+    return ItemBox(
+      title: Strings.bookingOverview,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          ...<Widget>[
+            _buildDateContent(state),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed(
+                Routes.bookingOverviewPage,
+                arguments: state.selectedDate,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  Text(Strings.goToPageButtonText),
+                  Icon(Icons.arrow_right)
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   Widget _buildDateContent(HomeReadyState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        const SizedBox(height: 4),
         Text(
           '${Strings.dateToCheck} ${state.selectedDate.formatted}',
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.titleSmall,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.only(top: 4, bottom: 12),
           child: OutlinedButton(
             onPressed: () async {
               final DateTime? newDate = await showDatePicker(
@@ -169,6 +199,16 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildGetMeAFreeRoomNowTile(HomeState state) {
+    return ItemBox(
+      title: Strings.getMeAFreeRoom,
+      child: GetFreeRoomNowWidget(
+        widget.dateTimeProvider,
+        widget.bookingProvider,
+      ),
     );
   }
 }

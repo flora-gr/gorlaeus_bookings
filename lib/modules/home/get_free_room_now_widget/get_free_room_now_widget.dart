@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/data/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/date_time_provider.dart';
+import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_bloc.dart';
+import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_event.dart';
+import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_state.dart';
+import 'package:gorlaeus_bookings/resources/strings.dart';
+
+class GetFreeRoomNowWidget extends StatefulWidget {
+  const GetFreeRoomNowWidget(
+    this.dateTimeProvider,
+    this.bookingProvider, {
+    Key? key,
+  }) : super(key: key);
+
+  final DateTimeProvider dateTimeProvider;
+  final BookingProvider bookingProvider;
+
+  @override
+  State<GetFreeRoomNowWidget> createState() => _GetFreeRoomNowWidgetState();
+}
+
+class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
+  late GetFreeRoomNowBloc _bloc;
+
+  @override
+  void initState() {
+    _bloc = GetFreeRoomNowBloc(
+      widget.dateTimeProvider,
+      widget.bookingProvider,
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+      bloc: _bloc,
+      builder: (BuildContext context, GetFreeRoomNowState state) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          ElevatedButton(
+            onPressed: () => _bloc.add(const GetFreeRoomNowSearchEvent()),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  state is GetFreeRoomNowErrorState
+                      ? Strings.tryAgain
+                      : Strings.search,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: state is GetFreeRoomNowBusyState
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          )
+                        : null,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (state is GetFreeRoomNowReadyState && state.freeRoom != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Text(
+                Strings.roomIsFree(
+                  state.freeRoom!,
+                ),
+              ),
+            ),
+          if (state is GetFreeRoomNowErrorState)
+            const Text(Strings.getFreeRoomFailed),
+        ],
+      ),
+    );
+  }
+}
