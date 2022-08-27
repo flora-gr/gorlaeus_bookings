@@ -13,8 +13,8 @@ class ItemBox extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 600),
       child: Container(
         margin: const EdgeInsets.all(8),
         padding: const EdgeInsets.all(16),
