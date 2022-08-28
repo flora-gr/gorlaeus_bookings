@@ -187,9 +187,7 @@ class _HomePageState extends State<HomePage> {
                 firstDate: state.minimumDate,
                 lastDate: state.maximumDate,
                 locale: const Locale('nl', 'NL'),
-                selectableDayPredicate: (DateTime date) =>
-                    date.weekday != DateTime.saturday &&
-                    date.weekday != DateTime.sunday,
+                selectableDayPredicate: (DateTime date) => !date.isWeekendDay(),
               );
               if (newDate != null) {
                 _bloc.add(HomeDateChangedEvent(newDate));
