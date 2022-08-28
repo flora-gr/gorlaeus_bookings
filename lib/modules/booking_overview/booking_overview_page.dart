@@ -12,8 +12,8 @@ class BookingOverviewPage extends StatefulWidget {
   const BookingOverviewPage(
     this._bloc,
     this._date, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final BookingOverviewBloc _bloc;
   final DateTime _date;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/data/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/time_block.dart';
+import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';

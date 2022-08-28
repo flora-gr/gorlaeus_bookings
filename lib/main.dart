@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
+import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
+import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
@@ -15,7 +17,7 @@ void main() {
 }
 
 class GorlaeusBookingApp extends StatelessWidget {
-  const GorlaeusBookingApp({Key? key}) : super(key: key);
+  const GorlaeusBookingApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class GorlaeusBookingApp extends StatelessWidget {
       supportedLocales: const <Locale>[
         Locale('nl', 'NL'),
       ],
-      initialRoute: Routes.home,
+      initialRoute: Routes.homePage,
       onGenerateRoute: _onGenerateRoute,
     );
   }
@@ -76,7 +78,14 @@ class GorlaeusBookingApp extends StatelessWidget {
           ),
           settings,
         );
-      case Routes.home:
+      case Routes.settingsPage:
+        return getRoute(
+          SettingsPage(
+            SettingsBloc(),
+          ),
+          settings,
+        );
+      case Routes.homePage:
       default:
         return getRoute(
           HomePage(

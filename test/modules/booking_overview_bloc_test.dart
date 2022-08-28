@@ -1,10 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gorlaeus_bookings/data/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
-import 'package:gorlaeus_bookings/data/time_block.dart';
+import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';

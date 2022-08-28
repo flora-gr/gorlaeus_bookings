@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gorlaeus_bookings/data/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/time_block.dart';
+import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 
 void main() {
-  const RoomsOverviewMapper _sut = RoomsOverviewMapper();
+  const RoomsOverviewMapper sut = RoomsOverviewMapper();
 
   const TimeBlock bookingTimeBlock = TimeBlock(
     startTime: TimeOfDay(hour: 12, minute: 0),
@@ -28,7 +28,7 @@ void main() {
     'mapToRoomsOverview returns map of all rooms with TimeBlocks if available',
     () {
       final Map<String, Iterable<TimeBlock?>> result =
-          _sut.mapToRoomsOverview(bookings);
+          sut.mapToRoomsOverview(bookings);
 
       expect(
         result.length == Rooms.all.length,

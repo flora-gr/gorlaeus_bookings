@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';

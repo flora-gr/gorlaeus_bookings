@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
+import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
@@ -21,8 +21,8 @@ class HomePage extends StatefulWidget {
     this.bloc,
     this.dateTimeProvider,
     this.bookingProvider, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final HomeBloc bloc;
   final DateTimeProvider dateTimeProvider;
@@ -66,6 +66,25 @@ class _HomePageState extends State<HomePage> {
                         ...<Widget>[
                           _buildBookingOverviewTile(state),
                           _buildGetMeAFreeRoomNowTile(state),
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
+                                .pushNamed(Routes.settingsPage),
+                            child: const Text(
+                              Strings.adjustSettings,
+                              style: TextStyle(
+                                shadows: <Shadow>[
+                                  Shadow(
+                                    color: Styles.secondaryColorSwatch,
+                                    offset: Offset(0, -2),
+                                  ),
+                                ],
+                                color: Colors.transparent,
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 1.5,
+                                decorationColor: Styles.secondaryColorSwatch,
+                              ),
+                            ),
+                          ),
                         ],
                       ],
                     ),

@@ -5,8 +5,8 @@ class ItemBox extends StatelessWidget {
   const ItemBox({
     required this.title,
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String title;
   final Widget child;

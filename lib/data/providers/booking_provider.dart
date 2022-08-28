@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/data/booking_entry.dart';
+import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/utils/dom_element_extensions.dart';
 import 'package:gorlaeus_bookings/utils/string_extensions.dart';

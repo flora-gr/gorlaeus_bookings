@@ -3,6 +3,7 @@ class Strings {
 
   // Home page
   static const String homePageTitle = 'Gorlaeus Bookings';
+  static const String adjustSettings = 'Adjust settings';
 
   // Booking overview tile
   static const String bookingOverview = 'Booking overview';
@@ -55,6 +56,9 @@ class Strings {
   static const String roomBookedDialogText = 'This room is already booked.';
   static const String yesBookRoom = 'Yes, send email';
   static const String cancel = 'Cancel';
+
+  // Settings page
+  static const String settingsPageTitle = 'Settings';
 
   // Shared
   static const String ok = 'OK';
