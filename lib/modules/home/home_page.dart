@@ -19,14 +19,14 @@ import 'package:url_launcher/url_launcher.dart';
 class HomePage extends StatefulWidget {
   const HomePage(
     this.bloc,
-    this.dateTimeProvider,
-    this.bookingProvider, {
+    this.dateTimeRepository,
+    this.bookingRepository, {
     super.key,
   });
 
   final HomeBloc bloc;
-  final DateTimeRepository dateTimeProvider;
-  final BookingRepository bookingProvider;
+  final DateTimeRepository dateTimeRepository;
+  final BookingRepository bookingRepository;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -226,8 +226,8 @@ class _HomePageState extends State<HomePage> {
       child: ItemBox(
         title: Strings.getMeAFreeRoom,
         child: GetFreeRoomNowWidget(
-          widget.dateTimeProvider,
-          widget.bookingProvider,
+          widget.dateTimeRepository,
+          widget.bookingRepository,
         ),
       ),
     );

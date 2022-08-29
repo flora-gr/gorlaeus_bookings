@@ -15,8 +15,8 @@ import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
 class GetFreeRoomNowBloc
     extends Bloc<GetFreeRoomNowEvent, GetFreeRoomNowState> {
   GetFreeRoomNowBloc(
-    this._dateTimeProvider,
-    this._bookingProvider,
+    this._dateTimeRepository,
+    this._bookingRepository,
   ) : super(const GetFreeRoomNowReadyState()) {
     on<GetFreeRoomNowInitEvent>(
         (GetFreeRoomNowInitEvent event, Emitter<GetFreeRoomNowState> emit) =>
@@ -27,14 +27,14 @@ class GetFreeRoomNowBloc
                 onData: (GetFreeRoomNowState state) => state));
   }
 
-  final DateTimeRepository _dateTimeProvider;
-  final BookingRepository _bookingProvider;
+  final DateTimeRepository _dateTimeRepository;
+  final BookingRepository _bookingRepository;
 
   final RoomsOverviewMapper _mapper = const RoomsOverviewMapper();
   final Random _random = Random();
 
   GetFreeRoomNowState _handleGetFreeRoomInitEvent() {
-    if (_dateTimeProvider.getCurrentDateTime().isWeekendDay()) {
+    if (_dateTimeRepository.getCurrentDateTime().isWeekendDay()) {
       return const GetFreeRoomNowWeekendState();
     } else {
       return const GetFreeRoomNowReadyState();
@@ -53,9 +53,9 @@ class GetFreeRoomNowBloc
     yield GetFreeRoomNowBusyState(freeRoom: currentFreeRoom);
 
     if (currentFreeRooms == null) {
-      final DateTime now = _dateTimeProvider.getCurrentDateTime();
+      final DateTime now = _dateTimeRepository.getCurrentDateTime();
       final List<BookingEntry>? bookings =
-          await _bookingProvider.getBookings(now);
+          await _bookingRepository.getBookings(now);
 
       if (bookings != null) {
         final TimeBlock timeBlockFromNowUntilEndOfDay = TimeBlock(

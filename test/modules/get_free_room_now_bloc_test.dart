@@ -11,13 +11,13 @@ import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockDateTimeProvider extends Mock implements DateTimeRepository {}
+class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
-class MockBookingProvider extends Mock implements BookingRepository {}
+class MockBookingRepository extends Mock implements BookingRepository {}
 
 void main() {
-  late DateTimeRepository dateTimeProvider;
-  late BookingRepository bookingProvider;
+  late DateTimeRepository dateTimeRepository;
+  late BookingRepository bookingRepository;
   late GetFreeRoomNowBloc sut;
 
   final DateTime todayAtTwo = DateTime(2020, 1, 1, 14);
@@ -48,13 +48,13 @@ void main() {
       .toList();
 
   setUp(() {
-    dateTimeProvider = MockDateTimeProvider();
-    when(() => dateTimeProvider.getCurrentDateTime())
+    dateTimeRepository = MockDateTimeRepository();
+    when(() => dateTimeRepository.getCurrentDateTime())
         .thenAnswer((_) => todayAtTwo);
-    bookingProvider = MockBookingProvider();
-    when(() => bookingProvider.getBookings(any()))
+    bookingRepository = MockBookingRepository();
+    when(() => bookingRepository.getBookings(any()))
         .thenAnswer((_) async => defaultBookingResponse);
-    sut = GetFreeRoomNowBloc(dateTimeProvider, bookingProvider);
+    sut = GetFreeRoomNowBloc(dateTimeRepository, bookingRepository);
   });
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
@@ -68,7 +68,7 @@ void main() {
           state.freeRooms != null && state.freeRoom != null),
     ],
     verify: (_) {
-      verify(() => bookingProvider.getBookings(any())).called(1);
+      verify(() => bookingRepository.getBookings(any())).called(1);
     },
   );
 
@@ -92,13 +92,13 @@ void main() {
       ),
     ],
     verify: (_) {
-      verifyNever(() => bookingProvider.getBookings(any()));
+      verifyNever(() => bookingRepository.getBookings(any()));
     },
   );
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
     'Failure to fetch data emits error state',
-    setUp: () => when(() => bookingProvider.getBookings(any()))
+    setUp: () => when(() => bookingRepository.getBookings(any()))
         .thenAnswer((_) async => null),
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>
@@ -111,7 +111,7 @@ void main() {
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
     'All rooms booked emits empty state',
-    setUp: () => when(() => bookingProvider.getBookings(any()))
+    setUp: () => when(() => bookingRepository.getBookings(any()))
         .thenAnswer((_) async => fullyBookedResponse),
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>

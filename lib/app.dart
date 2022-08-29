@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
-import 'package:gorlaeus_bookings/data/repositories/shared_preferences_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
@@ -63,8 +63,8 @@ class GorlaeusBookingApp extends StatelessWidget {
   );
 
   MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
-    const BookingRepository bookingProvider = BookingRepository();
-    const DateTimeRepository dateTimeProvider = DateTimeRepository();
+    const BookingRepository bookingRepository = BookingRepository();
+    const DateTimeRepository dateTimeRepository = DateTimeRepository();
 
     debugPrint(settings.toString());
     switch (settings.name) {
@@ -72,8 +72,8 @@ class GorlaeusBookingApp extends StatelessWidget {
         return _getRoute(
           BookingOverviewPage(
             BookingOverviewBloc(
-              bookingProvider,
-              dateTimeProvider,
+              bookingRepository,
+              dateTimeRepository,
             ),
             settings.arguments as DateTime,
           ),
@@ -91,10 +91,10 @@ class GorlaeusBookingApp extends StatelessWidget {
         return _getRoute(
           HomePage(
             HomeBloc(
-              dateTimeProvider,
+              dateTimeRepository,
             ),
-            dateTimeProvider,
-            bookingProvider,
+            dateTimeRepository,
+            bookingRepository,
           ),
           settings,
         );

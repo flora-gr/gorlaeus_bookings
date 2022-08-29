@@ -6,10 +6,10 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockDateTimeProvider extends Mock implements DateTimeRepository {}
+class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 void main() {
-  late DateTimeRepository dateTimeProvider;
+  late DateTimeRepository dateTimeRepository;
   late HomeBloc sut;
 
   final DateTime today = DateTime.fromMillisecondsSinceEpoch(0);
@@ -17,10 +17,10 @@ void main() {
   final DateTime otherDay = DateTime.fromMillisecondsSinceEpoch(1);
 
   setUp(() {
-    dateTimeProvider = MockDateTimeProvider();
-    when(() => dateTimeProvider.getFirstWeekdayFromToday())
+    dateTimeRepository = MockDateTimeRepository();
+    when(() => dateTimeRepository.getFirstWeekdayFromToday())
         .thenAnswer((_) => today);
-    sut = HomeBloc(dateTimeProvider);
+    sut = HomeBloc(dateTimeRepository);
   });
 
   blocTest<HomeBloc, HomeState>(

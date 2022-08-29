@@ -10,13 +10,13 @@ import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockBookingProvider extends Mock implements BookingRepository {}
+class MockBookingRepository extends Mock implements BookingRepository {}
 
-class MockDateTimeProvider extends Mock implements DateTimeRepository {}
+class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 void main() {
-  late BookingRepository bookingProvider;
-  late DateTimeRepository dateTimeProvider;
+  late BookingRepository bookingRepository;
+  late DateTimeRepository dateTimeRepository;
   late BookingOverviewBloc sut;
 
   final DateTime date = DateTime.fromMillisecondsSinceEpoch(0);
@@ -36,14 +36,14 @@ void main() {
   ];
 
   setUp(() {
-    bookingProvider = MockBookingProvider();
-    dateTimeProvider = MockDateTimeProvider();
-    sut = BookingOverviewBloc(bookingProvider, dateTimeProvider);
+    bookingRepository = MockBookingRepository();
+    dateTimeRepository = MockDateTimeRepository();
+    sut = BookingOverviewBloc(bookingRepository, dateTimeRepository);
   });
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
     'Initialization emits ready state',
-    setUp: () => when(() => bookingProvider.getBookings(any()))
+    setUp: () => when(() => bookingRepository.getBookings(any()))
         .thenAnswer((_) async => bookings),
     build: () => sut,
     act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),
@@ -58,7 +58,7 @@ void main() {
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
     'Failure to fetch data emits error state',
-    setUp: () => when(() => bookingProvider.getBookings(any()))
+    setUp: () => when(() => bookingRepository.getBookings(any()))
         .thenThrow(Exception('Failed')),
     build: () => sut,
     act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),

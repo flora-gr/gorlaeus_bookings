@@ -12,8 +12,8 @@ import 'package:url_launcher/url_launcher.dart';
 class BookingOverviewBloc
     extends Bloc<BookingOverviewEvent, BookingOverviewState> {
   BookingOverviewBloc(
-    this._bookingProvider,
-    this._dateTimeProvider,
+    this._bookingRepository,
+    this._dateTimeRepository,
   ) : super(const BookingOverviewBusyState()) {
     on<BookingOverviewInitEvent>(
         (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
@@ -24,15 +24,15 @@ class BookingOverviewBloc
         _handleBookRoomEvent(event));
   }
 
-  final BookingRepository _bookingProvider;
-  final DateTimeRepository _dateTimeProvider;
+  final BookingRepository _bookingRepository;
+  final DateTimeRepository _dateTimeRepository;
 
   Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
     yield const BookingOverviewBusyState();
 
     try {
       final List<BookingEntry>? bookings =
-          await _bookingProvider.getBookings(date);
+          await _bookingRepository.getBookings(date);
       if (bookings != null) {
         yield BookingOverviewReadyState(
           date: date,
@@ -49,7 +49,7 @@ class BookingOverviewBloc
   _handleBookRoomEvent(BookingOverviewBookRoomEvent event) async {
     final DateTime date = (state as BookingOverviewReadyState).date;
     final String dateString =
-        date.isOnSameDateAs(_dateTimeProvider.getCurrentDateTime())
+        date.isOnSameDateAs(_dateTimeRepository.getCurrentDateTime())
             ? Strings.today
             : Strings.onDay(date.formatted);
 
