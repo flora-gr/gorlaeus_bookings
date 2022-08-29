@@ -11,13 +11,17 @@ class SettingsInitEvent extends SettingsEvent {
   List<Object?> get props => <Object?>[];
 }
 
-class SettingsSelectedRoomsChangedEvent extends SettingsEvent {
-  const SettingsSelectedRoomsChangedEvent(this.selectedRooms);
+class SettingsRoomSelectionChangedEvent extends SettingsEvent {
+  const SettingsRoomSelectionChangedEvent({
+    required this.room,
+    required this.isSelected,
+  });
 
-  final List<String> selectedRooms;
+  final String room;
+  final bool isSelected;
 
   @override
-  List<Object?> get props => <Object?>[selectedRooms];
+  List<Object?> get props => <Object?>[room, isSelected];
 }
 
 class SettingsSaveEvent extends SettingsEvent {

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
+import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
-import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/utils/string_extensions.dart';
+import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage(
@@ -23,7 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    _bloc = widget.bloc;
+    _bloc = widget.bloc..add(const SettingsInitEvent());
     super.initState();
   }
 
@@ -35,14 +37,50 @@ class _SettingsPageState extends State<SettingsPage> {
         appBar: AppBar(
           title: const Text(Strings.settingsPageTitle),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: Styles.defaultPagePadding,
-            child: Column(
-              children: <Widget>[],
-            ),
-          ),
-        ),
+        body: state is SettingsReadyState
+            ? SingleChildScrollView(
+                child: Padding(
+                  padding: Styles.defaultPagePadding,
+                  child: Column(
+                    children: <Widget>[
+                      ...state.rooms.map(
+                        (String room) => CheckboxListTile(
+                          title: Text(room.toRoomName()),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          visualDensity: VisualDensity.compact,
+                          activeColor: Styles.secondaryColorSwatch,
+                          value: state.selectedRooms.contains(room),
+                          onChanged: (bool? value) {
+                            _bloc.add(
+                              SettingsRoomSelectionChangedEvent(
+                                room: room,
+                                isSelected: value!,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : const Center(
+                child: LoadingWidget(),
+              ),
+        persistentFooterButtons: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(Strings.save),
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

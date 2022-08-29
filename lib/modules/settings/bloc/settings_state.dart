@@ -17,9 +17,15 @@ class SettingsReadyState extends SettingsState {
     required this.selectedRooms,
   });
 
-  final List<String> rooms;
+  final Iterable<String> rooms;
+  final Iterable<String> selectedRooms;
 
-  final List<String> selectedRooms;
+  SettingsReadyState copyWith(Iterable<String> selectedRooms) {
+    return SettingsReadyState(
+      rooms: rooms,
+      selectedRooms: selectedRooms,
+    );
+  }
 
   @override
   List<Object?> get props => <Object?>[rooms, selectedRooms];

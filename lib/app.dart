@@ -85,6 +85,7 @@ class GorlaeusBookingApp extends StatelessWidget {
             SettingsBloc(SharedPreferencesRepository()),
           ),
           settings,
+          fullscreenDialog: true,
         );
       case Routes.homePage:
       default:
@@ -101,10 +102,15 @@ class GorlaeusBookingApp extends StatelessWidget {
     }
   }
 
-  MaterialPageRoute<void> _getRoute(Widget page, RouteSettings settings) {
+  MaterialPageRoute<void> _getRoute(
+    Widget page,
+    RouteSettings settings, {
+    bool fullscreenDialog = false,
+  }) {
     return MaterialPageRoute<void>(
       builder: (_) => page,
       settings: settings,
+      fullscreenDialog: fullscreenDialog,
     );
   }
 }

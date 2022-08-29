@@ -59,6 +59,7 @@ class Strings {
 
   // Settings page
   static const String settingsPageTitle = 'Settings';
+  static const String save = 'Save changes';
 
   // Shared
   static const String ok = 'OK';
