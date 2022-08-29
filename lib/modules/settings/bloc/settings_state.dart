@@ -10,3 +10,17 @@ class SettingsBusyState extends SettingsState {
   @override
   List<Object?> get props => <Object?>[];
 }
+
+class SettingsReadyState extends SettingsState {
+  const SettingsReadyState({
+    required this.rooms,
+    required this.selectedRooms,
+  });
+
+  final List<String> rooms;
+
+  final List<String> selectedRooms;
+
+  @override
+  List<Object?> get props => <Object?>[rooms, selectedRooms];
+}

@@ -2,8 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_event.dart';
@@ -11,13 +11,13 @@ import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockDateTimeProvider extends Mock implements DateTimeProvider {}
+class MockDateTimeProvider extends Mock implements DateTimeRepository {}
 
-class MockBookingProvider extends Mock implements BookingProvider {}
+class MockBookingProvider extends Mock implements BookingRepository {}
 
 void main() {
-  late DateTimeProvider dateTimeProvider;
-  late BookingProvider bookingProvider;
+  late DateTimeRepository dateTimeProvider;
+  late BookingRepository bookingProvider;
   late GetFreeRoomNowBloc sut;
 
   final DateTime todayAtTwo = DateTime(2020, 1, 1, 14);

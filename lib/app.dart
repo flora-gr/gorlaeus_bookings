@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/shared_preferences_provider.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
@@ -62,13 +63,13 @@ class GorlaeusBookingApp extends StatelessWidget {
   );
 
   MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
-    const BookingProvider bookingProvider = BookingProvider();
-    const DateTimeProvider dateTimeProvider = DateTimeProvider();
+    const BookingRepository bookingProvider = BookingRepository();
+    const DateTimeRepository dateTimeProvider = DateTimeRepository();
 
     debugPrint(settings.toString());
     switch (settings.name) {
       case Routes.bookingOverviewPage:
-        return getRoute(
+        return _getRoute(
           BookingOverviewPage(
             BookingOverviewBloc(
               bookingProvider,
@@ -79,15 +80,15 @@ class GorlaeusBookingApp extends StatelessWidget {
           settings,
         );
       case Routes.settingsPage:
-        return getRoute(
+        return _getRoute(
           SettingsPage(
-            SettingsBloc(),
+            SettingsBloc(SharedPreferencesRepository()),
           ),
           settings,
         );
       case Routes.homePage:
       default:
-        return getRoute(
+        return _getRoute(
           HomePage(
             HomeBloc(
               dateTimeProvider,
@@ -100,7 +101,7 @@ class GorlaeusBookingApp extends StatelessWidget {
     }
   }
 
-  MaterialPageRoute<void> getRoute(Widget page, RouteSettings settings) {
+  MaterialPageRoute<void> _getRoute(Widget page, RouteSettings settings) {
     return MaterialPageRoute<void>(
       builder: (_) => page,
       settings: settings,

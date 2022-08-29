@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_state.dart';
@@ -27,8 +27,8 @@ class GetFreeRoomNowBloc
                 onData: (GetFreeRoomNowState state) => state));
   }
 
-  final DateTimeProvider _dateTimeProvider;
-  final BookingProvider _bookingProvider;
+  final DateTimeRepository _dateTimeProvider;
+  final BookingRepository _bookingProvider;
 
   final RoomsOverviewMapper _mapper = const RoomsOverviewMapper();
   final Random _random = Random();

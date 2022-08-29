@@ -8,8 +8,8 @@ import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-class BookingProvider {
-  const BookingProvider();
+class BookingRepository {
+  const BookingRepository();
 
   static const String _building1 = 'GORLB+GORLB - Gorlaeus Building';
   static const String _building2 = 'GORL+GORL - Gorlaeus Lecture Hall';

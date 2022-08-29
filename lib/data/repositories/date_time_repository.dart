@@ -1,5 +1,5 @@
-class DateTimeProvider {
-  const DateTimeProvider();
+class DateTimeRepository {
+  const DateTimeRepository();
 
   DateTime getCurrentDateTime() {
     return DateTime.now();

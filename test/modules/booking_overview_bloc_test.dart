@@ -2,21 +2,21 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockBookingProvider extends Mock implements BookingProvider {}
+class MockBookingProvider extends Mock implements BookingRepository {}
 
-class MockDateTimeProvider extends Mock implements DateTimeProvider {}
+class MockDateTimeProvider extends Mock implements DateTimeRepository {}
 
 void main() {
-  late BookingProvider bookingProvider;
-  late DateTimeProvider dateTimeProvider;
+  late BookingRepository bookingProvider;
+  late DateTimeRepository dateTimeProvider;
   late BookingOverviewBloc sut;
 
   final DateTime date = DateTime.fromMillisecondsSinceEpoch(0);

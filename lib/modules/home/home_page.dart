@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
@@ -25,8 +25,8 @@ class HomePage extends StatefulWidget {
   });
 
   final HomeBloc bloc;
-  final DateTimeProvider dateTimeProvider;
-  final BookingProvider bookingProvider;
+  final DateTimeRepository dateTimeProvider;
+  final BookingRepository bookingProvider;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                 width: double.infinity,
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: Styles.defaultPagePadding,
                     child: Column(
                       children: <Widget>[
                         ...<Widget>[

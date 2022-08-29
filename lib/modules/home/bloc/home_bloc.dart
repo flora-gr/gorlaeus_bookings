@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 
@@ -12,7 +12,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit((state as HomeReadyState).copyWith(newSelectedDate: event.date)));
   }
 
-  final DateTimeProvider _dateTimeProvider;
+  final DateTimeRepository _dateTimeProvider;
 
   HomeState _handleInitEvent() {
     final DateTime initialDate = _dateTimeProvider.getFirstWeekdayFromToday();

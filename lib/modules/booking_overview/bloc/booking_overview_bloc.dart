@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/providers/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/providers/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
@@ -24,8 +24,8 @@ class BookingOverviewBloc
         _handleBookRoomEvent(event));
   }
 
-  final BookingProvider _bookingProvider;
-  final DateTimeProvider _dateTimeProvider;
+  final BookingRepository _bookingProvider;
+  final DateTimeRepository _dateTimeProvider;
 
   Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
     yield const BookingOverviewBusyState();
