@@ -16,6 +16,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         (SettingsRoomSelectionChangedEvent event,
                 Emitter<SettingsState> emit) =>
             emit(_handleSelectionChangedEvent(event)));
+    on<SettingsSaveEvent>(
+        (SettingsSaveEvent event, Emitter<SettingsState> emit) =>
+            _handleSettingsSaveEvent());
   }
 
   final SharedPreferencesRepository _sharedPreferencesRepository;
@@ -41,5 +44,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           .whereNot((String room) => room == event.room);
     }
     return currentState.copyWith(newSelectedRooms);
+  }
+
+  void _handleSettingsSaveEvent() {
+    final SettingsReadyState currentState = (state as SettingsReadyState);
+    final Iterable<String> hiddenRooms = currentState.rooms
+        .whereNot((String room) => currentState.selectedRooms.contains(room));
+    _sharedPreferencesRepository.setHideRooms(hiddenRooms.toList());
   }
 }
