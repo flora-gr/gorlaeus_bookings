@@ -120,12 +120,10 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText2,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    launchUrl(
-                      ConnectionUrls.zrsWebsiteLink,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  },
+                  ..onTap = () => launchUrl(
+                        ConnectionUrls.zrsWebsiteLink,
+                        mode: LaunchMode.externalApplication,
+                      ),
               ),
               TextSpan(
                 text: Strings.disclaimerDialogText3,
@@ -135,15 +133,24 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText4,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    launchUrl(
-                      ConnectionUrls.githubRepositoryLink,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  },
+                  ..onTap =
+                      () => launchUrl(ConnectionUrls.appDeveloperEmailUri),
               ),
               TextSpan(
                 text: Strings.disclaimerDialogText5,
+                style: defaultTextStyle,
+              ),
+              TextSpan(
+                text: Strings.disclaimerDialogText6,
+                style: linkTextStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => launchUrl(
+                        ConnectionUrls.githubRepositoryLink,
+                        mode: LaunchMode.externalApplication,
+                      ),
+              ),
+              TextSpan(
+                text: Strings.disclaimerDialogText7,
                 style: defaultTextStyle,
               ),
             ],
@@ -205,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                 initialDate: state.selectedDate,
                 firstDate: state.minimumDate,
                 lastDate: state.maximumDate,
-                locale: const Locale('nl', 'NL'),
+                locale: const Locale('en', 'GB'),
                 selectableDayPredicate: (DateTime date) => !date.isWeekendDay(),
               );
               if (newDate != null) {

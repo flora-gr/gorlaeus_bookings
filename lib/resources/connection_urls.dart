@@ -10,6 +10,9 @@ class ConnectionUrls {
 
   static const String serviceDeskEmail = 'servicedesk@science.leidenuniv.nl';
 
+  static Uri appDeveloperEmailUri =
+      Uri(scheme: 'mailto', path: 'gorlaeusbookings@gmail.com');
+
   static Uri githubRepositoryLink =
       Uri.https('github.com', '/flora-gr/gorlaeus_bookings');
 }

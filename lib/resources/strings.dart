@@ -18,9 +18,11 @@ class Strings {
   static const String disclaimerDialogText3 = ' website to fetch data. '
       'It is a hobby project and although all data is presented in good faith, it may contain errors. '
       'Usage of the booking system via this app is at your own risk.\n\n'
-      'Bug reports and feature requests can be made at our ';
-  static const String disclaimerDialogText4 = 'Github repository';
-  static const String disclaimerDialogText5 =
+      'Bug reports and feature requests can be ';
+  static const String disclaimerDialogText4 = 'e-mailed';
+  static const String disclaimerDialogText5 = ' or made at our ';
+  static const String disclaimerDialogText6 = 'Github repository';
+  static const String disclaimerDialogText7 =
       '.\n\nThanks for using Gorlaeus Bookings!';
 
   // Get me a free room tile
@@ -60,6 +62,10 @@ class Strings {
   // Settings page
   static const String settingsPageTitle = 'Settings';
   static const String save = 'Save changes';
+  static const String hideRoomsInfoI =
+      'Hidden rooms will not be shown in the \'Booking overview\' '
+      'and will not be suggested in \'Find an available room now\'. '
+      'You can not hide your favorite room.';
 
   // Shared
   static const String ok = 'OK';

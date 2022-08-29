@@ -29,6 +29,7 @@ class GorlaeusBookingApp extends StatelessWidget {
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       supportedLocales: const <Locale>[
         Locale('nl', 'NL'),
+        Locale('en', 'GB'),
       ],
       initialRoute: Routes.homePage,
       onGenerateRoute: _onGenerateRoute,
