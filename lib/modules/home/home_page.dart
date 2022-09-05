@@ -12,6 +12,7 @@ import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,13 +21,15 @@ class HomePage extends StatefulWidget {
   const HomePage(
     this.bloc,
     this.dateTimeRepository,
-    this.bookingRepository, {
+    this.bookingRepository,
+    this.mapper, {
     super.key,
   });
 
   final HomeBloc bloc;
   final DateTimeRepository dateTimeRepository;
   final BookingRepository bookingRepository;
+  final RoomsOverviewMapper mapper;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -235,6 +238,7 @@ class _HomePageState extends State<HomePage> {
         child: GetFreeRoomNowWidget(
           widget.dateTimeRepository,
           widget.bookingRepository,
+          widget.mapper,
         ),
       ),
     );

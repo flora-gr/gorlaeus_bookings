@@ -17,6 +17,7 @@ class GetFreeRoomNowBloc
   GetFreeRoomNowBloc(
     this._dateTimeRepository,
     this._bookingRepository,
+    this._mapper,
   ) : super(const GetFreeRoomNowReadyState()) {
     on<GetFreeRoomNowInitEvent>(
         (GetFreeRoomNowInitEvent event, Emitter<GetFreeRoomNowState> emit) =>
@@ -29,8 +30,8 @@ class GetFreeRoomNowBloc
 
   final DateTimeRepository _dateTimeRepository;
   final BookingRepository _bookingRepository;
+  final RoomsOverviewMapper _mapper;
 
-  final RoomsOverviewMapper _mapper = const RoomsOverviewMapper();
   final Random _random = Random();
 
   GetFreeRoomNowState _handleGetFreeRoomInitEvent() {
@@ -42,57 +43,57 @@ class GetFreeRoomNowBloc
   }
 
   Stream<GetFreeRoomNowState> _handleGetFreeRoomNowSearchEvent() async* {
-    List<String>? currentFreeRooms;
+    List<BookingEntry>? bookings;
     String? currentFreeRoom;
 
     if (state is GetFreeRoomNowReadyState) {
-      currentFreeRooms = (state as GetFreeRoomNowReadyState).freeRooms;
+      bookings = (state as GetFreeRoomNowReadyState).bookings;
       currentFreeRoom = (state as GetFreeRoomNowReadyState).freeRoom;
     }
 
     yield GetFreeRoomNowBusyState(freeRoom: currentFreeRoom);
 
-    if (currentFreeRooms == null) {
-      final DateTime now = _dateTimeRepository.getCurrentDateTime();
-      final List<BookingEntry>? bookings =
+    final DateTime now = _dateTimeRepository.getCurrentDateTime();
+
+    if (bookings == null) {
+      final List<BookingEntry>? bookingsResponse =
           await _bookingRepository.getBookings(now);
 
-      if (bookings != null) {
-        final TimeBlock timeBlockFromNowUntilEndOfDay = TimeBlock(
-          startTime: TimeOfDay(
-            hour: now.hour,
-            minute: now.minute,
-          ),
-          endTime: const TimeOfDay(hour: 18, minute: 0),
+      if (bookingsResponse != null) {
+        bookings = bookingsResponse;
+      }
+    }
+
+    final Map<String, Iterable<TimeBlock?>>? bookingsOverview =
+        await _mapper.mapToRoomsOverview(bookings);
+
+    if (bookingsOverview != null) {
+      final TimeBlock timeBlockFromNowUntilEndOfDay = TimeBlock(
+        startTime: TimeOfDay(
+          hour: now.hour,
+          minute: now.minute,
+        ),
+        endTime: const TimeOfDay(hour: 18, minute: 0),
+      );
+
+      final List<String> freeRooms = bookingsOverview.keys
+          .where((String key) =>
+              bookingsOverview[key]?.any((TimeBlock? timeBlock) =>
+                  timeBlock?.overlapsWith(timeBlockFromNowUntilEndOfDay) ==
+                  true) ==
+              false)
+          .toList();
+
+      if (freeRooms.isNotEmpty) {
+        yield GetFreeRoomNowReadyState(
+          bookings: bookings,
+          freeRoom: freeRooms[_random.nextInt(freeRooms.length)],
         );
-
-        final Map<String, Iterable<TimeBlock?>> bookingsOverview =
-            _mapper.mapToRoomsOverview(bookings);
-
-        final List<String> freeRooms = bookingsOverview.keys
-            .where((String key) =>
-                bookingsOverview[key]?.any((TimeBlock? timeBlock) =>
-                    timeBlock?.overlapsWith(timeBlockFromNowUntilEndOfDay) ==
-                    true) ==
-                false)
-            .toList();
-
-        if (freeRooms.isNotEmpty) {
-          yield GetFreeRoomNowReadyState(
-            freeRooms: freeRooms,
-            freeRoom: freeRooms[_random.nextInt(freeRooms.length)],
-          );
-        } else {
-          yield const GetFreeRoomNowEmptyState();
-        }
       } else {
-        yield const GetFreeRoomNowErrorState();
+        yield const GetFreeRoomNowEmptyState();
       }
     } else {
-      yield GetFreeRoomNowReadyState(
-        freeRooms: currentFreeRooms,
-        freeRoom: currentFreeRooms[_random.nextInt(currentFreeRooms.length)],
-      );
+      yield const GetFreeRoomNowErrorState();
     }
   }
 }

@@ -7,6 +7,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookingOverviewBloc
@@ -14,6 +15,7 @@ class BookingOverviewBloc
   BookingOverviewBloc(
     this._bookingRepository,
     this._dateTimeRepository,
+    this._mapper,
   ) : super(const BookingOverviewBusyState()) {
     on<BookingOverviewInitEvent>(
         (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
@@ -26,6 +28,7 @@ class BookingOverviewBloc
 
   final BookingRepository _bookingRepository;
   final DateTimeRepository _dateTimeRepository;
+  final RoomsOverviewMapper _mapper;
 
   Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
     yield const BookingOverviewBusyState();

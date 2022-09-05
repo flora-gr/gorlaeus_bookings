@@ -12,6 +12,7 @@ import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 
 void main() {
   runApp(const GorlaeusBookingApp());
@@ -66,6 +67,10 @@ class GorlaeusBookingApp extends StatelessWidget {
   MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
     const BookingRepository bookingRepository = BookingRepository();
     const DateTimeRepository dateTimeRepository = DateTimeRepository();
+    SharedPreferencesRepository sharedPreferencesRepository =
+        SharedPreferencesRepository();
+    RoomsOverviewMapper roomsOverviewMapper =
+        RoomsOverviewMapper(sharedPreferencesRepository);
 
     debugPrint(settings.toString());
     switch (settings.name) {
@@ -75,6 +80,7 @@ class GorlaeusBookingApp extends StatelessWidget {
             BookingOverviewBloc(
               bookingRepository,
               dateTimeRepository,
+              roomsOverviewMapper,
             ),
             settings.arguments as DateTime,
           ),
@@ -83,7 +89,7 @@ class GorlaeusBookingApp extends StatelessWidget {
       case Routes.settingsPage:
         return _getRoute(
           SettingsPage(
-            SettingsBloc(SharedPreferencesRepository()),
+            SettingsBloc(sharedPreferencesRepository),
           ),
           settings,
           fullscreenDialog: true,
@@ -97,6 +103,7 @@ class GorlaeusBookingApp extends StatelessWidget {
             ),
             dateTimeRepository,
             bookingRepository,
+            roomsOverviewMapper,
           ),
           settings,
         );

@@ -65,7 +65,7 @@ void main() {
     expect: () => <dynamic>[
       const GetFreeRoomNowBusyState(),
       predicate((GetFreeRoomNowReadyState state) =>
-          state.freeRooms != null && state.freeRoom != null),
+          state.bookings != null && state.freeRoom != null),
     ],
     verify: (_) {
       verify(() => bookingRepository.getBookings(any())).called(1);
@@ -73,7 +73,7 @@ void main() {
   );
 
   const GetFreeRoomNowReadyState seedState = GetFreeRoomNowReadyState(
-    freeRooms: <String>[Rooms.room1, Rooms.room2],
+    bookings: <String>[Rooms.room1, Rooms.room2],
     freeRoom: Rooms.room1,
   );
 
@@ -87,8 +87,8 @@ void main() {
       GetFreeRoomNowBusyState(freeRoom: seedState.freeRoom),
       predicate(
         (GetFreeRoomNowReadyState state) =>
-            state.freeRooms == seedState.freeRooms &&
-            seedState.freeRooms!.contains(state.freeRoom),
+            state.bookings == seedState.bookings &&
+            seedState.bookings!.contains(state.freeRoom),
       ),
     ],
     verify: (_) {

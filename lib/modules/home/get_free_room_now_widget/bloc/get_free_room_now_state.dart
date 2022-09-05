@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
 
 abstract class GetFreeRoomNowState extends Equatable {
   const GetFreeRoomNowState();
@@ -13,22 +14,22 @@ class GetFreeRoomNowWeekendState extends GetFreeRoomNowState {
 
 class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
   const GetFreeRoomNowReadyState({
-    this.freeRooms,
+    this.bookings,
     this.freeRoom,
   });
 
-  final List<String>? freeRooms;
+  final List<BookingEntry>? bookings;
   final String? freeRoom;
 
   @override
-  List<Object?> get props => <Object?>[freeRooms, freeRoom];
+  List<Object?> get props => <Object?>[bookings, freeRoom];
 }
 
 class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
   const GetFreeRoomNowBusyState({
-    List<String>? freeRooms,
+    List<BookingEntry>? bookings,
     String? freeRoom,
-  }) : super(freeRooms: freeRooms, freeRoom: freeRoom);
+  }) : super(bookings: bookings, freeRoom: freeRoom);
 
   @override
   List<Object?> get props => <Object?>[...super.props];
