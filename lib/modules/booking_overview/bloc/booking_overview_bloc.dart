@@ -39,7 +39,7 @@ class BookingOverviewBloc
       if (bookings != null) {
         yield BookingOverviewReadyState(
           date: date,
-          bookings: bookings,
+          bookings: (await _mapper.mapToRoomsOverview(bookings))!,
         );
       } else {
         yield const BookingOverviewErrorState();

@@ -11,19 +11,18 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingDataSource extends DataGridSource {
   BookingDataSource({
-    required List<BookingEntry> bookings,
+    required Map<String, Iterable<TimeBlock?>> bookings,
     required this.onEmailButtonClicked,
     required this.context,
   }) {
-    _bookingData = Rooms.all
+    _bookingData = bookings.keys
         .map(
           (String room) => DataGridRow(
             cells: BookingTimes.all
                 .map(
                   (TimeBlock bookingTime) => DataGridCell(
-                    value: bookings.any((BookingEntry booking) =>
-                            booking.room == room &&
-                            booking.time!.overlapsWith(bookingTime))
+                    value: bookings[room]!.any((TimeBlock? time) =>
+                            time?.overlapsWith(bookingTime) == true)
                         ? '${room.toRoomName()}${Strings.booked}'
                         : '${room.toRoomName()}${Strings.free}',
                     columnName: bookingTime.startTimeString(),

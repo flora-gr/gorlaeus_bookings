@@ -13,7 +13,7 @@ class BookingTable extends StatelessWidget {
     super.key,
   });
 
-  final List<BookingEntry> _bookings;
+  final Map<String, Iterable<TimeBlock?>> _bookings;
   final void Function({
     required String time,
     required String room,
@@ -37,7 +37,7 @@ class BookingTable extends StatelessWidget {
           )
           .toList(),
       source: BookingDataSource(
-        bookings: _bookings.toList(),
+        bookings: _bookings,
         onEmailButtonClicked: onEmailButtonClicked,
         context: context,
       ),
