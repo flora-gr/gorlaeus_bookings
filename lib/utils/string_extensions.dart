@@ -44,6 +44,7 @@ extension StringExtension on String {
     if (_cRooms.contains(this)) {
       return replaceAll('0', 'C');
     }
+    // TODO: add hall name room extension
     return this;
   }
 }

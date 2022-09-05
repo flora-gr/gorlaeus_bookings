@@ -38,32 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
           title: const Text(Strings.settingsPageTitle),
         ),
         body: state is SettingsReadyState
-            ? SingleChildScrollView(
-                child: Padding(
-                  padding: Styles.defaultPagePadding,
-                  child: Column(
-                    children: <Widget>[
-                      ...state.rooms.map(
-                        (String room) => CheckboxListTile(
-                          title: Text(room.toRoomName()),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          visualDensity: VisualDensity.compact,
-                          activeColor: Styles.secondaryColorSwatch,
-                          value: state.selectedRooms.contains(room),
-                          onChanged: (bool? value) {
-                            _bloc.add(
-                              SettingsRoomSelectionChangedEvent(
-                                room: room,
-                                isSelected: value!,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+            ? _buildReadyBody(state)
             : const Center(
                 child: LoadingWidget(),
               ),
@@ -82,6 +57,95 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildReadyBody(SettingsReadyState state) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: Styles.defaultPagePadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ..._buildRoomSelection(state),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Iterable<Widget> _buildRoomSelection(SettingsReadyState state) {
+    final int halfRoomCount = (state.rooms.length / 2).floor();
+    final Iterable<String> firstHalfOfRooms = state.rooms.take(halfRoomCount);
+    final Iterable<String> secondHalfOfRooms =
+        state.rooms.toList().getRange(halfRoomCount, state.rooms.length);
+    return <Widget>[
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: <Widget>[
+            Text(
+              Strings.selectRooms,
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            IconButton(
+              onPressed: () => showDialog(
+                builder: (_) => AlertDialog(
+                  title: const Text(
+                    Strings.selectRooms,
+                  ),
+                  content: const Text(Strings.selectRoomsInfoI),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text(Strings.ok),
+                    ),
+                  ],
+                ),
+                context: context,
+              ),
+              icon: const Icon(
+                Icons.info_rounded,
+                color: Styles.primaryColorSwatch,
+              ),
+            )
+          ],
+        ),
+      ),
+      Row(
+        children: <Widget>[
+          _buildCheckBoxColumn(firstHalfOfRooms, state.selectedRooms),
+          _buildCheckBoxColumn(secondHalfOfRooms, state.selectedRooms),
+        ],
+      ),
+    ];
+  }
+
+  Widget _buildCheckBoxColumn(
+      Iterable<String> rooms, Iterable<String> selectedRooms) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: rooms
+            .map(
+              (String room) => CheckboxListTile(
+                title: Text(room.toRoomName()),
+                controlAffinity: ListTileControlAffinity.leading,
+                visualDensity: VisualDensity.compact,
+                activeColor: Styles.secondaryColorSwatch,
+                value: selectedRooms.contains(room),
+                onChanged: (bool? value) => _bloc.add(
+                  SettingsRoomSelectionChangedEvent(
+                    room: room,
+                    isSelected: value!,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }

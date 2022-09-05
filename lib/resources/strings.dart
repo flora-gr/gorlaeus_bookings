@@ -61,11 +61,11 @@ class Strings {
 
   // Settings page
   static const String settingsPageTitle = 'Settings';
+  static const String selectRooms = 'Select rooms';
+  static const String selectRoomsInfoI =
+      'Selected will be shown in the \'Booking overview\' '
+      'and will be suggested in \'Find an available room now\'.';
   static const String save = 'Save changes';
-  static const String hideRoomsInfoI =
-      'Hidden rooms will not be shown in the \'Booking overview\' '
-      'and will not be suggested in \'Find an available room now\'. '
-      'You can not hide your favorite room.';
 
   // Shared
   static const String ok = 'OK';
