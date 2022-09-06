@@ -25,7 +25,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   Stream<SettingsState> _handleInitEvent() async* {
     final List<String> hiddenRooms =
-        await _sharedPreferencesRepository.getHideRooms();
+        await _sharedPreferencesRepository.getHiddenRooms();
     yield SettingsReadyState(
       rooms: Rooms.all,
       selectedRooms:
@@ -50,6 +50,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     final SettingsReadyState currentState = (state as SettingsReadyState);
     final Iterable<String> hiddenRooms = currentState.rooms
         .whereNot((String room) => currentState.selectedRooms.contains(room));
-    _sharedPreferencesRepository.setHideRooms(hiddenRooms.toList());
+    _sharedPreferencesRepository.setHiddenRooms(hiddenRooms.toList());
   }
 }

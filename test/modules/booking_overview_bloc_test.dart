@@ -8,15 +8,19 @@ import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockBookingRepository extends Mock implements BookingRepository {}
 
 class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
+class MockRoomsOverviewMapper extends Mock implements RoomsOverviewMapper {}
+
 void main() {
   late BookingRepository bookingRepository;
   late DateTimeRepository dateTimeRepository;
+  late RoomsOverviewMapper mapper;
   late BookingOverviewBloc sut;
 
   final DateTime date = DateTime.fromMillisecondsSinceEpoch(0);
@@ -35,23 +39,37 @@ void main() {
     ),
   ];
 
+  Map<String, Iterable<TimeBlock?>> mappedBookings =
+      <String, Iterable<TimeBlock?>>{
+    'room': <TimeBlock?>[bookings.first.time],
+  };
+
   setUp(() {
     bookingRepository = MockBookingRepository();
     dateTimeRepository = MockDateTimeRepository();
-    sut = BookingOverviewBloc(bookingRepository, dateTimeRepository);
+    mapper = MockRoomsOverviewMapper();
+    sut = BookingOverviewBloc(
+      bookingRepository,
+      dateTimeRepository,
+      mapper,
+    );
   });
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
     'Initialization emits ready state',
-    setUp: () => when(() => bookingRepository.getBookings(any()))
-        .thenAnswer((_) async => bookings),
+    setUp: () {
+      when(() => bookingRepository.getBookings(any()))
+          .thenAnswer((_) async => bookings);
+      when(() => mapper.mapToRoomsOverview(bookings))
+          .thenAnswer((_) async => mappedBookings);
+    },
     build: () => sut,
     act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),
     expect: () => <BookingOverviewState>[
       const BookingOverviewBusyState(),
       BookingOverviewReadyState(
         date: date,
-        bookings: bookings,
+        bookings: mappedBookings,
       ),
     ],
   );

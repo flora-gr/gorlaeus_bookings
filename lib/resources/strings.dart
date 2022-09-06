@@ -63,7 +63,7 @@ class Strings {
   static const String settingsPageTitle = 'Settings';
   static const String selectRooms = 'Select rooms';
   static const String selectRoomsInfoI =
-      'Selected will be shown in the \'Booking overview\' '
+      'Selected rooms will be shown in the \'Booking overview\' '
       'and will be suggested in \'Find an available room now\'.';
   static const String save = 'Save changes';
 

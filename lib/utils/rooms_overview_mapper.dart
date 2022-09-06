@@ -14,7 +14,7 @@ class RoomsOverviewMapper {
       final Map<String, Iterable<TimeBlock?>> roomsOverview =
           <String, Iterable<TimeBlock?>>{};
       final List<String> hiddenRooms =
-          await _sharedPreferencesRepository.getHideRooms();
+          await _sharedPreferencesRepository.getHiddenRooms();
       final Iterable<String> roomsToShow =
           Rooms.all.where((String room) => !hiddenRooms.contains(room));
 

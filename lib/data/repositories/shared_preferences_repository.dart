@@ -8,14 +8,14 @@ class SharedPreferencesRepository {
 
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  static const String hideRoomsKey = 'hideRooms';
+  static const String hiddenRoomsKey = 'hiddenRooms';
 
-  Future<bool> setHideRooms(List<String> rooms) async {
-    return (await _prefs).setStringList(hideRoomsKey, rooms);
+  Future<bool> setHiddenRooms(List<String> rooms) async {
+    return (await _prefs).setStringList(hiddenRoomsKey, rooms);
   }
 
-  Future<List<String>> getHideRooms() async {
-    return (await _prefs).getStringList(hideRoomsKey) ??
+  Future<List<String>> getHiddenRooms() async {
+    return (await _prefs).getStringList(hiddenRoomsKey) ??
         <String>[Rooms.room13, Rooms.room21, Rooms.room22];
   }
 }

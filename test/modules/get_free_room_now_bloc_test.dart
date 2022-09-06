@@ -9,43 +9,55 @@ import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 class MockBookingRepository extends Mock implements BookingRepository {}
 
+class MockRoomsOverviewMapper extends Mock implements RoomsOverviewMapper {}
+
 void main() {
   late DateTimeRepository dateTimeRepository;
   late BookingRepository bookingRepository;
+  late RoomsOverviewMapper mapper;
   late GetFreeRoomNowBloc sut;
 
   final DateTime todayAtTwo = DateTime(2020, 1, 1, 14);
 
-  BookingEntry getBookingEntry({TimeBlock? time, String? room}) => BookingEntry(
-        time: time ??
-            const TimeBlock(
-              startTime: TimeOfDay(hour: 12, minute: 0),
-              endTime: TimeOfDay(hour: 13, minute: 0),
-            ),
-        room: room ?? Rooms.room1,
-        personCount: 10,
-        bookedOnBehalfOf: '',
-        activity: '',
-        user: '',
-      );
+  const BookingEntry defaultBookingEntry = BookingEntry(
+    time: TimeBlock(
+      startTime: TimeOfDay(hour: 12, minute: 0),
+      endTime: TimeOfDay(hour: 13, minute: 0),
+    ),
+    room: Rooms.room1,
+    personCount: 10,
+    bookedOnBehalfOf: '',
+    activity: '',
+    user: '',
+  );
 
-  List<BookingEntry> defaultBookingResponse = <BookingEntry>[getBookingEntry()];
+  List<BookingEntry> defaultBookingResponse = <BookingEntry>[
+    defaultBookingEntry
+  ];
+
+  Map<String, Iterable<TimeBlock?>> mappedBooking =
+      <String, Iterable<TimeBlock?>>{
+    Rooms.room1: <TimeBlock?>[defaultBookingEntry.time],
+  };
 
   const TimeBlock overlappingTimeBlock = TimeBlock(
     startTime: TimeOfDay(hour: 12, minute: 0),
     endTime: TimeOfDay(hour: 18, minute: 0),
   );
 
-  List<BookingEntry> fullyBookedResponse = Rooms.all
-      .map((String room) =>
-          getBookingEntry(time: overlappingTimeBlock, room: room))
-      .toList();
+  Map<String, Iterable<TimeBlock?>> fullyBookedMappedBookings() {
+    final Iterable<Iterable<TimeBlock?>> timeBlocks =
+        Rooms.all.map((String room) => <TimeBlock?>[overlappingTimeBlock]);
+    return Map<String, Iterable<TimeBlock?>>.fromIterables(
+        Rooms.all, timeBlocks);
+  }
 
   setUp(() {
     dateTimeRepository = MockDateTimeRepository();
@@ -54,11 +66,18 @@ void main() {
     bookingRepository = MockBookingRepository();
     when(() => bookingRepository.getBookings(any()))
         .thenAnswer((_) async => defaultBookingResponse);
-    sut = GetFreeRoomNowBloc(dateTimeRepository, bookingRepository);
+    mapper = MockRoomsOverviewMapper();
+    when(() => mapper.mapToRoomsOverview(any()))
+        .thenAnswer((_) async => mappedBooking);
+    sut = GetFreeRoomNowBloc(
+      dateTimeRepository,
+      bookingRepository,
+      mapper,
+    );
   });
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-    'FetchGetFreeRoomNowSearchEventing fetches data and emits ready state with freeRooms and freeRoom',
+    'FetchGetFreeRoomNowSearchEventing fetches data and emits ready state with bookings and freeRoom',
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
@@ -72,13 +91,13 @@ void main() {
     },
   );
 
-  const GetFreeRoomNowReadyState seedState = GetFreeRoomNowReadyState(
-    bookings: <String>[Rooms.room1, Rooms.room2],
+  GetFreeRoomNowReadyState seedState = GetFreeRoomNowReadyState(
+    bookings: defaultBookingResponse,
     freeRoom: Rooms.room1,
   );
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-    'GetFreeRoomNowSearchEvent when freeRooms is available emits ready state with freeRooms and freeRoom without fetching new data',
+    'GetFreeRoomNowSearchEvent when bookings is available emits ready state with bookings and freeRoom without fetching new data',
     build: () => sut,
     seed: () => seedState,
     act: (GetFreeRoomNowBloc bloc) =>
@@ -88,7 +107,8 @@ void main() {
       predicate(
         (GetFreeRoomNowReadyState state) =>
             state.bookings == seedState.bookings &&
-            seedState.bookings!.contains(state.freeRoom),
+            seedState.bookings!
+                .any((BookingEntry entry) => entry.room == state.freeRoom),
       ),
     ],
     verify: (_) {
@@ -98,7 +118,7 @@ void main() {
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
     'Failure to fetch data emits error state',
-    setUp: () => when(() => bookingRepository.getBookings(any()))
+    setUp: () => when(() => mapper.mapToRoomsOverview(any()))
         .thenAnswer((_) async => null),
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>
@@ -111,8 +131,8 @@ void main() {
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
     'All rooms booked emits empty state',
-    setUp: () => when(() => bookingRepository.getBookings(any()))
-        .thenAnswer((_) async => fullyBookedResponse),
+    setUp: () => when(() => mapper.mapToRoomsOverview(any()))
+        .thenAnswer((_) async => fullyBookedMappedBookings()),
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
