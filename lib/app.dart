@@ -3,6 +3,7 @@ import 'package:gorlaeus_bookings/di/injection_container.dart';
 
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
@@ -101,9 +102,11 @@ class GorlaeusBookingApp extends StatelessWidget {
               getIt.get<DateTimeRepository>(),
             ),
             getIt.get<UrlLauncherWrapper>(),
-            getIt.get<DateTimeRepository>(),
-            getIt.get<BookingRepository>(),
-            getIt.get<RoomsOverviewMapper>(),
+            GetFreeRoomNowBloc(
+              getIt.get<DateTimeRepository>(),
+              getIt.get<BookingRepository>(),
+              getIt.get<RoomsOverviewMapper>(),
+            ),
           ),
           settings,
         );

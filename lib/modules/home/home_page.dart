@@ -1,8 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
@@ -12,7 +11,6 @@ import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
-import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
@@ -21,17 +19,13 @@ class HomePage extends StatefulWidget {
   const HomePage(
     this._bloc,
     this._urlLauncherWrapper,
-    this._dateTimeRepository,
-    this._bookingRepository,
-    this._mapper, {
+    this._getFreeRoomNowBloc, {
     super.key,
   });
 
   final HomeBloc _bloc;
   final UrlLauncherWrapper _urlLauncherWrapper;
-  final DateTimeRepository _dateTimeRepository;
-  final BookingRepository _bookingRepository;
-  final RoomsOverviewMapper _mapper;
+  final GetFreeRoomNowBloc _getFreeRoomNowBloc;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -243,9 +237,7 @@ class _HomePageState extends State<HomePage> {
       child: ItemBox(
         title: Strings.getMeAFreeRoom,
         child: GetFreeRoomNowWidget(
-          widget._dateTimeRepository,
-          widget._bookingRepository,
-          widget._mapper,
+          widget._getFreeRoomNowBloc,
         ),
       ),
     );

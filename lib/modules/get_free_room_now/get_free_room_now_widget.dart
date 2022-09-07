@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 
 class GetFreeRoomNowWidget extends StatefulWidget {
   const GetFreeRoomNowWidget(
-    this._dateTimeRepository,
-    this._bookingRepository,
-    this._mapper, {
+    this._bloc, {
     super.key,
   });
 
-  final DateTimeRepository _dateTimeRepository;
-  final BookingRepository _bookingRepository;
-  final RoomsOverviewMapper _mapper;
+  final GetFreeRoomNowBloc _bloc;
 
   @override
   State<GetFreeRoomNowWidget> createState() => _GetFreeRoomNowWidgetState();
@@ -31,11 +24,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
 
   @override
   void initState() {
-    _bloc = GetFreeRoomNowBloc(
-      widget._dateTimeRepository,
-      widget._bookingRepository,
-      widget._mapper,
-    )..add(const GetFreeRoomNowInitEvent());
+    _bloc = widget._bloc..add(const GetFreeRoomNowInitEvent());
     super.initState();
   }
 
