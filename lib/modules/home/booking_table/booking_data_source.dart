@@ -50,41 +50,11 @@ class BookingDataSource extends DataGridSource {
           final String? room =
               isFree ? cell.value!.replaceAll(Strings.free, '') : null;
           return InkWell(
-            onTap: () {
-              showDialog(
-                builder: (_) => AlertDialog(
-                  title: Text(
-                    isFree
-                        ? Strings.roomFreeDialogHeader
-                        : Strings.roomBookedDialogHeader,
-                  ),
-                  content: Text(
-                    isFree
-                        ? Strings.roomFreeDialogText(room!, cell.columnName)
-                        : Strings.roomBookedDialogText,
-                  ),
-                  actions: isFree
-                      ? <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text(Strings.cancel),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              onEmailButtonClicked(
-                                time: cell.columnName,
-                                room: room!,
-                              );
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text(Strings.yesBookRoom),
-                          ),
-                        ]
-                      : null,
-                ),
-                context: context,
-              );
-            },
+            onTap: () => _showDialog(
+              room: room,
+              time: cell.columnName,
+              isFree: isFree,
+            ),
             child: Container(
               color: isFree ? Styles.freeRoomColor : Styles.bookedRoomColor,
               alignment: Alignment.centerLeft,
@@ -98,6 +68,43 @@ class BookingDataSource extends DataGridSource {
           );
         },
       ).toList(),
+    );
+  }
+
+  void _showDialog({
+    required String? room,
+    required String time,
+    required bool isFree,
+  }) {
+    showDialog(
+      builder: (_) => AlertDialog(
+        title: Text(
+          isFree
+              ? Strings.roomFreeDialogHeader
+              : Strings.roomBookedDialogHeader,
+        ),
+        content: Text(
+          isFree
+              ? Strings.roomFreeDialogText(room!, time)
+              : Strings.roomBookedDialogText,
+        ),
+        actions: isFree
+            ? <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text(Strings.cancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    onEmailButtonClicked(time: time, room: room!);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(Strings.yesBookRoom),
+                ),
+              ]
+            : null,
+      ),
+      context: context,
     );
   }
 }
