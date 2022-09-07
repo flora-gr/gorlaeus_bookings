@@ -105,8 +105,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _openDisclaimerDialog() {
-    final TextStyle? defaultTextStyle = Theme.of(context).textTheme.bodyText2;
-    final TextStyle? linkTextStyle = defaultTextStyle?.copyWith(
+    double scaleFactor = MediaQuery.of(context).textScaleFactor;
+    final TextStyle defaultTextStyle = Theme.of(context)
+        .textTheme
+        .bodyText2!
+        .copyWith(fontSize: 14 * scaleFactor);
+    final TextStyle linkTextStyle = defaultTextStyle.copyWith(
       color: Styles.secondaryColorSwatch,
       decoration: TextDecoration.underline,
     );
