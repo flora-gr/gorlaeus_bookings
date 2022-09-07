@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
-import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_bloc.dart';
-import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_event.dart';
-import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/bloc/get_free_room_now_state.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/string_extensions.dart';
@@ -52,15 +52,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  state is GetFreeRoomNowWeekendState
-                      ? Strings.notAvailableInWeekend
-                      : state is GetFreeRoomNowErrorState ||
-                              state is GetFreeRoomNowReadyState &&
-                                  state.freeRoom != null
-                          ? Strings.tryAgain
-                          : Strings.search,
-                ),
+                Text(_getButtonText(state)),
                 Padding(
                   padding: const EdgeInsets.only(left: 12),
                   child: SizedBox(
@@ -77,27 +69,33 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
               ],
             ),
           ),
-          if (state is GetFreeRoomNowReadyState && state.freeRoom != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: Text(
-                Strings.roomIsFree(
-                  state.freeRoom!.toRoomName(),
-                ),
-              ),
-            )
-          else if (state is GetFreeRoomNowEmptyState)
-            const Padding(
-              padding: EdgeInsets.only(top: 12),
-              child: Text(Strings.noRoomFound),
-            )
-          else if (state is GetFreeRoomNowErrorState)
-            const Padding(
-              padding: EdgeInsets.only(top: 12),
-              child: Text(Strings.getFreeRoomFailed),
-            ),
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Text(_getDataFetchedText(state)),
+          )
         ],
       ),
     );
+  }
+
+  String _getButtonText(GetFreeRoomNowState state) {
+    return state is GetFreeRoomNowWeekendState
+        ? Strings.notAvailableInWeekend
+        : state is GetFreeRoomNowErrorState ||
+                state is GetFreeRoomNowReadyState && state.freeRoom != null
+            ? Strings.tryAgain
+            : Strings.search;
+  }
+
+  String _getDataFetchedText(GetFreeRoomNowState state) {
+    if (state is GetFreeRoomNowReadyState && state.freeRoom != null) {
+      return Strings.roomIsFree(
+        state.freeRoom!.toRoomName(),
+      );
+    } else if (state is GetFreeRoomNowEmptyState) {
+      return Strings.noRoomFound;
+    } else {
+      return Strings.getFreeRoomFailed;
+    }
   }
 }

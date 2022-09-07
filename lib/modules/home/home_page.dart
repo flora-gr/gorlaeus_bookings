@@ -6,7 +6,7 @@ import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
-import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/get_free_room_now_widget.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/get_free_room_now_widget.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
