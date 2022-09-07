@@ -106,7 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 context: context,
               ),
               icon: const Icon(
-                Icons.info_rounded,
+                Icons.info_outline,
                 color: Styles.primaryColorSwatch,
               ),
             )

@@ -42,39 +42,43 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<GetFreeRoomNowBloc, GetFreeRoomNowState>(
       bloc: _bloc,
-      builder: (BuildContext context, GetFreeRoomNowState state) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ElevatedButton(
-            onPressed: state is GetFreeRoomNowWeekendState
-                ? null
-                : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(_getButtonText(state)),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: state is GetFreeRoomNowBusyState
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          )
-                        : null,
+      builder: (BuildContext context, GetFreeRoomNowState state) {
+        final String? dataFetchedText = _getDataFetchedText(state);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: state is GetFreeRoomNowWeekendState
+                  ? null
+                  : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(_getButtonText(state)),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: state is GetFreeRoomNowBusyState
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            )
+                          : null,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: Text(_getDataFetchedText(state)),
-          )
-        ],
-      ),
+            if (dataFetchedText != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(dataFetchedText),
+              )
+          ],
+        );
+      },
     );
   }
 
@@ -87,15 +91,16 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             : Strings.search;
   }
 
-  String _getDataFetchedText(GetFreeRoomNowState state) {
+  String? _getDataFetchedText(GetFreeRoomNowState state) {
     if (state is GetFreeRoomNowReadyState && state.freeRoom != null) {
       return Strings.roomIsFree(
         state.freeRoom!.toRoomName(),
       );
     } else if (state is GetFreeRoomNowEmptyState) {
       return Strings.noRoomFound;
-    } else {
+    } else if (State is GetFreeRoomNowErrorState) {
       return Strings.getFreeRoomFailed;
     }
+    return null;
   }
 }

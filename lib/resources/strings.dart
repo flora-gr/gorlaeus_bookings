@@ -18,7 +18,7 @@ class Strings {
   static const String disclaimerDialogText3 = ' website to fetch data. '
       'It is a hobby project and although all data is presented in good faith, it may contain errors. '
       'Usage of the booking system via this app is at your own risk.\n\n'
-      'Bug reports and feature requests can be ';
+      'Feedback such as bug reports and feature requests can be ';
   static const String disclaimerDialogText4 = 'e-mailed';
   static const String disclaimerDialogText5 = ' or made at our ';
   static const String disclaimerDialogText6 = 'Github repository';
