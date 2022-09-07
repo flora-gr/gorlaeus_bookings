@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 

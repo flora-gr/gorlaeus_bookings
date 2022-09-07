@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:gorlaeus_bookings/data/models/time_block.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
 
 abstract class BookingOverviewState extends Equatable {
   const BookingOverviewState();

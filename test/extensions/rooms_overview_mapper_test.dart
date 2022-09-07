@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/models/time_block.dart';
-import 'package:gorlaeus_bookings/data/repositories/shared_preferences_repository.dart';
+import 'package:gorlaeus_bookings/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
-import 'package:gorlaeus_bookings/extensions/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockSharedPreferencesRepository extends Mock

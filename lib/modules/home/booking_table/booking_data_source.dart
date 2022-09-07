@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/data/models/time_block.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';

@@ -1,6 +1,6 @@
-import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/models/time_block.dart';
-import 'package:gorlaeus_bookings/data/repositories/shared_preferences_repository.dart';
+import 'package:gorlaeus_bookings/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 class RoomsOverviewMapper {

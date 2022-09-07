@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';

@@ -1,10 +1,8 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 
-import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
-import 'package:gorlaeus_bookings/data/repositories/shared_preferences_repository.dart';
+import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
@@ -14,7 +12,7 @@ import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/extensions/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 
 void main() {
@@ -55,7 +53,7 @@ class GorlaeusBookingApp extends StatelessWidget {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        primary: Styles.secondaryColorSwatch,
+        foregroundColor: Styles.secondaryColorSwatch,
       ),
     ),
     textTheme: const TextTheme().copyWith(

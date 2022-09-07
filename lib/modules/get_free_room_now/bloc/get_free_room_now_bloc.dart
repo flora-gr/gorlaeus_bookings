@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
-import 'package:gorlaeus_bookings/data/models/time_block.dart';
+import 'package:gorlaeus_bookings/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
-import 'package:gorlaeus_bookings/extensions/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 
 class GetFreeRoomNowBloc
