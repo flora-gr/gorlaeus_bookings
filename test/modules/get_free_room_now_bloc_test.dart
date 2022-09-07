@@ -9,7 +9,7 @@ import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_n
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
-import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/extensions/rooms_overview_mapper.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockDateTimeRepository extends Mock implements DateTimeRepository {}

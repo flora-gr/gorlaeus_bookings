@@ -11,15 +11,16 @@ import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
-import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/extensions/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(
     this.bloc,
+    this.urlLauncherWrapper,
     this.dateTimeRepository,
     this.bookingRepository,
     this.mapper, {
@@ -27,6 +28,8 @@ class HomePage extends StatefulWidget {
   });
 
   final HomeBloc bloc;
+  final UrlLauncherWrapper urlLauncherWrapper;
+
   final DateTimeRepository dateTimeRepository;
   final BookingRepository bookingRepository;
   final RoomsOverviewMapper mapper;
@@ -123,9 +126,8 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText2,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => launchUrl(
+                  ..onTap = () => widget.urlLauncherWrapper.launchUrl(
                         ConnectionUrls.zrsWebsiteLink,
-                        mode: LaunchMode.externalApplication,
                       ),
               ),
               TextSpan(
@@ -136,8 +138,9 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText4,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap =
-                      () => launchUrl(ConnectionUrls.appDeveloperEmailUri),
+                  ..onTap = () => widget.urlLauncherWrapper.launchEmail(
+                        ConnectionUrls.appDeveloperEmailUri,
+                      ),
               ),
               TextSpan(
                 text: Strings.disclaimerDialogText5,
@@ -147,9 +150,8 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText6,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => launchUrl(
+                  ..onTap = () => widget.urlLauncherWrapper.launchUrl(
                         ConnectionUrls.githubRepositoryLink,
-                        mode: LaunchMode.externalApplication,
                       ),
               ),
               TextSpan(

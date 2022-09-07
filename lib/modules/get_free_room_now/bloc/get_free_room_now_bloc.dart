@@ -8,9 +8,9 @@ import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
-import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
-import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
-import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
+import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/extensions/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 
 class GetFreeRoomNowBloc
     extends Bloc<GetFreeRoomNowEvent, GetFreeRoomNowState> {

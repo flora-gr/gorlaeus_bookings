@@ -8,7 +8,8 @@ import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
-import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/extensions/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockBookingRepository extends Mock implements BookingRepository {}
@@ -17,10 +18,13 @@ class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 class MockRoomsOverviewMapper extends Mock implements RoomsOverviewMapper {}
 
+class MockUrlLauncherWrapper extends Mock implements UrlLauncherWrapper {}
+
 void main() {
   late BookingRepository bookingRepository;
   late DateTimeRepository dateTimeRepository;
   late RoomsOverviewMapper mapper;
+  late UrlLauncherWrapper urlLauncherWrapper;
   late BookingOverviewBloc sut;
 
   final DateTime date = DateTime.fromMillisecondsSinceEpoch(0);
@@ -48,10 +52,15 @@ void main() {
     bookingRepository = MockBookingRepository();
     dateTimeRepository = MockDateTimeRepository();
     mapper = MockRoomsOverviewMapper();
+    urlLauncherWrapper = MockUrlLauncherWrapper();
+    when(() => urlLauncherWrapper.launchEmail(any(),
+        subject: any(named: 'subject'),
+        body: any(named: 'body'))).thenAnswer((_) async => <dynamic>{});
     sut = BookingOverviewBloc(
       bookingRepository,
       dateTimeRepository,
       mapper,
+      urlLauncherWrapper,
     );
   });
 

@@ -3,8 +3,8 @@ import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/utils/string_extensions.dart';
-import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
+import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
+import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingDataSource extends DataGridSource {
