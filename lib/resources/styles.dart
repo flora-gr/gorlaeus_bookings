@@ -44,4 +44,6 @@ class Styles {
   static const Color bookedRoomColor = Color(0xFFF08080);
 
   static BorderRadius borderRadius = BorderRadius.circular(6);
+
+  static const EdgeInsetsGeometry defaultPagePadding = EdgeInsets.all(16);
 }

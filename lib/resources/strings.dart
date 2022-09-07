@@ -3,6 +3,7 @@ class Strings {
 
   // Home page
   static const String homePageTitle = 'Gorlaeus Bookings';
+  static const String adjustSettings = 'Adjust settings';
 
   // Booking overview tile
   static const String bookingOverview = 'Booking overview';
@@ -17,9 +18,11 @@ class Strings {
   static const String disclaimerDialogText3 = ' website to fetch data. '
       'It is a hobby project and although all data is presented in good faith, it may contain errors. '
       'Usage of the booking system via this app is at your own risk.\n\n'
-      'Bug reports and feature requests can be made at our ';
-  static const String disclaimerDialogText4 = 'Github repository';
-  static const String disclaimerDialogText5 =
+      'Bug reports and feature requests can be ';
+  static const String disclaimerDialogText4 = 'e-mailed';
+  static const String disclaimerDialogText5 = ' or made at our ';
+  static const String disclaimerDialogText6 = 'Github repository';
+  static const String disclaimerDialogText7 =
       '.\n\nThanks for using Gorlaeus Bookings!';
 
   // Get me a free room tile
@@ -55,6 +58,14 @@ class Strings {
   static const String roomBookedDialogText = 'This room is already booked.';
   static const String yesBookRoom = 'Yes, send email';
   static const String cancel = 'Cancel';
+
+  // Settings page
+  static const String settingsPageTitle = 'Settings';
+  static const String selectRooms = 'Select rooms';
+  static const String selectRoomsInfoI =
+      'Selected rooms will be shown in the \'Booking overview\' '
+      'and will be suggested in \'Find an available room now\'.';
+  static const String save = 'Save changes';
 
   // Shared
   static const String ok = 'OK';

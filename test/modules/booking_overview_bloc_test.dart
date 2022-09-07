@@ -1,22 +1,26 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gorlaeus_bookings/data/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
-import 'package:gorlaeus_bookings/data/time_block.dart';
+import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockBookingProvider extends Mock implements BookingProvider {}
+class MockBookingRepository extends Mock implements BookingRepository {}
 
-class MockDateTimeProvider extends Mock implements DateTimeProvider {}
+class MockDateTimeRepository extends Mock implements DateTimeRepository {}
+
+class MockRoomsOverviewMapper extends Mock implements RoomsOverviewMapper {}
 
 void main() {
-  late BookingProvider bookingProvider;
-  late DateTimeProvider dateTimeProvider;
+  late BookingRepository bookingRepository;
+  late DateTimeRepository dateTimeRepository;
+  late RoomsOverviewMapper mapper;
   late BookingOverviewBloc sut;
 
   final DateTime date = DateTime.fromMillisecondsSinceEpoch(0);
@@ -35,30 +39,44 @@ void main() {
     ),
   ];
 
+  Map<String, Iterable<TimeBlock?>> mappedBookings =
+      <String, Iterable<TimeBlock?>>{
+    'room': <TimeBlock?>[bookings.first.time],
+  };
+
   setUp(() {
-    bookingProvider = MockBookingProvider();
-    dateTimeProvider = MockDateTimeProvider();
-    sut = BookingOverviewBloc(bookingProvider, dateTimeProvider);
+    bookingRepository = MockBookingRepository();
+    dateTimeRepository = MockDateTimeRepository();
+    mapper = MockRoomsOverviewMapper();
+    sut = BookingOverviewBloc(
+      bookingRepository,
+      dateTimeRepository,
+      mapper,
+    );
   });
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
     'Initialization emits ready state',
-    setUp: () => when(() => bookingProvider.getBookings(any()))
-        .thenAnswer((_) async => bookings),
+    setUp: () {
+      when(() => bookingRepository.getBookings(any()))
+          .thenAnswer((_) async => bookings);
+      when(() => mapper.mapToRoomsOverview(bookings))
+          .thenAnswer((_) async => mappedBookings);
+    },
     build: () => sut,
     act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),
     expect: () => <BookingOverviewState>[
       const BookingOverviewBusyState(),
       BookingOverviewReadyState(
         date: date,
-        bookings: bookings,
+        bookings: mappedBookings,
       ),
     ],
   );
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
     'Failure to fetch data emits error state',
-    setUp: () => when(() => bookingProvider.getBookings(any()))
+    setUp: () => when(() => bookingRepository.getBookings(any()))
         .thenThrow(Exception('Failed')),
     build: () => sut,
     act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),

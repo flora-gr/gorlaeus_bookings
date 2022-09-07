@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/data/time_block.dart';
+import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 extension StringExtension on String {
@@ -44,6 +44,7 @@ extension StringExtension on String {
     if (_cRooms.contains(this)) {
       return replaceAll('0', 'C');
     }
+    // TODO: add hall name room extension
     return this;
   }
 }

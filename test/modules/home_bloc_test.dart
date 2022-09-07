@@ -1,15 +1,15 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockDateTimeProvider extends Mock implements DateTimeProvider {}
+class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 void main() {
-  late DateTimeProvider dateTimeProvider;
+  late DateTimeRepository dateTimeRepository;
   late HomeBloc sut;
 
   final DateTime today = DateTime.fromMillisecondsSinceEpoch(0);
@@ -17,10 +17,10 @@ void main() {
   final DateTime otherDay = DateTime.fromMillisecondsSinceEpoch(1);
 
   setUp(() {
-    dateTimeProvider = MockDateTimeProvider();
-    when(() => dateTimeProvider.getFirstWeekdayFromToday())
+    dateTimeRepository = MockDateTimeRepository();
+    when(() => dateTimeRepository.getFirstWeekdayFromToday())
         .thenAnswer((_) => today);
-    sut = HomeBloc(dateTimeProvider);
+    sut = HomeBloc(dateTimeRepository);
   });
 
   blocTest<HomeBloc, HomeState>(

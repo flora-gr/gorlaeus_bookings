@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
@@ -12,6 +12,7 @@ import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,14 +20,16 @@ import 'package:url_launcher/url_launcher.dart';
 class HomePage extends StatefulWidget {
   const HomePage(
     this.bloc,
-    this.dateTimeProvider,
-    this.bookingProvider, {
-    Key? key,
-  }) : super(key: key);
+    this.dateTimeRepository,
+    this.bookingRepository,
+    this.mapper, {
+    super.key,
+  });
 
   final HomeBloc bloc;
-  final DateTimeProvider dateTimeProvider;
-  final BookingProvider bookingProvider;
+  final DateTimeRepository dateTimeRepository;
+  final BookingRepository bookingRepository;
+  final RoomsOverviewMapper mapper;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -60,12 +63,31 @@ class _HomePageState extends State<HomePage> {
                 width: double.infinity,
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: Styles.defaultPagePadding,
                     child: Column(
                       children: <Widget>[
                         ...<Widget>[
                           _buildBookingOverviewTile(state),
                           _buildGetMeAFreeRoomNowTile(state),
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
+                                .pushNamed(Routes.settingsPage),
+                            child: const Text(
+                              Strings.adjustSettings,
+                              style: TextStyle(
+                                shadows: <Shadow>[
+                                  Shadow(
+                                    color: Styles.secondaryColorSwatch,
+                                    offset: Offset(0, -2),
+                                  ),
+                                ],
+                                color: Colors.transparent,
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 1.5,
+                                decorationColor: Styles.secondaryColorSwatch,
+                              ),
+                            ),
+                          ),
                         ],
                       ],
                     ),
@@ -101,12 +123,10 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText2,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    launchUrl(
-                      ConnectionUrls.zrsWebsiteLink,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  },
+                  ..onTap = () => launchUrl(
+                        ConnectionUrls.zrsWebsiteLink,
+                        mode: LaunchMode.externalApplication,
+                      ),
               ),
               TextSpan(
                 text: Strings.disclaimerDialogText3,
@@ -116,15 +136,24 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText4,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    launchUrl(
-                      ConnectionUrls.githubRepositoryLink,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  },
+                  ..onTap =
+                      () => launchUrl(ConnectionUrls.appDeveloperEmailUri),
               ),
               TextSpan(
                 text: Strings.disclaimerDialogText5,
+                style: defaultTextStyle,
+              ),
+              TextSpan(
+                text: Strings.disclaimerDialogText6,
+                style: linkTextStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => launchUrl(
+                        ConnectionUrls.githubRepositoryLink,
+                        mode: LaunchMode.externalApplication,
+                      ),
+              ),
+              TextSpan(
+                text: Strings.disclaimerDialogText7,
                 style: defaultTextStyle,
               ),
             ],
@@ -186,10 +215,8 @@ class _HomePageState extends State<HomePage> {
                 initialDate: state.selectedDate,
                 firstDate: state.minimumDate,
                 lastDate: state.maximumDate,
-                locale: const Locale('nl', 'NL'),
-                selectableDayPredicate: (DateTime date) =>
-                    date.weekday != DateTime.saturday &&
-                    date.weekday != DateTime.sunday,
+                locale: const Locale('en', 'GB'),
+                selectableDayPredicate: (DateTime date) => !date.isWeekendDay(),
               );
               if (newDate != null) {
                 _bloc.add(HomeDateChangedEvent(newDate));
@@ -209,8 +236,9 @@ class _HomePageState extends State<HomePage> {
       child: ItemBox(
         title: Strings.getMeAFreeRoom,
         child: GetFreeRoomNowWidget(
-          widget.dateTimeProvider,
-          widget.bookingProvider,
+          widget.dateTimeRepository,
+          widget.bookingRepository,
+          widget.mapper,
         ),
       ),
     );

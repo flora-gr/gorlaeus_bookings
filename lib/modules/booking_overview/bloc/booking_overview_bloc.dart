@@ -1,19 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookingOverviewBloc
     extends Bloc<BookingOverviewEvent, BookingOverviewState> {
   BookingOverviewBloc(
-    this._bookingProvider,
-    this._dateTimeProvider,
+    this._bookingRepository,
+    this._dateTimeRepository,
+    this._mapper,
   ) : super(const BookingOverviewBusyState()) {
     on<BookingOverviewInitEvent>(
         (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
@@ -24,19 +26,20 @@ class BookingOverviewBloc
         _handleBookRoomEvent(event));
   }
 
-  final BookingProvider _bookingProvider;
-  final DateTimeProvider _dateTimeProvider;
+  final BookingRepository _bookingRepository;
+  final DateTimeRepository _dateTimeRepository;
+  final RoomsOverviewMapper _mapper;
 
   Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
     yield const BookingOverviewBusyState();
 
     try {
       final List<BookingEntry>? bookings =
-          await _bookingProvider.getBookings(date);
+          await _bookingRepository.getBookings(date);
       if (bookings != null) {
         yield BookingOverviewReadyState(
           date: date,
-          bookings: bookings,
+          bookings: (await _mapper.mapToRoomsOverview(bookings))!,
         );
       } else {
         yield const BookingOverviewErrorState();
@@ -49,7 +52,7 @@ class BookingOverviewBloc
   _handleBookRoomEvent(BookingOverviewBookRoomEvent event) async {
     final DateTime date = (state as BookingOverviewReadyState).date;
     final String dateString =
-        date.isOnSameDateAs(_dateTimeProvider.getCurrentDateTime())
+        date.isOnSameDateAs(_dateTimeRepository.getCurrentDateTime())
             ? Strings.today
             : Strings.onDay(date.formatted);
 

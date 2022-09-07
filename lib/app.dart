@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 
-import 'package:gorlaeus_bookings/data/booking_provider.dart';
-import 'package:gorlaeus_bookings/data/date_time_provider.dart';
+import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/data/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
+import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
+import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 
 void main() {
   runApp(const GorlaeusBookingApp());
 }
 
 class GorlaeusBookingApp extends StatelessWidget {
-  const GorlaeusBookingApp({Key? key}) : super(key: key);
+  const GorlaeusBookingApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +30,9 @@ class GorlaeusBookingApp extends StatelessWidget {
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       supportedLocales: const <Locale>[
         Locale('nl', 'NL'),
+        Locale('en', 'GB'),
       ],
-      initialRoute: Routes.home,
+      initialRoute: Routes.homePage,
       onGenerateRoute: _onGenerateRoute,
     );
   }
@@ -60,41 +65,60 @@ class GorlaeusBookingApp extends StatelessWidget {
   );
 
   MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
-    const BookingProvider bookingProvider = BookingProvider();
-    const DateTimeProvider dateTimeProvider = DateTimeProvider();
+    const BookingRepository bookingRepository = BookingRepository();
+    const DateTimeRepository dateTimeRepository = DateTimeRepository();
+    SharedPreferencesRepository sharedPreferencesRepository =
+        SharedPreferencesRepository();
+    RoomsOverviewMapper roomsOverviewMapper =
+        RoomsOverviewMapper(sharedPreferencesRepository);
 
     debugPrint(settings.toString());
     switch (settings.name) {
       case Routes.bookingOverviewPage:
-        return getRoute(
+        return _getRoute(
           BookingOverviewPage(
             BookingOverviewBloc(
-              bookingProvider,
-              dateTimeProvider,
+              bookingRepository,
+              dateTimeRepository,
+              roomsOverviewMapper,
             ),
             settings.arguments as DateTime,
           ),
           settings,
         );
-      case Routes.home:
+      case Routes.settingsPage:
+        return _getRoute(
+          SettingsPage(
+            SettingsBloc(sharedPreferencesRepository),
+          ),
+          settings,
+          fullscreenDialog: true,
+        );
+      case Routes.homePage:
       default:
-        return getRoute(
+        return _getRoute(
           HomePage(
             HomeBloc(
-              dateTimeProvider,
+              dateTimeRepository,
             ),
-            dateTimeProvider,
-            bookingProvider,
+            dateTimeRepository,
+            bookingRepository,
+            roomsOverviewMapper,
           ),
           settings,
         );
     }
   }
 
-  MaterialPageRoute<void> getRoute(Widget page, RouteSettings settings) {
+  MaterialPageRoute<void> _getRoute(
+    Widget page,
+    RouteSettings settings, {
+    bool fullscreenDialog = false,
+  }) {
     return MaterialPageRoute<void>(
       builder: (_) => page,
       settings: settings,
+      fullscreenDialog: fullscreenDialog,
     );
   }
 }

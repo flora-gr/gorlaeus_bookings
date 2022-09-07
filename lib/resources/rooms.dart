@@ -14,7 +14,7 @@ class Rooms {
   static const String room10 = 'EM1.21';
   static const String room11 = 'EM109';
   static const String room12 = 'GM4.13';
-  static const String room13 = 'HALL GOB'; // Not in table
+  static const String room13 = 'HALL GOB'; // Default hidden
 
   // Gorlaeus Schotel
   static const String room14 = 'BS.1.17';
@@ -24,8 +24,8 @@ class Rooms {
   static const String room18 = '02';
   static const String room19 = '03';
   static const String room20 = '04/5';
-  static const String room21 = 'PRACT'; // Not in table
-  static const String room22 = 'HALL'; // Not in table
+  static const String room21 = 'PRACT'; // Default hidden
+  static const String room22 = 'HALL'; // Default hidden
 
   static const Iterable<String> all = <String>[
     room1,
@@ -40,6 +40,7 @@ class Rooms {
     room10,
     room11,
     room12,
+    room13,
     room14,
     room15,
     room16,
@@ -47,5 +48,7 @@ class Rooms {
     room18,
     room19,
     room20,
+    room21,
+    room22,
   ];
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/data/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/time_block.dart';
+import 'package:gorlaeus_bookings/data/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/widgets/booking_table/booking_data_source.dart';
@@ -10,10 +9,10 @@ class BookingTable extends StatelessWidget {
   const BookingTable(
     this._bookings, {
     required this.onEmailButtonClicked,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
-  final List<BookingEntry> _bookings;
+  final Map<String, Iterable<TimeBlock?>> _bookings;
   final void Function({
     required String time,
     required String room,
@@ -37,7 +36,7 @@ class BookingTable extends StatelessWidget {
           )
           .toList(),
       source: BookingDataSource(
-        bookings: _bookings.toList(),
+        bookings: _bookings,
         onEmailButtonClicked: onEmailButtonClicked,
         context: context,
       ),
