@@ -16,6 +16,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_localizations:
     sdk: flutter
+  get_it: ^7.2.0
   html: ^0.15.0
   http: ^0.13.5
   intl: ^0.17.0

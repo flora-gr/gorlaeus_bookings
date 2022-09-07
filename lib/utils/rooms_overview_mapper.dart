@@ -1,12 +1,15 @@
+import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 class RoomsOverviewMapper {
-  const RoomsOverviewMapper(this._sharedPreferencesRepository);
+  RoomsOverviewMapper() {
+    _sharedPreferencesRepository = getIt.get<SharedPreferencesRepository>();
+  }
 
-  final SharedPreferencesRepository _sharedPreferencesRepository;
+  late SharedPreferencesRepository _sharedPreferencesRepository;
 
   Future<Map<String, Iterable<TimeBlock?>>?> mapToRoomsOverview(
       List<BookingEntry>? bookings) async {
