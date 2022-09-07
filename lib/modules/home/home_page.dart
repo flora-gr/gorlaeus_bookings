@@ -19,20 +19,19 @@ import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(
-    this.bloc,
-    this.urlLauncherWrapper,
-    this.dateTimeRepository,
-    this.bookingRepository,
-    this.mapper, {
+    this._bloc,
+    this._urlLauncherWrapper,
+    this._dateTimeRepository,
+    this._bookingRepository,
+    this._mapper, {
     super.key,
   });
 
-  final HomeBloc bloc;
-  final UrlLauncherWrapper urlLauncherWrapper;
-
-  final DateTimeRepository dateTimeRepository;
-  final BookingRepository bookingRepository;
-  final RoomsOverviewMapper mapper;
+  final HomeBloc _bloc;
+  final UrlLauncherWrapper _urlLauncherWrapper;
+  final DateTimeRepository _dateTimeRepository;
+  final BookingRepository _bookingRepository;
+  final RoomsOverviewMapper _mapper;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -40,10 +39,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late HomeBloc _bloc;
+  late UrlLauncherWrapper _urlLauncherWrapper;
 
   @override
   void initState() {
-    _bloc = widget.bloc..add(const HomeInitEvent());
+    _bloc = widget._bloc..add(const HomeInitEvent());
+    _urlLauncherWrapper = widget._urlLauncherWrapper;
     super.initState();
   }
 
@@ -130,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText2,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => widget.urlLauncherWrapper.launchUrl(
+                  ..onTap = () => _urlLauncherWrapper.launchUrl(
                         ConnectionUrls.zrsWebsiteLink,
                       ),
               ),
@@ -142,8 +143,8 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText4,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => widget.urlLauncherWrapper.launchEmail(
-                        ConnectionUrls.appDeveloperEmailUri,
+                  ..onTap = () => _urlLauncherWrapper.launchEmail(
+                        ConnectionUrls.appDeveloperEmail,
                       ),
               ),
               TextSpan(
@@ -154,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                 text: Strings.disclaimerDialogText6,
                 style: linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => widget.urlLauncherWrapper.launchUrl(
+                  ..onTap = () => _urlLauncherWrapper.launchUrl(
                         ConnectionUrls.githubRepositoryLink,
                       ),
               ),
@@ -242,9 +243,9 @@ class _HomePageState extends State<HomePage> {
       child: ItemBox(
         title: Strings.getMeAFreeRoom,
         child: GetFreeRoomNowWidget(
-          widget.dateTimeRepository,
-          widget.bookingRepository,
-          widget.mapper,
+          widget._dateTimeRepository,
+          widget._bookingRepository,
+          widget._mapper,
         ),
       ),
     );

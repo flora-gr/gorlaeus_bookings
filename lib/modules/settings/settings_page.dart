@@ -10,11 +10,11 @@ import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage(
-    this.bloc, {
+    this._bloc, {
     super.key,
   });
 
-  final SettingsBloc bloc;
+  final SettingsBloc _bloc;
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -25,7 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    _bloc = widget.bloc..add(const SettingsInitEvent());
+    _bloc = widget._bloc..add(const SettingsInitEvent());
     super.initState();
   }
 

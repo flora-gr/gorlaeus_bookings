@@ -11,15 +11,15 @@ import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 
 class GetFreeRoomNowWidget extends StatefulWidget {
   const GetFreeRoomNowWidget(
-    this.dateTimeRepository,
-    this.bookingRepository,
-    this.mapper, {
+    this._dateTimeRepository,
+    this._bookingRepository,
+    this._mapper, {
     super.key,
   });
 
-  final DateTimeRepository dateTimeRepository;
-  final BookingRepository bookingRepository;
-  final RoomsOverviewMapper mapper;
+  final DateTimeRepository _dateTimeRepository;
+  final BookingRepository _bookingRepository;
+  final RoomsOverviewMapper _mapper;
 
   @override
   State<GetFreeRoomNowWidget> createState() => _GetFreeRoomNowWidgetState();
@@ -31,9 +31,9 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
   @override
   void initState() {
     _bloc = GetFreeRoomNowBloc(
-      widget.dateTimeRepository,
-      widget.bookingRepository,
-      widget.mapper,
+      widget._dateTimeRepository,
+      widget._bookingRepository,
+      widget._mapper,
     )..add(const GetFreeRoomNowInitEvent());
     super.initState();
   }

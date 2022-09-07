@@ -33,6 +33,7 @@ class Strings {
       'Room $room is available until the end of the day.';
   static const String getFreeRoomFailed = 'Something went wrong.';
   static const String noRoomFound = 'No available room found.';
+  static const String tryAgain = 'Try again';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
@@ -69,5 +70,4 @@ class Strings {
 
   // Shared
   static const String ok = 'OK';
-  static const String tryAgain = 'Try again';
 }
