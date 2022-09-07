@@ -6,6 +6,7 @@ import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_n
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
+import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 
@@ -73,7 +74,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             ),
             if (dataFetchedText != null)
               Padding(
-                padding: const EdgeInsets.only(top: 12),
+                padding: Styles.topPadding12,
                 child: Text(dataFetchedText),
               )
           ],

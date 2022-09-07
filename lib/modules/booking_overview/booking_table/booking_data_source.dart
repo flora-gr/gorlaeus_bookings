@@ -58,7 +58,7 @@ class BookingDataSource extends DataGridSource {
             child: Container(
               color: isFree ? Styles.freeRoomColor : Styles.bookedRoomColor,
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.all(8.0),
+              padding: Styles.padding8,
               child: Text(
                 cell.value
                     .replaceAll(Strings.free, '')

@@ -6,6 +6,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class BookingOverviewPage extends StatefulWidget {
@@ -41,16 +42,13 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
         ),
         body: state is BookingOverviewReadyState
             ? Padding(
-                padding: const EdgeInsets.all(16),
+                padding: Styles.defaultPagePadding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Text(
-                        '${Strings.bookingsOn} ${state.date.formatted}',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
+                    Text(
+                      '${Strings.bookingsOn} ${state.date.formatted}',
+                      style: Theme.of(context).textTheme.headline6,
                     ),
                     Expanded(
                       child: BookingTable(

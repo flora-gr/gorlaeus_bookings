@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
     final TextStyle defaultTextStyle = Theme.of(context)
         .textTheme
         .bodyText2!
-        .copyWith(fontSize: 14 * scaleFactor);
+        .copyWith(fontSize: Styles.defaultFontSize * scaleFactor);
     final TextStyle linkTextStyle = defaultTextStyle.copyWith(
       color: Styles.secondaryColorSwatch,
       decoration: TextDecoration.underline,

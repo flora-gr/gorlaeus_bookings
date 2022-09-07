@@ -57,9 +57,9 @@ class GorlaeusBookingApp extends StatelessWidget {
       ),
     ),
     textTheme: const TextTheme().copyWith(
-      bodyText2: const TextStyle(
-        fontSize: 14,
-        height: 1.3,
+      bodyText2: TextStyle(
+        fontSize: Styles.defaultFontSize,
+        height: Styles.defaultFontHeight,
       ),
     ),
     scaffoldBackgroundColor: Styles.backgroundColor,

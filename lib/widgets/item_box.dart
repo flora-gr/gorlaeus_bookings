@@ -16,8 +16,8 @@ class ItemBox extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 600),
       child: Container(
-        margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.all(16),
+        margin: Styles.padding8,
+        padding: Styles.padding16,
         decoration: BoxDecoration(
           border: Border.all(
             color: Styles.secondaryColorSwatch,

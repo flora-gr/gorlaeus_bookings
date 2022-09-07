@@ -81,43 +81,43 @@ class _SettingsPageState extends State<SettingsPage> {
     final Iterable<String> secondHalfOfRooms =
         state.rooms.toList().getRange(halfRoomCount, state.rooms.length);
     return <Widget>[
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: <Widget>[
-            Text(
-              Strings.selectRooms,
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            IconButton(
-              onPressed: () => showDialog(
-                builder: (_) => AlertDialog(
-                  title: const Text(
-                    Strings.selectRooms,
-                  ),
-                  content: const Text(Strings.selectRoomsInfoI),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text(Strings.ok),
-                    ),
-                  ],
-                ),
-                context: context,
-              ),
-              icon: const Icon(
-                Icons.info_outline,
-                color: Styles.primaryColorSwatch,
-              ),
-            )
-          ],
-        ),
-      ),
       Row(
         children: <Widget>[
-          _buildCheckBoxColumn(firstHalfOfRooms, state.selectedRooms),
-          _buildCheckBoxColumn(secondHalfOfRooms, state.selectedRooms),
+          Text(
+            Strings.selectRooms,
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          IconButton(
+            onPressed: () => showDialog(
+              builder: (_) => AlertDialog(
+                title: const Text(
+                  Strings.selectRooms,
+                ),
+                content: const Text(Strings.selectRoomsInfoI),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text(Strings.ok),
+                  ),
+                ],
+              ),
+              context: context,
+            ),
+            icon: const Icon(
+              Icons.info_outline,
+              color: Styles.primaryColorSwatch,
+            ),
+          )
         ],
+      ),
+      Padding(
+        padding: Styles.verticalPadding8,
+        child: Row(
+          children: <Widget>[
+            _buildCheckBoxColumn(firstHalfOfRooms, state.selectedRooms),
+            _buildCheckBoxColumn(secondHalfOfRooms, state.selectedRooms),
+          ],
+        ),
       ),
     ];
   }
