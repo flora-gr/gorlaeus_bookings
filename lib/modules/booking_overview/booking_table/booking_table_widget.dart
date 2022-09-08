@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/data/models/time_block.dart';
+import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
+import 'package:gorlaeus_bookings/modules/booking_overview/booking_table/booking_data_source.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
-import 'package:gorlaeus_bookings/utils/time_block_extensions.dart';
-import 'package:gorlaeus_bookings/widgets/booking_table/booking_data_source.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingTable extends StatelessWidget {
   const BookingTable(
-    this._bookings, {
+    this._roomsOverview, {
     required this.onEmailButtonClicked,
     super.key,
   });
 
-  final Map<String, Iterable<TimeBlock?>> _bookings;
-  final void Function({
-    required String time,
-    required String room,
-  }) onEmailButtonClicked;
+  final Map<String, Iterable<TimeBlock?>> _roomsOverview;
+  final void Function({required String time, required String room})
+      onEmailButtonClicked;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,7 @@ class BookingTable extends StatelessWidget {
           )
           .toList(),
       source: BookingDataSource(
-        bookings: _bookings,
+        roomsOverview: _roomsOverview,
         onEmailButtonClicked: onEmailButtonClicked,
         context: context,
       ),

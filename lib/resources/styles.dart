@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Styles {
   Styles._();
 
+  // Colors
   static const MaterialColor primaryColorSwatch = MaterialColor(
     0xFF001158,
     <int, Color>{
@@ -43,7 +44,18 @@ class Styles {
 
   static const Color bookedRoomColor = Color(0xFFF08080);
 
-  static BorderRadius borderRadius = BorderRadius.circular(6);
+  // Paddings
+  static const EdgeInsetsGeometry defaultPagePadding =
+      EdgeInsets.symmetric(horizontal: 16, vertical: 20);
+  static const EdgeInsetsGeometry padding16 = EdgeInsets.all(16);
+  static const EdgeInsetsGeometry padding8 = EdgeInsets.all(8);
+  static const EdgeInsetsGeometry verticalPadding8 =
+      EdgeInsets.symmetric(vertical: 8);
+  static const EdgeInsetsGeometry topPadding12 = EdgeInsets.only(top: 12);
+  static const EdgeInsetsGeometry leftPadding12 = EdgeInsets.only(left: 12);
 
-  static const EdgeInsetsGeometry defaultPagePadding = EdgeInsets.all(16);
+  // Other
+  static BorderRadius borderRadius = BorderRadius.circular(6);
+  static double defaultFontSize = 14;
+  static double defaultFontHeight = 1.3;
 }

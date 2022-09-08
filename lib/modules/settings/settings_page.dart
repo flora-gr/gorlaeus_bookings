@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/utils/string_extensions.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage(
-    this.bloc, {
+    this._bloc, {
     super.key,
   });
 
-  final SettingsBloc bloc;
+  final SettingsBloc _bloc;
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -25,7 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    _bloc = widget.bloc..add(const SettingsInitEvent());
+    _bloc = widget._bloc..add(const SettingsInitEvent());
     super.initState();
   }
 
@@ -81,43 +81,43 @@ class _SettingsPageState extends State<SettingsPage> {
     final Iterable<String> secondHalfOfRooms =
         state.rooms.toList().getRange(halfRoomCount, state.rooms.length);
     return <Widget>[
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: <Widget>[
-            Text(
-              Strings.selectRooms,
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            IconButton(
-              onPressed: () => showDialog(
-                builder: (_) => AlertDialog(
-                  title: const Text(
-                    Strings.selectRooms,
-                  ),
-                  content: const Text(Strings.selectRoomsInfoI),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text(Strings.ok),
-                    ),
-                  ],
-                ),
-                context: context,
-              ),
-              icon: const Icon(
-                Icons.info_rounded,
-                color: Styles.primaryColorSwatch,
-              ),
-            )
-          ],
-        ),
-      ),
       Row(
         children: <Widget>[
-          _buildCheckBoxColumn(firstHalfOfRooms, state.selectedRooms),
-          _buildCheckBoxColumn(secondHalfOfRooms, state.selectedRooms),
+          Text(
+            Strings.selectRooms,
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          IconButton(
+            onPressed: () => showDialog(
+              builder: (_) => AlertDialog(
+                title: const Text(
+                  Strings.selectRooms,
+                ),
+                content: const Text(Strings.selectRoomsInfoI),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text(Strings.ok),
+                  ),
+                ],
+              ),
+              context: context,
+            ),
+            icon: const Icon(
+              Icons.info_outline,
+              color: Styles.primaryColorSwatch,
+            ),
+          )
         ],
+      ),
+      Padding(
+        padding: Styles.verticalPadding8,
+        child: Row(
+          children: <Widget>[
+            _buildCheckBoxColumn(firstHalfOfRooms, state.selectedRooms),
+            _buildCheckBoxColumn(secondHalfOfRooms, state.selectedRooms),
+          ],
+        ),
       ),
     ];
   }

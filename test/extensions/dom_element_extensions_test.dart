@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gorlaeus_bookings/extensions/dom_element_extensions.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:gorlaeus_bookings/utils/dom_element_extensions.dart';
 
 void main() {
   test(

@@ -4,6 +4,9 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    avoid_print: false
-    prefer_single_quotes: true
     always_specify_types: true
+    avoid_print: false
+    avoid_relative_lib_imports: true
+    directives_ordering: true
+    prefer_single_quotes: true
+    sort_pub_dependencies: true

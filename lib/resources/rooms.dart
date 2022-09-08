@@ -27,7 +27,7 @@ class Rooms {
   static const String room21 = 'PRACT'; // Default hidden
   static const String room22 = 'HALL'; // Default hidden
 
-  static const Iterable<String> all = <String>[
+  static const Iterable<String> building1 = <String>[
     room1,
     room2,
     room3,
@@ -41,6 +41,9 @@ class Rooms {
     room11,
     room12,
     room13,
+  ];
+
+  static const Iterable<String> building2 = <String>[
     room14,
     room15,
     room16,
@@ -50,5 +53,10 @@ class Rooms {
     room20,
     room21,
     room22,
+  ];
+
+  static const Iterable<String> all = <String>[
+    ...building1,
+    ...building2,
   ];
 }

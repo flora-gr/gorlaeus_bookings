@@ -1,35 +1,31 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/get_free_room_now_widget.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
-import 'package:gorlaeus_bookings/modules/home/get_free_room_now_widget/get_free_room_now_widget.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
-import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(
-    this.bloc,
-    this.dateTimeRepository,
-    this.bookingRepository,
-    this.mapper, {
+    this._bloc,
+    this._urlLauncherWrapper,
+    this._getFreeRoomNowBloc, {
     super.key,
   });
 
-  final HomeBloc bloc;
-  final DateTimeRepository dateTimeRepository;
-  final BookingRepository bookingRepository;
-  final RoomsOverviewMapper mapper;
+  final HomeBloc _bloc;
+  final UrlLauncherWrapper _urlLauncherWrapper;
+  final GetFreeRoomNowBloc _getFreeRoomNowBloc;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -37,10 +33,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late HomeBloc _bloc;
+  late UrlLauncherWrapper _urlLauncherWrapper;
 
   @override
   void initState() {
-    _bloc = widget.bloc..add(const HomeInitEvent());
+    _bloc = widget._bloc..add(const HomeInitEvent());
+    _urlLauncherWrapper = widget._urlLauncherWrapper;
     super.initState();
   }
 
@@ -102,8 +100,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _openDisclaimerDialog() {
-    final TextStyle? defaultTextStyle = Theme.of(context).textTheme.bodyText2;
-    final TextStyle? linkTextStyle = defaultTextStyle?.copyWith(
+    final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
+    final TextStyle linkTextStyle = defaultTextStyle.copyWith(
       color: Styles.secondaryColorSwatch,
       decoration: TextDecoration.underline,
     );
@@ -112,49 +110,52 @@ class _HomePageState extends State<HomePage> {
         title: const Text(
           Strings.disclaimerDialogTitle,
         ),
-        content: RichText(
-          text: TextSpan(
+        content: Text.rich(
+          TextSpan(
             children: <TextSpan>[
               TextSpan(
-                text: Strings.disclaimerDialogText1,
-                style: defaultTextStyle,
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText2,
-                style: linkTextStyle,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => launchUrl(
-                        ConnectionUrls.zrsWebsiteLink,
-                        mode: LaunchMode.externalApplication,
-                      ),
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText3,
-                style: defaultTextStyle,
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText4,
-                style: linkTextStyle,
-                recognizer: TapGestureRecognizer()
-                  ..onTap =
-                      () => launchUrl(ConnectionUrls.appDeveloperEmailUri),
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText5,
-                style: defaultTextStyle,
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText6,
-                style: linkTextStyle,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => launchUrl(
-                        ConnectionUrls.githubRepositoryLink,
-                        mode: LaunchMode.externalApplication,
-                      ),
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText7,
-                style: defaultTextStyle,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: Strings.disclaimerDialogText1,
+                    style: defaultTextStyle,
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText2,
+                    style: linkTextStyle,
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => _urlLauncherWrapper.launchUrl(
+                            ConnectionUrls.zrsWebsiteLink,
+                          ),
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText3,
+                    style: defaultTextStyle,
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText4,
+                    style: linkTextStyle,
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => _urlLauncherWrapper.launchEmail(
+                            ConnectionUrls.appDeveloperEmail,
+                          ),
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText5,
+                    style: defaultTextStyle,
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText6,
+                    style: linkTextStyle,
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => _urlLauncherWrapper.launchUrl(
+                            ConnectionUrls.githubRepositoryLink,
+                          ),
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText7,
+                    style: defaultTextStyle,
+                  ),
+                ],
               ),
             ],
           ),
@@ -236,9 +237,7 @@ class _HomePageState extends State<HomePage> {
       child: ItemBox(
         title: Strings.getMeAFreeRoom,
         child: GetFreeRoomNowWidget(
-          widget.dateTimeRepository,
-          widget.bookingRepository,
-          widget.mapper,
+          widget._getFreeRoomNowBloc,
         ),
       ),
     );

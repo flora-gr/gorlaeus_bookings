@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
-
-import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
-import 'package:gorlaeus_bookings/data/repositories/shared_preferences_repository.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gorlaeus_bookings/di/injection_container.dart';
+import 'package:gorlaeus_bookings/di/injection_container.dart' as di;
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
+import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  di.init();
   runApp(const GorlaeusBookingApp());
 }
 
@@ -52,35 +57,29 @@ class GorlaeusBookingApp extends StatelessWidget {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        primary: Styles.secondaryColorSwatch,
+        foregroundColor: Styles.secondaryColorSwatch,
       ),
     ),
     textTheme: const TextTheme().copyWith(
-      bodyText2: const TextStyle(
-        fontSize: 14,
-        height: 1.3,
+      bodyText2: TextStyle(
+        fontSize: Styles.defaultFontSize,
+        height: Styles.defaultFontHeight,
       ),
     ),
     scaffoldBackgroundColor: Styles.backgroundColor,
   );
 
   MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
-    const BookingRepository bookingRepository = BookingRepository();
-    const DateTimeRepository dateTimeRepository = DateTimeRepository();
-    SharedPreferencesRepository sharedPreferencesRepository =
-        SharedPreferencesRepository();
-    RoomsOverviewMapper roomsOverviewMapper =
-        RoomsOverviewMapper(sharedPreferencesRepository);
-
     debugPrint(settings.toString());
     switch (settings.name) {
       case Routes.bookingOverviewPage:
         return _getRoute(
           BookingOverviewPage(
             BookingOverviewBloc(
-              bookingRepository,
-              dateTimeRepository,
-              roomsOverviewMapper,
+              getIt.get<BookingRepository>(),
+              getIt.get<DateTimeRepository>(),
+              getIt.get<RoomsOverviewMapper>(),
+              getIt.get<UrlLauncherWrapper>(),
             ),
             settings.arguments as DateTime,
           ),
@@ -89,7 +88,7 @@ class GorlaeusBookingApp extends StatelessWidget {
       case Routes.settingsPage:
         return _getRoute(
           SettingsPage(
-            SettingsBloc(sharedPreferencesRepository),
+            SettingsBloc(getIt.get<SharedPreferencesRepository>()),
           ),
           settings,
           fullscreenDialog: true,
@@ -99,11 +98,14 @@ class GorlaeusBookingApp extends StatelessWidget {
         return _getRoute(
           HomePage(
             HomeBloc(
-              dateTimeRepository,
+              getIt.get<DateTimeRepository>(),
             ),
-            dateTimeRepository,
-            bookingRepository,
-            roomsOverviewMapper,
+            getIt.get<UrlLauncherWrapper>(),
+            GetFreeRoomNowBloc(
+              getIt.get<BookingRepository>(),
+              getIt.get<DateTimeRepository>(),
+              getIt.get<RoomsOverviewMapper>(),
+            ),
           ),
           settings,
         );

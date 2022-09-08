@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/data/models/time_block.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 extension StringExtension on String {
@@ -26,9 +26,10 @@ extension StringExtension on String {
   }
 
   TimeOfDay? toTimeOfDay() {
-    if (split(':').length == 2) {
-      final int? hour = int.tryParse(split(':')[0]);
-      final int? minute = int.tryParse(split(':')[1]);
+    final List<String> timeStringSplit = split(':');
+    if (timeStringSplit.length == 2) {
+      final int? hour = int.tryParse(timeStringSplit[0]);
+      final int? minute = int.tryParse(timeStringSplit[1]);
       if (hour != null && minute != null) {
         return TimeOfDay(
           hour: hour,

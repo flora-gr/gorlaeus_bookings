@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/widgets/booking_table/booking_table_widget.dart';
+import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/modules/booking_overview/booking_table/booking_table_widget.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/utils/date_time_extensions.dart';
+import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class BookingOverviewPage extends StatefulWidget {
@@ -41,20 +42,17 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
         ),
         body: state is BookingOverviewReadyState
             ? Padding(
-                padding: const EdgeInsets.all(16),
+                padding: Styles.defaultPagePadding,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Text(
-                        '${Strings.bookingsOn} ${state.date.formatted}',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
+                    Text(
+                      '${Strings.bookingsOn} ${state.date.formatted}',
+                      style: Theme.of(context).textTheme.headline6,
                     ),
                     Expanded(
                       child: BookingTable(
-                        state.bookings,
+                        state.roomsOverview,
                         onEmailButtonClicked: ({
                           required String time,
                           required String room,

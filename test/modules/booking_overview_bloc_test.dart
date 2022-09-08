@@ -1,14 +1,15 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gorlaeus_bookings/data/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/data/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/data/repositories/date_time_repository.dart';
-import 'package:gorlaeus_bookings/data/models/time_block.dart';
+import 'package:gorlaeus_bookings/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
+import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockBookingRepository extends Mock implements BookingRepository {}
@@ -17,10 +18,13 @@ class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 class MockRoomsOverviewMapper extends Mock implements RoomsOverviewMapper {}
 
+class MockUrlLauncherWrapper extends Mock implements UrlLauncherWrapper {}
+
 void main() {
   late BookingRepository bookingRepository;
   late DateTimeRepository dateTimeRepository;
   late RoomsOverviewMapper mapper;
+  late UrlLauncherWrapper urlLauncherWrapper;
   late BookingOverviewBloc sut;
 
   final DateTime date = DateTime.fromMillisecondsSinceEpoch(0);
@@ -39,7 +43,7 @@ void main() {
     ),
   ];
 
-  Map<String, Iterable<TimeBlock?>> mappedBookings =
+  Map<String, Iterable<TimeBlock?>> roomsOverview =
       <String, Iterable<TimeBlock?>>{
     'room': <TimeBlock?>[bookings.first.time],
   };
@@ -48,10 +52,15 @@ void main() {
     bookingRepository = MockBookingRepository();
     dateTimeRepository = MockDateTimeRepository();
     mapper = MockRoomsOverviewMapper();
+    urlLauncherWrapper = MockUrlLauncherWrapper();
+    when(() => urlLauncherWrapper.launchEmail(any(),
+        subject: any(named: 'subject'),
+        body: any(named: 'body'))).thenAnswer((_) async => <dynamic>{});
     sut = BookingOverviewBloc(
       bookingRepository,
       dateTimeRepository,
       mapper,
+      urlLauncherWrapper,
     );
   });
 
@@ -61,7 +70,7 @@ void main() {
       when(() => bookingRepository.getBookings(any()))
           .thenAnswer((_) async => bookings);
       when(() => mapper.mapToRoomsOverview(bookings))
-          .thenAnswer((_) async => mappedBookings);
+          .thenAnswer((_) async => roomsOverview);
     },
     build: () => sut,
     act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),
@@ -69,7 +78,7 @@ void main() {
       const BookingOverviewBusyState(),
       BookingOverviewReadyState(
         date: date,
-        bookings: mappedBookings,
+        roomsOverview: roomsOverview,
       ),
     ],
   );

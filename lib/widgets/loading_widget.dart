@@ -11,3 +11,29 @@ class LoadingWidget extends StatelessWidget {
     );
   }
 }
+
+class ButtonLoadingWidget extends StatelessWidget {
+  const ButtonLoadingWidget({
+    required this.showLoading,
+    super.key,
+  });
+
+  final bool showLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.leftPadding12,
+      child: SizedBox(
+        height: 20,
+        width: 20,
+        child: showLoading
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2,
+              )
+            : null,
+      ),
+    );
+  }
+}
