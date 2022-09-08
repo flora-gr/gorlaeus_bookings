@@ -2,12 +2,12 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:mocktail/mocktail.dart';
@@ -43,7 +43,7 @@ void main() {
     ),
   ];
 
-  Map<String, Iterable<TimeBlock?>> mappedBookings =
+  Map<String, Iterable<TimeBlock?>> roomsOverview =
       <String, Iterable<TimeBlock?>>{
     'room': <TimeBlock?>[bookings.first.time],
   };
@@ -70,7 +70,7 @@ void main() {
       when(() => bookingRepository.getBookings(any()))
           .thenAnswer((_) async => bookings);
       when(() => mapper.mapToRoomsOverview(bookings))
-          .thenAnswer((_) async => mappedBookings);
+          .thenAnswer((_) async => roomsOverview);
     },
     build: () => sut,
     act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),
@@ -78,7 +78,7 @@ void main() {
       const BookingOverviewBusyState(),
       BookingOverviewReadyState(
         date: date,
-        bookings: mappedBookings,
+        roomsOverview: roomsOverview,
       ),
     ],
   );

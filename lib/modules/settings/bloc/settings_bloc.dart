@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {

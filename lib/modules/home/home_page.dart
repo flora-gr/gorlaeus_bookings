@@ -1,16 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/get_free_room_now_widget.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
-import 'package:gorlaeus_bookings/modules/get_free_room_now/get_free_room_now_widget.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
@@ -100,11 +100,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _openDisclaimerDialog() {
-    double scaleFactor = MediaQuery.of(context).textScaleFactor;
-    final TextStyle defaultTextStyle = Theme.of(context)
-        .textTheme
-        .bodyText2!
-        .copyWith(fontSize: Styles.defaultFontSize * scaleFactor);
+    final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
     final TextStyle linkTextStyle = defaultTextStyle.copyWith(
       color: Styles.secondaryColorSwatch,
       decoration: TextDecoration.underline,
@@ -114,48 +110,52 @@ class _HomePageState extends State<HomePage> {
         title: const Text(
           Strings.disclaimerDialogTitle,
         ),
-        content: RichText(
-          text: TextSpan(
+        content: Text.rich(
+          TextSpan(
             children: <TextSpan>[
               TextSpan(
-                text: Strings.disclaimerDialogText1,
-                style: defaultTextStyle,
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText2,
-                style: linkTextStyle,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => _urlLauncherWrapper.launchUrl(
-                        ConnectionUrls.zrsWebsiteLink,
-                      ),
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText3,
-                style: defaultTextStyle,
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText4,
-                style: linkTextStyle,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => _urlLauncherWrapper.launchEmail(
-                        ConnectionUrls.appDeveloperEmail,
-                      ),
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText5,
-                style: defaultTextStyle,
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText6,
-                style: linkTextStyle,
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => _urlLauncherWrapper.launchUrl(
-                        ConnectionUrls.githubRepositoryLink,
-                      ),
-              ),
-              TextSpan(
-                text: Strings.disclaimerDialogText7,
-                style: defaultTextStyle,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: Strings.disclaimerDialogText1,
+                    style: defaultTextStyle,
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText2,
+                    style: linkTextStyle,
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => _urlLauncherWrapper.launchUrl(
+                            ConnectionUrls.zrsWebsiteLink,
+                          ),
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText3,
+                    style: defaultTextStyle,
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText4,
+                    style: linkTextStyle,
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => _urlLauncherWrapper.launchEmail(
+                            ConnectionUrls.appDeveloperEmail,
+                          ),
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText5,
+                    style: defaultTextStyle,
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText6,
+                    style: linkTextStyle,
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => _urlLauncherWrapper.launchUrl(
+                            ConnectionUrls.githubRepositoryLink,
+                          ),
+                  ),
+                  TextSpan(
+                    text: Strings.disclaimerDialogText7,
+                    style: defaultTextStyle,
+                  ),
+                ],
               ),
             ],
           ),

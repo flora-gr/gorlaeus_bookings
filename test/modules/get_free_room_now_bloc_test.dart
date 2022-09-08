@@ -2,19 +2,19 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
+import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockDateTimeRepository extends Mock implements DateTimeRepository {}
-
 class MockBookingRepository extends Mock implements BookingRepository {}
+
+class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 class MockRoomsOverviewMapper extends Mock implements RoomsOverviewMapper {}
 
@@ -42,7 +42,7 @@ void main() {
     defaultBookingEntry
   ];
 
-  Map<String, Iterable<TimeBlock?>> mappedBooking =
+  Map<String, Iterable<TimeBlock?>> roomsOverview =
       <String, Iterable<TimeBlock?>>{
     Rooms.room1: <TimeBlock?>[defaultBookingEntry.time],
   };
@@ -60,18 +60,18 @@ void main() {
   }
 
   setUp(() {
-    dateTimeRepository = MockDateTimeRepository();
-    when(() => dateTimeRepository.getCurrentDateTime())
-        .thenAnswer((_) => todayAtTwo);
     bookingRepository = MockBookingRepository();
     when(() => bookingRepository.getBookings(any()))
         .thenAnswer((_) async => defaultBookingResponse);
     mapper = MockRoomsOverviewMapper();
+    dateTimeRepository = MockDateTimeRepository();
+    when(() => dateTimeRepository.getCurrentDateTime())
+        .thenAnswer((_) => todayAtTwo);
     when(() => mapper.mapToRoomsOverview(any()))
-        .thenAnswer((_) async => mappedBooking);
+        .thenAnswer((_) async => roomsOverview);
     sut = GetFreeRoomNowBloc(
-      dateTimeRepository,
       bookingRepository,
+      dateTimeRepository,
       mapper,
     );
   });
@@ -107,8 +107,7 @@ void main() {
       predicate(
         (GetFreeRoomNowReadyState state) =>
             state.bookings == seedState.bookings &&
-            seedState.bookings!
-                .any((BookingEntry entry) => entry.room == state.freeRoom),
+            roomsOverview.keys.contains(state.freeRoom),
       ),
     ],
     verify: (_) {

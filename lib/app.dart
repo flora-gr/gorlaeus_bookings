@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
-
+import 'package:gorlaeus_bookings/di/injection_container.dart' as di;
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
@@ -12,11 +13,9 @@ import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
-import 'package:gorlaeus_bookings/di/injection_container.dart' as di;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -103,8 +102,8 @@ class GorlaeusBookingApp extends StatelessWidget {
             ),
             getIt.get<UrlLauncherWrapper>(),
             GetFreeRoomNowBloc(
-              getIt.get<DateTimeRepository>(),
               getIt.get<BookingRepository>(),
+              getIt.get<DateTimeRepository>(),
               getIt.get<RoomsOverviewMapper>(),
             ),
           ),

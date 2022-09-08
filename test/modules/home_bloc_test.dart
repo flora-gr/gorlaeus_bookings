@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockDateTimeRepository extends Mock implements DateTimeRepository {}
@@ -13,7 +13,7 @@ void main() {
   late HomeBloc sut;
 
   final DateTime today = DateTime.fromMillisecondsSinceEpoch(0);
-  final DateTime nextYear = today.add(const Duration(days: 365));
+  final DateTime maximumDate = today.add(const Duration(days: 100));
   final DateTime otherDay = DateTime.fromMillisecondsSinceEpoch(1);
 
   setUp(() {
@@ -30,7 +30,7 @@ void main() {
     expect: () => <HomeState>[
       HomeReadyState(
         minimumDate: today,
-        maximumDate: nextYear,
+        maximumDate: maximumDate,
         selectedDate: today,
       ),
     ],
@@ -41,14 +41,14 @@ void main() {
     build: () => sut,
     seed: () => HomeReadyState(
       minimumDate: today,
-      maximumDate: nextYear,
+      maximumDate: maximumDate,
       selectedDate: today,
     ),
     act: (HomeBloc bloc) => bloc.add(HomeDateChangedEvent(otherDay)),
     expect: () => <HomeState>[
       HomeReadyState(
         minimumDate: today,
-        maximumDate: nextYear,
+        maximumDate: maximumDate,
         selectedDate: otherDay,
       ),
     ],

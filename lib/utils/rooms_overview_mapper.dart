@@ -14,19 +14,20 @@ class RoomsOverviewMapper {
   Future<Map<String, Iterable<TimeBlock?>>?> mapToRoomsOverview(
       List<BookingEntry>? bookings) async {
     if (bookings != null) {
-      final Map<String, Iterable<TimeBlock?>> roomsOverview =
-          <String, Iterable<TimeBlock?>>{};
       final List<String> hiddenRooms =
           await _sharedPreferencesRepository.getHiddenRooms();
       final Iterable<String> roomsToShow =
           Rooms.all.where((String room) => !hiddenRooms.contains(room));
 
+      final Map<String, Iterable<TimeBlock?>> roomsOverview =
+          <String, Iterable<TimeBlock?>>{};
       for (String room in roomsToShow) {
         final Iterable<BookingEntry?> bookingsForRoom =
             bookings.where((BookingEntry entry) => entry.room == room);
         roomsOverview[room] =
             bookingsForRoom.map((BookingEntry? entry) => entry?.time);
       }
+
       return roomsOverview;
     }
     return null;

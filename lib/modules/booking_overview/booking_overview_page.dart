@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/modules/booking_overview/booking_table/booking_table_widget.dart';
+import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/modules/booking_overview/booking_table/booking_table_widget.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
@@ -52,7 +52,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
                     ),
                     Expanded(
                       child: BookingTable(
-                        state.bookings,
+                        state.roomsOverview,
                         onEmailButtonClicked: ({
                           required String time,
                           required String room,

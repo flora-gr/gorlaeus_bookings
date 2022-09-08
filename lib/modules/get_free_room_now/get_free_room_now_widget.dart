@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
+import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class GetFreeRoomNowWidget extends StatefulWidget {
   const GetFreeRoomNowWidget(
@@ -44,19 +45,12 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(_getButtonText(state)),
                   Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: state is GetFreeRoomNowBusyState
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            )
-                          : null,
-                    ),
+                    padding: Styles.leftPadding12,
+                    child: Text(_getButtonText(state)),
+                  ),
+                  ButtonLoadingWidget(
+                    showLoading: state is GetFreeRoomNowBusyState,
                   ),
                 ],
               ),

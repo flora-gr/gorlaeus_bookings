@@ -29,11 +29,12 @@ class Strings {
   static const String getMeAFreeRoom = 'Find an available room now';
   static const String search = 'Search';
   static const String notAvailableInWeekend = 'Not available on weekends';
+
   static String roomIsFree(String room) =>
-      'Room $room is available until the end of the day.';
+      'Room $room is available until 18:00.';
   static const String getFreeRoomFailed = 'Something went wrong.';
   static const String noRoomFound = 'No available room found.';
-  static const String tryAgain = 'Try again';
+  static const String tryAgain = 'Search again';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
@@ -41,8 +42,11 @@ class Strings {
   static const String bookingsOn = 'Bookings on';
   static const String noBookings = 'No bookings found for this day.';
   static const String today = 'today';
+
   static String onDay(String day) => 'on $day';
+
   static String bookRoomEmailSubject(String room) => 'Book room $room';
+
   static String bookRoomEmailBody(
           String room, String dateString, String time) =>
       'Hello,\n\n'
@@ -53,12 +57,13 @@ class Strings {
   static const String free = 'Available';
   static const String booked = 'Booked';
   static const String roomFreeDialogHeader = 'This room is available';
-  static const String roomBookedDialogHeader = 'Sorry!';
+
   static String roomFreeDialogText(String room, String time) =>
       'Do you want to book room $room at $time?';
-  static const String roomBookedDialogText = 'This room is already booked.';
   static const String yesBookRoom = 'Yes, send email';
   static const String cancel = 'Cancel';
+  static const String roomBookedDialogHeader = 'Sorry!';
+  static const String roomBookedDialogText = 'This room is already booked.';
 
   // Settings page
   static const String settingsPageTitle = 'Settings';

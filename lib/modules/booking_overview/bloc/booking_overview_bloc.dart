@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
-import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
+import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
+import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 
@@ -41,7 +41,7 @@ class BookingOverviewBloc
       if (bookings != null) {
         yield BookingOverviewReadyState(
           date: date,
-          bookings: (await _mapper.mapToRoomsOverview(bookings))!,
+          roomsOverview: (await _mapper.mapToRoomsOverview(bookings))!,
         );
       } else {
         yield const BookingOverviewErrorState();
