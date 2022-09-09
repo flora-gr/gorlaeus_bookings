@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
@@ -17,13 +18,19 @@ void main() {
   final List<String> hiddenRooms =
       Rooms.all.where((String room) => room != Rooms.room1).toList();
 
-  setUp(() {
+  setUpAll(() {
+    GetIt getIt = GetIt.instance;
     sharedPreferencesRepository = MockSharedPreferencesRepository();
+    getIt.registerSingleton<SharedPreferencesRepository>(
+        sharedPreferencesRepository);
+  });
+
+  setUp(() {
     when(() => sharedPreferencesRepository.getHiddenRooms())
         .thenAnswer((_) async => hiddenRooms);
     when(() => sharedPreferencesRepository.setHiddenRooms(any()))
         .thenAnswer((_) async => true);
-    sut = SettingsBloc(sharedPreferencesRepository);
+    sut = SettingsBloc();
   });
 
   blocTest<SettingsBloc, SettingsState>(

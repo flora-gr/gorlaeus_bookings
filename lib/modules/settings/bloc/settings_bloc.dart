@@ -1,13 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
 import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc(this._sharedPreferencesRepository)
-      : super(const SettingsBusyState()) {
+  SettingsBloc() : super(const SettingsBusyState()) {
+    _sharedPreferencesRepository = getIt.get<SharedPreferencesRepository>();
     on<SettingsInitEvent>(
         (SettingsInitEvent event, Emitter<SettingsState> emit) => emit.forEach(
             _handleInitEvent(),
@@ -21,7 +22,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
             _handleSettingsSaveEvent());
   }
 
-  final SharedPreferencesRepository _sharedPreferencesRepository;
+  late SharedPreferencesRepository _sharedPreferencesRepository;
 
   Stream<SettingsState> _handleInitEvent() async* {
     final List<String> hiddenRooms =

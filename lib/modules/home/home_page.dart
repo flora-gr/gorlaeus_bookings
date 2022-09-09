@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/get_free_room_now_widget.dart';
@@ -18,13 +19,11 @@ import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 class HomePage extends StatefulWidget {
   const HomePage(
     this._bloc,
-    this._urlLauncherWrapper,
     this._getFreeRoomNowBloc, {
     super.key,
   });
 
   final HomeBloc _bloc;
-  final UrlLauncherWrapper _urlLauncherWrapper;
   final GetFreeRoomNowBloc _getFreeRoomNowBloc;
 
   @override
@@ -38,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _bloc = widget._bloc..add(const HomeInitEvent());
-    _urlLauncherWrapper = widget._urlLauncherWrapper;
+    _urlLauncherWrapper = getIt.get<UrlLauncherWrapper>();
     super.initState();
   }
 

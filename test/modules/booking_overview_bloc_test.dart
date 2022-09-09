@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
@@ -48,20 +49,23 @@ void main() {
     'room': <TimeBlock?>[bookings.first.time],
   };
 
-  setUp(() {
+  setUpAll(() {
+    GetIt getIt = GetIt.instance;
     bookingRepository = MockBookingRepository();
     dateTimeRepository = MockDateTimeRepository();
     mapper = MockRoomsOverviewMapper();
     urlLauncherWrapper = MockUrlLauncherWrapper();
+    getIt.registerSingleton<BookingRepository>(bookingRepository);
+    getIt.registerSingleton<DateTimeRepository>(dateTimeRepository);
+    getIt.registerSingleton<RoomsOverviewMapper>(mapper);
+    getIt.registerSingleton<UrlLauncherWrapper>(urlLauncherWrapper);
+  });
+
+  setUp(() {
     when(() => urlLauncherWrapper.launchEmail(any(),
         subject: any(named: 'subject'),
         body: any(named: 'body'))).thenAnswer((_) async => <dynamic>{});
-    sut = BookingOverviewBloc(
-      bookingRepository,
-      dateTimeRepository,
-      mapper,
-      urlLauncherWrapper,
-    );
+    sut = BookingOverviewBloc();
   });
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(

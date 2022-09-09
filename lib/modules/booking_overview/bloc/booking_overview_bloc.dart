@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
@@ -12,12 +13,11 @@ import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 
 class BookingOverviewBloc
     extends Bloc<BookingOverviewEvent, BookingOverviewState> {
-  BookingOverviewBloc(
-    this._bookingRepository,
-    this._dateTimeRepository,
-    this._mapper,
-    this._urlLauncherWrapper,
-  ) : super(const BookingOverviewBusyState()) {
+  BookingOverviewBloc() : super(const BookingOverviewBusyState()) {
+    _bookingRepository = getIt.get<BookingRepository>();
+    _dateTimeRepository = getIt.get<DateTimeRepository>();
+    _mapper = getIt.get<RoomsOverviewMapper>();
+    _urlLauncherWrapper = getIt.get<UrlLauncherWrapper>();
     on<BookingOverviewInitEvent>(
         (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
             emit.forEach(_handleInitEvent(event.date),
@@ -27,10 +27,10 @@ class BookingOverviewBloc
         _handleBookRoomEvent(event));
   }
 
-  final BookingRepository _bookingRepository;
-  final DateTimeRepository _dateTimeRepository;
-  final RoomsOverviewMapper _mapper;
-  final UrlLauncherWrapper _urlLauncherWrapper;
+  late BookingRepository _bookingRepository;
+  late DateTimeRepository _dateTimeRepository;
+  late RoomsOverviewMapper _mapper;
+  late UrlLauncherWrapper _urlLauncherWrapper;
 
   Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
     yield const BookingOverviewBusyState();
