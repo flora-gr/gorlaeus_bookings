@@ -54,8 +54,6 @@ class Strings {
       'Thanks in advance\n';
 
   // Booking table
-  static const String free = 'Available';
-  static const String booked = 'Booked';
   static const String roomFreeDialogHeader = 'This room is available';
 
   static String roomFreeDialogText(String room, String time) =>
