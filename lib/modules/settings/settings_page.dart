@@ -33,36 +33,40 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
       bloc: _bloc,
-      builder: (BuildContext context, SettingsState state) => Scaffold(
-        appBar: AppBar(
-          title: const Text(Strings.settingsPageTitle),
-        ),
-        body: state is SettingsReadyState
-            ? _buildReadyBody(state)
-            : const Center(
-                child: LoadingWidget(),
-              ),
-        persistentFooterButtons: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    _bloc.add(const SettingsSaveEvent());
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(Strings.save),
+      builder: (BuildContext context, SettingsState state) => GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text(Strings.settingsPageTitle),
+          ),
+          body: state is SettingsReadyState
+              ? _buildReadyBody(state)
+              : const Center(
+                  child: LoadingWidget(),
                 ),
-              ),
-            ],
-          )
-        ],
+          persistentFooterButtons: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _bloc.add(const SettingsSaveEvent());
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(Strings.save),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildReadyBody(SettingsReadyState state) {
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: Styles.defaultPagePadding,
         child: Column(
