@@ -8,8 +8,8 @@ import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingDataSource extends DataGridSource {
-  BookingDataSource({
-    required this.roomsOverview,
+  BookingDataSource(
+    this.roomsOverview, {
     required this.onEmailButtonClicked,
     required this.context,
   }) {
@@ -51,7 +51,7 @@ class BookingDataSource extends DataGridSource {
           final bool isFree = !roomsOverview[room]!.any(
               (TimeBlock? time) => time?.overlapsWith(bookingTime) == true);
           return InkWell(
-            onTap: () => _showDialog(
+            onTap: () => _showBookingDialog(
               room: room.toRoomName(),
               time: cell.columnName,
               isFree: isFree,
@@ -68,8 +68,8 @@ class BookingDataSource extends DataGridSource {
     );
   }
 
-  void _showDialog({
-    required String? room,
+  void _showBookingDialog({
+    required String room,
     required String time,
     required bool isFree,
   }) {
@@ -82,7 +82,7 @@ class BookingDataSource extends DataGridSource {
         ),
         content: Text(
           isFree
-              ? Strings.roomFreeDialogText(room!, time)
+              ? Strings.roomFreeDialogText(room, time)
               : Strings.roomBookedDialogText,
         ),
         actions: isFree
@@ -93,7 +93,7 @@ class BookingDataSource extends DataGridSource {
                 ),
                 TextButton(
                   onPressed: () {
-                    onEmailButtonClicked(time: time, room: room!);
+                    onEmailButtonClicked(time: time, room: room);
                     Navigator.of(context).pop();
                   },
                   child: const Text(Strings.yesBookRoom),

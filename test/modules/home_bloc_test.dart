@@ -14,7 +14,7 @@ void main() {
   late HomeBloc sut;
 
   final DateTime today = DateTime.fromMillisecondsSinceEpoch(0);
-  final DateTime maximumDate = today.add(const Duration(days: 100));
+  final DateTime maximumDate = today.add(const Duration(days: 180));
   final DateTime otherDay = DateTime.fromMillisecondsSinceEpoch(1);
 
   setUpAll(() {
