@@ -29,6 +29,12 @@ extension TimeBlockExtension on TimeBlock {
             endTimeMinutes >= bookingEndTimeMinutes;
   }
 
+  bool isAfter(TimeBlock bookingTime) {
+    final int startTimeMinutes = _getMinutes(startTime);
+    final int bookingEndTimeMinutes = _getMinutes(bookingTime.endTime);
+    return startTimeMinutes >= bookingEndTimeMinutes;
+  }
+
   int _getMinutes(TimeOfDay time) {
     return time.hour * 60 + time.minute;
   }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
@@ -68,26 +69,35 @@ class GetFreeRoomNowBloc
         await _mapper.mapToRoomsOverview(bookings);
 
     if (roomsOverview != null) {
-      final TimeBlock timeBlockFromNowUntilEndOfDay = TimeBlock(
+      final TimeBlock timeBlockFromNowUntilHourFromNow = TimeBlock(
         startTime: TimeOfDay(
           hour: now.hour,
           minute: now.minute,
         ),
-        endTime: const TimeOfDay(hour: 18, minute: 0),
+        endTime: TimeOfDay(
+          hour: now.hour + 1,
+          minute: now.minute,
+        ),
       );
 
       final List<String> freeRooms = roomsOverview.keys
           .where((String key) =>
               roomsOverview[key]?.any((TimeBlock? timeBlock) =>
-                  timeBlock?.overlapsWith(timeBlockFromNowUntilEndOfDay) ==
+                  timeBlock?.overlapsWith(timeBlockFromNowUntilHourFromNow) ==
                   true) ==
               false)
           .toList();
 
       if (freeRooms.isNotEmpty) {
+        final String freeRoom = freeRooms[_random.nextInt(freeRooms.length)];
+        final TimeBlock? nextBooking = roomsOverview[freeRoom]!
+            .firstWhereOrNull(((TimeBlock? bookingTime) =>
+                bookingTime!.isAfter(timeBlockFromNowUntilHourFromNow)));
+
         yield GetFreeRoomNowReadyState(
           bookings: bookings,
-          freeRoom: freeRooms[_random.nextInt(freeRooms.length)],
+          freeRoom: freeRoom,
+          nextBooking: nextBooking,
         );
       } else {
         yield const GetFreeRoomNowEmptyState();

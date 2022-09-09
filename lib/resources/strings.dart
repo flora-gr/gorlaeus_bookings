@@ -30,8 +30,8 @@ class Strings {
   static const String search = 'Search';
   static const String notAvailableInWeekend = 'Not available on weekends';
 
-  static String roomIsFree(String room) =>
-      'Room $room is available until 18:00.';
+  static String roomIsFree(String room, String? endTime) =>
+      'Room $room is available until ${endTime ?? 'end of the day'}.';
   static const String getFreeRoomFailed = 'Something went wrong.';
   static const String noRoomFound = 'No available room found.';
   static const String tryAgain = 'Search again';
