@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
@@ -14,11 +16,10 @@ import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 
 class GetFreeRoomNowBloc
     extends Bloc<GetFreeRoomNowEvent, GetFreeRoomNowState> {
-  GetFreeRoomNowBloc(
-    this._bookingRepository,
-    this._dateTimeRepository,
-    this._mapper,
-  ) : super(const GetFreeRoomNowReadyState()) {
+  GetFreeRoomNowBloc() : super(const GetFreeRoomNowReadyState()) {
+    _bookingRepository = getIt.get<BookingRepository>();
+    _dateTimeRepository = getIt.get<DateTimeRepository>();
+    _mapper = getIt.get<RoomsOverviewMapper>();
     on<GetFreeRoomNowInitEvent>(
         (GetFreeRoomNowInitEvent event, Emitter<GetFreeRoomNowState> emit) =>
             emit(_handleGetFreeRoomInitEvent()));
@@ -28,9 +29,10 @@ class GetFreeRoomNowBloc
                 onData: (GetFreeRoomNowState state) => state));
   }
 
-  final BookingRepository _bookingRepository;
-  final DateTimeRepository _dateTimeRepository;
-  final RoomsOverviewMapper _mapper;
+  late BookingRepository _bookingRepository;
+  late DateTimeRepository _dateTimeRepository;
+  late RoomsOverviewMapper _mapper;
+
   final Random _random = Random();
 
   GetFreeRoomNowState _handleGetFreeRoomInitEvent() {
@@ -67,26 +69,35 @@ class GetFreeRoomNowBloc
         await _mapper.mapToRoomsOverview(bookings);
 
     if (roomsOverview != null) {
-      final TimeBlock timeBlockFromNowUntilEndOfDay = TimeBlock(
+      final TimeBlock timeBlockFromNowUntilHourFromNow = TimeBlock(
         startTime: TimeOfDay(
           hour: now.hour,
           minute: now.minute,
         ),
-        endTime: const TimeOfDay(hour: 18, minute: 0),
+        endTime: TimeOfDay(
+          hour: now.hour + 1,
+          minute: now.minute,
+        ),
       );
 
       final List<String> freeRooms = roomsOverview.keys
           .where((String key) =>
               roomsOverview[key]?.any((TimeBlock? timeBlock) =>
-                  timeBlock?.overlapsWith(timeBlockFromNowUntilEndOfDay) ==
+                  timeBlock?.overlapsWith(timeBlockFromNowUntilHourFromNow) ==
                   true) ==
               false)
           .toList();
 
       if (freeRooms.isNotEmpty) {
+        final String freeRoom = freeRooms[_random.nextInt(freeRooms.length)];
+        final TimeBlock? nextBooking = roomsOverview[freeRoom]!
+            .firstWhereOrNull(((TimeBlock? bookingTime) =>
+                bookingTime!.isAfter(timeBlockFromNowUntilHourFromNow)));
+
         yield GetFreeRoomNowReadyState(
           bookings: bookings,
-          freeRoom: freeRooms[_random.nextInt(freeRooms.length)],
+          freeRoom: freeRoom,
+          nextBooking: nextBooking,
         );
       } else {
         yield const GetFreeRoomNowEmptyState();

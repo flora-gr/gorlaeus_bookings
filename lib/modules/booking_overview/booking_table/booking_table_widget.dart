@@ -34,7 +34,7 @@ class BookingTable extends StatelessWidget {
           )
           .toList(),
       source: BookingDataSource(
-        roomsOverview: _roomsOverview,
+        _roomsOverview,
         onEmailButtonClicked: onEmailButtonClicked,
         context: context,
       ),

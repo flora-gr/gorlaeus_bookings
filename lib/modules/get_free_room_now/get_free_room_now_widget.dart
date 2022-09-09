@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
+import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
@@ -79,6 +80,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
     if (state is GetFreeRoomNowReadyState && state.freeRoom != null) {
       return Strings.roomIsFree(
         state.freeRoom!.toRoomName(),
+        state.nextBooking?.startTimeString(),
       );
     } else if (state is GetFreeRoomNowEmptyState) {
       return Strings.noRoomFound;

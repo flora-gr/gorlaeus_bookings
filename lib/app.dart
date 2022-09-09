@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart' as di;
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
@@ -9,13 +8,8 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
-import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
-import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
-import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
-import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
-import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,12 +69,7 @@ class GorlaeusBookingApp extends StatelessWidget {
       case Routes.bookingOverviewPage:
         return _getRoute(
           BookingOverviewPage(
-            BookingOverviewBloc(
-              getIt.get<BookingRepository>(),
-              getIt.get<DateTimeRepository>(),
-              getIt.get<RoomsOverviewMapper>(),
-              getIt.get<UrlLauncherWrapper>(),
-            ),
+            BookingOverviewBloc(),
             settings.arguments as DateTime,
           ),
           settings,
@@ -88,7 +77,7 @@ class GorlaeusBookingApp extends StatelessWidget {
       case Routes.settingsPage:
         return _getRoute(
           SettingsPage(
-            SettingsBloc(getIt.get<SharedPreferencesRepository>()),
+            SettingsBloc(),
           ),
           settings,
           fullscreenDialog: true,
@@ -97,15 +86,8 @@ class GorlaeusBookingApp extends StatelessWidget {
       default:
         return _getRoute(
           HomePage(
-            HomeBloc(
-              getIt.get<DateTimeRepository>(),
-            ),
-            getIt.get<UrlLauncherWrapper>(),
-            GetFreeRoomNowBloc(
-              getIt.get<BookingRepository>(),
-              getIt.get<DateTimeRepository>(),
-              getIt.get<RoomsOverviewMapper>(),
-            ),
+            HomeBloc(),
+            GetFreeRoomNowBloc(),
           ),
           settings,
         );

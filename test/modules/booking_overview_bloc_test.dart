@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:mocktail/mocktail.dart';
@@ -18,12 +20,16 @@ class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 class MockRoomsOverviewMapper extends Mock implements RoomsOverviewMapper {}
 
+class MockSharedPreferencesRepository extends Mock
+    implements SharedPreferencesRepository {}
+
 class MockUrlLauncherWrapper extends Mock implements UrlLauncherWrapper {}
 
 void main() {
   late BookingRepository bookingRepository;
   late DateTimeRepository dateTimeRepository;
   late RoomsOverviewMapper mapper;
+  late SharedPreferencesRepository sharedPreferencesRepository;
   late UrlLauncherWrapper urlLauncherWrapper;
   late BookingOverviewBloc sut;
 
@@ -48,20 +54,27 @@ void main() {
     'room': <TimeBlock?>[bookings.first.time],
   };
 
-  setUp(() {
+  setUpAll(() {
+    GetIt getIt = GetIt.instance;
     bookingRepository = MockBookingRepository();
     dateTimeRepository = MockDateTimeRepository();
     mapper = MockRoomsOverviewMapper();
+    sharedPreferencesRepository = MockSharedPreferencesRepository();
     urlLauncherWrapper = MockUrlLauncherWrapper();
+    getIt.registerSingleton<BookingRepository>(bookingRepository);
+    getIt.registerSingleton<DateTimeRepository>(dateTimeRepository);
+    getIt.registerSingleton<RoomsOverviewMapper>(mapper);
+    getIt.registerSingleton<SharedPreferencesRepository>(
+        sharedPreferencesRepository);
+    getIt.registerSingleton<UrlLauncherWrapper>(urlLauncherWrapper);
+  });
+
+  setUp(() {
+    when(() => dateTimeRepository.getCurrentDateTime()).thenAnswer((_) => date);
     when(() => urlLauncherWrapper.launchEmail(any(),
         subject: any(named: 'subject'),
         body: any(named: 'body'))).thenAnswer((_) async => <dynamic>{});
-    sut = BookingOverviewBloc(
-      bookingRepository,
-      dateTimeRepository,
-      mapper,
-      urlLauncherWrapper,
-    );
+    sut = BookingOverviewBloc();
   });
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
@@ -93,5 +106,29 @@ void main() {
       const BookingOverviewBusyState(),
       const BookingOverviewErrorState(),
     ],
+  );
+
+  blocTest<BookingOverviewBloc, BookingOverviewState>(
+    'Book room event launches email',
+    setUp: () {
+      when(() => sharedPreferencesRepository.getEmailName())
+          .thenAnswer((_) async => 'name');
+    },
+    build: () => sut,
+    seed: () => BookingOverviewReadyState(
+      date: date,
+      roomsOverview: roomsOverview,
+    ),
+    act: (BookingOverviewBloc bloc) =>
+        bloc.add(const BookingOverviewBookRoomEvent('8:00', 'room')),
+    verify: (_) {
+      verify(
+        () => urlLauncherWrapper.launchEmail(
+          any(),
+          subject: any(named: 'subject'),
+          body: any(named: 'body'),
+        ),
+      ).called(1);
+    },
   );
 }

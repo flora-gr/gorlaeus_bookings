@@ -36,12 +36,9 @@ class Styles {
     },
   );
 
-  static Color? backgroundColor = Colors.grey[100];
-
-  static Color? outlinedButtonBorderColor = primaryColorSwatch[200];
-
+  static Color backgroundColor = Colors.grey.shade100;
+  static Color outlinedButtonBorderColor = primaryColorSwatch[200]!;
   static Color freeRoomColor = Colors.lightGreen;
-
   static const Color bookedRoomColor = Color(0xFFF08080);
 
   // Paddings

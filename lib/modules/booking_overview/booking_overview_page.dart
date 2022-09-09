@@ -46,9 +46,12 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      '${Strings.bookingsOn} ${state.date.formatted}',
-                      style: Theme.of(context).textTheme.headline6,
+                    Padding(
+                      padding: Styles.verticalPadding8,
+                      child: Text(
+                        '${Strings.bookingsOn} ${state.date.formatted}',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
                     Expanded(
                       child: BookingTable(

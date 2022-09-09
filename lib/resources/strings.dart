@@ -30,8 +30,8 @@ class Strings {
   static const String search = 'Search';
   static const String notAvailableInWeekend = 'Not available on weekends';
 
-  static String roomIsFree(String room) =>
-      'Room $room is available until 18:00.';
+  static String roomIsFree(String room, String? endTime) =>
+      'Room $room is available until ${endTime ?? 'end of the day'}.';
   static const String getFreeRoomFailed = 'Something went wrong.';
   static const String noRoomFound = 'No available room found.';
   static const String tryAgain = 'Search again';
@@ -48,14 +48,13 @@ class Strings {
   static String bookRoomEmailSubject(String room) => 'Book room $room';
 
   static String bookRoomEmailBody(
-          String room, String dateString, String time) =>
+          String room, String dateString, String time, String? emailName) =>
       'Hello,\n\n'
       'I would like to book room $room $dateString from $time to ...\n\n'
-      'Thanks in advance\n';
+      'Thanks in advance'
+      '${emailName != null && emailName.trim().isNotEmpty ? ',\n$emailName' : '\n'}';
 
   // Booking table
-  static const String free = 'Available';
-  static const String booked = 'Booked';
   static const String roomFreeDialogHeader = 'This room is available';
 
   static String roomFreeDialogText(String room, String time) =>
@@ -72,6 +71,9 @@ class Strings {
       'Selected rooms will be shown in the \'Booking overview\' '
       'and will be suggested in \'Find an available room now\'.';
   static const String save = 'Save changes';
+  static const String setEmailName = 'Email signature';
+  static const String setEmailNameInfoI =
+      'Enter the name you want to use when booking a room on the \'Booking overview\'.';
 
   // Shared
   static const String ok = 'OK';

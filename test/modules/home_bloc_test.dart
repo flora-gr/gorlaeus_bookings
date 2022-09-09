@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
@@ -13,14 +14,19 @@ void main() {
   late HomeBloc sut;
 
   final DateTime today = DateTime.fromMillisecondsSinceEpoch(0);
-  final DateTime maximumDate = today.add(const Duration(days: 100));
+  final DateTime maximumDate = today.add(const Duration(days: 180));
   final DateTime otherDay = DateTime.fromMillisecondsSinceEpoch(1);
 
-  setUp(() {
+  setUpAll(() {
+    GetIt getIt = GetIt.instance;
     dateTimeRepository = MockDateTimeRepository();
+    getIt.registerSingleton<DateTimeRepository>(dateTimeRepository);
+  });
+
+  setUp(() {
     when(() => dateTimeRepository.getFirstWeekdayFromToday())
         .thenAnswer((_) => today);
-    sut = HomeBloc(dateTimeRepository);
+    sut = HomeBloc();
   });
 
   blocTest<HomeBloc, HomeState>(

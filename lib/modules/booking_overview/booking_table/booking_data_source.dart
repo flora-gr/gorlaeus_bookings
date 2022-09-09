@@ -8,8 +8,8 @@ import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingDataSource extends DataGridSource {
-  BookingDataSource({
-    required Map<String, Iterable<TimeBlock?>> roomsOverview,
+  BookingDataSource(
+    this.roomsOverview, {
     required this.onEmailButtonClicked,
     required this.context,
   }) {
@@ -19,11 +19,8 @@ class BookingDataSource extends DataGridSource {
             cells: BookingTimes.all
                 .map(
                   (TimeBlock bookingTime) => DataGridCell(
-                    value: roomsOverview[room]!.any((TimeBlock? time) =>
-                            time?.overlapsWith(bookingTime) == true)
-                        ? '${room.toRoomName()}${Strings.booked}'
-                        : '${room.toRoomName()}${Strings.free}',
                     columnName: bookingTime.startTimeString(),
+                    value: room,
                   ),
                 )
                 .toList(),
@@ -32,6 +29,7 @@ class BookingDataSource extends DataGridSource {
         .toList();
   }
 
+  final Map<String, Iterable<TimeBlock?>> roomsOverview;
   final void Function({required String time, required String room})
       onEmailButtonClicked;
   final BuildContext context;
@@ -46,12 +44,15 @@ class BookingDataSource extends DataGridSource {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>(
         (DataGridCell cell) {
-          final bool isFree = cell.value.endsWith(Strings.free);
-          final String? room =
-              isFree ? cell.value!.replaceAll(Strings.free, '') : null;
+          final String room = cell.value as String;
+          final TimeBlock bookingTime = BookingTimes.all.singleWhere(
+              (TimeBlock bookingTime) =>
+                  bookingTime.startTimeString() == cell.columnName);
+          final bool isFree = !roomsOverview[room]!.any(
+              (TimeBlock? time) => time?.overlapsWith(bookingTime) == true);
           return InkWell(
-            onTap: () => _showDialog(
-              room: room,
+            onTap: () => _showBookingDialog(
+              room: room.toRoomName(),
               time: cell.columnName,
               isFree: isFree,
             ),
@@ -59,11 +60,7 @@ class BookingDataSource extends DataGridSource {
               color: isFree ? Styles.freeRoomColor : Styles.bookedRoomColor,
               alignment: Alignment.centerLeft,
               padding: Styles.padding8,
-              child: Text(
-                cell.value
-                    .replaceAll(Strings.free, '')
-                    .replaceAll(Strings.booked, ''),
-              ),
+              child: Text(room.toRoomName()),
             ),
           );
         },
@@ -71,8 +68,8 @@ class BookingDataSource extends DataGridSource {
     );
   }
 
-  void _showDialog({
-    required String? room,
+  void _showBookingDialog({
+    required String room,
     required String time,
     required bool isFree,
   }) {
@@ -85,7 +82,7 @@ class BookingDataSource extends DataGridSource {
         ),
         content: Text(
           isFree
-              ? Strings.roomFreeDialogText(room!, time)
+              ? Strings.roomFreeDialogText(room, time)
               : Strings.roomBookedDialogText,
         ),
         actions: isFree
@@ -96,7 +93,7 @@ class BookingDataSource extends DataGridSource {
                 ),
                 TextButton(
                   onPressed: () {
-                    onEmailButtonClicked(time: time, room: room!);
+                    onEmailButtonClicked(time: time, room: room);
                     Navigator.of(context).pop();
                   },
                   child: const Text(Strings.yesBookRoom),

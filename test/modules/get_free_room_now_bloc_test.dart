@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
@@ -59,21 +60,24 @@ void main() {
         Rooms.all, timeBlocks);
   }
 
-  setUp(() {
+  setUpAll(() {
+    GetIt getIt = GetIt.instance;
     bookingRepository = MockBookingRepository();
+    dateTimeRepository = MockDateTimeRepository();
+    mapper = MockRoomsOverviewMapper();
+    getIt.registerSingleton<BookingRepository>(bookingRepository);
+    getIt.registerSingleton<DateTimeRepository>(dateTimeRepository);
+    getIt.registerSingleton<RoomsOverviewMapper>(mapper);
+  });
+
+  setUp(() {
     when(() => bookingRepository.getBookings(any()))
         .thenAnswer((_) async => defaultBookingResponse);
-    mapper = MockRoomsOverviewMapper();
-    dateTimeRepository = MockDateTimeRepository();
     when(() => dateTimeRepository.getCurrentDateTime())
         .thenAnswer((_) => todayAtTwo);
     when(() => mapper.mapToRoomsOverview(any()))
         .thenAnswer((_) async => roomsOverview);
-    sut = GetFreeRoomNowBloc(
-      bookingRepository,
-      dateTimeRepository,
-      mapper,
-    );
+    sut = GetFreeRoomNowBloc();
   });
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
