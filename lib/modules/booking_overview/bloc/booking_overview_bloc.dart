@@ -6,6 +6,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
@@ -17,6 +18,7 @@ class BookingOverviewBloc
     _bookingRepository = getIt.get<BookingRepository>();
     _dateTimeRepository = getIt.get<DateTimeRepository>();
     _mapper = getIt.get<RoomsOverviewMapper>();
+    _sharedPreferencesRepository = getIt.get<SharedPreferencesRepository>();
     _urlLauncherWrapper = getIt.get<UrlLauncherWrapper>();
     on<BookingOverviewInitEvent>(
         (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
@@ -30,6 +32,7 @@ class BookingOverviewBloc
   late BookingRepository _bookingRepository;
   late DateTimeRepository _dateTimeRepository;
   late RoomsOverviewMapper _mapper;
+  late SharedPreferencesRepository _sharedPreferencesRepository;
   late UrlLauncherWrapper _urlLauncherWrapper;
 
   Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
@@ -58,10 +61,13 @@ class BookingOverviewBloc
             ? Strings.today
             : Strings.onDay(date.formatted);
 
+    final String? emailName = await _sharedPreferencesRepository.getEmailName();
+
     await _urlLauncherWrapper.launchEmail(
       ConnectionUrls.serviceDeskEmail,
       subject: Strings.bookRoomEmailSubject(event.room),
-      body: Strings.bookRoomEmailBody(event.room, dateString, event.time),
+      body: Strings.bookRoomEmailBody(
+          event.room, dateString, event.time, emailName),
     );
   }
 }

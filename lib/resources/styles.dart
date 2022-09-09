@@ -36,12 +36,9 @@ class Styles {
     },
   );
 
-  static Color? backgroundColor = Colors.grey[100];
-
-  static Color? outlinedButtonBorderColor = primaryColorSwatch[200];
-
+  static Color backgroundColor = Colors.grey.shade100;
+  static Color outlinedButtonBorderColor = primaryColorSwatch[200]!;
   static Color freeRoomColor = Colors.lightGreen;
-
   static const Color bookedRoomColor = Color(0xFFF08080);
 
   // Paddings
@@ -52,7 +49,6 @@ class Styles {
   static const EdgeInsetsGeometry verticalPadding8 =
       EdgeInsets.symmetric(vertical: 8);
   static const EdgeInsetsGeometry topPadding12 = EdgeInsets.only(top: 12);
-  static const EdgeInsetsGeometry topPadding8 = EdgeInsets.only(top: 12);
   static const EdgeInsetsGeometry leftPadding12 = EdgeInsets.only(left: 12);
 
   // Other

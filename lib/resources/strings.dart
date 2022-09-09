@@ -48,10 +48,11 @@ class Strings {
   static String bookRoomEmailSubject(String room) => 'Book room $room';
 
   static String bookRoomEmailBody(
-          String room, String dateString, String time) =>
+          String room, String dateString, String time, String? emailName) =>
       'Hello,\n\n'
       'I would like to book room $room $dateString from $time to ...\n\n'
-      'Thanks in advance\n';
+      'Thanks in advance'
+      '${emailName != null && emailName.trim().isNotEmpty ? ',\n$emailName' : '\n'}';
 
   // Booking table
   static const String roomFreeDialogHeader = 'This room is available';
@@ -70,6 +71,9 @@ class Strings {
       'Selected rooms will be shown in the \'Booking overview\' '
       'and will be suggested in \'Find an available room now\'.';
   static const String save = 'Save changes';
+  static const String setEmailName = 'Email signature';
+  static const String setEmailNameInfoI =
+      'Enter the name you want to use when booking a room on the \'Booking overview\'.';
 
   // Shared
   static const String ok = 'OK';

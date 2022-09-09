@@ -15,18 +15,24 @@ class SettingsReadyState extends SettingsState {
   const SettingsReadyState({
     required this.rooms,
     required this.selectedRooms,
+    this.emailName,
   });
 
   final Iterable<String> rooms;
   final Iterable<String> selectedRooms;
+  final String? emailName;
 
-  SettingsReadyState copyWith(Iterable<String> selectedRooms) {
+  SettingsReadyState copyWith({
+    Iterable<String>? selectedRooms,
+    String? emailName,
+  }) {
     return SettingsReadyState(
       rooms: rooms,
-      selectedRooms: selectedRooms,
+      selectedRooms: selectedRooms ?? this.selectedRooms,
+      emailName: emailName ?? this.emailName,
     );
   }
 
   @override
-  List<Object?> get props => <Object?>[rooms, selectedRooms];
+  List<Object?> get props => <Object?>[rooms, selectedRooms, emailName];
 }

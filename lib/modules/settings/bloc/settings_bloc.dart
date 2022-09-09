@@ -17,6 +17,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         (SettingsRoomSelectionChangedEvent event,
                 Emitter<SettingsState> emit) =>
             emit(_handleSelectionChangedEvent(event)));
+    on<SettingsEmailNameChangedEvent>(
+        (SettingsEmailNameChangedEvent event, Emitter<SettingsState> emit) =>
+            emit((state as SettingsReadyState)
+                .copyWith(emailName: event.emailName)));
     on<SettingsSaveEvent>(
         (SettingsSaveEvent event, Emitter<SettingsState> emit) =>
             _handleSettingsSaveEvent());
@@ -27,10 +31,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Stream<SettingsState> _handleInitEvent() async* {
     final List<String> hiddenRooms =
         await _sharedPreferencesRepository.getHiddenRooms();
+    final String? emailName = await _sharedPreferencesRepository.getEmailName();
+
     yield SettingsReadyState(
       rooms: Rooms.all,
       selectedRooms:
           Rooms.all.whereNot((String room) => hiddenRooms.contains(room)),
+      emailName: emailName,
     );
   }
 
@@ -44,7 +51,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       newSelectedRooms = currentState.selectedRooms
           .whereNot((String room) => room == event.room);
     }
-    return currentState.copyWith(newSelectedRooms);
+    return currentState.copyWith(selectedRooms: newSelectedRooms);
   }
 
   void _handleSettingsSaveEvent() {
@@ -52,5 +59,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     final Iterable<String> hiddenRooms = currentState.rooms
         .whereNot((String room) => currentState.selectedRooms.contains(room));
     _sharedPreferencesRepository.setHiddenRooms(hiddenRooms.toList());
+    if (currentState.emailName != null &&
+        currentState.emailName!.trim().isNotEmpty) {
+      _sharedPreferencesRepository.setEmailName(currentState.emailName!);
+    }
   }
 }
