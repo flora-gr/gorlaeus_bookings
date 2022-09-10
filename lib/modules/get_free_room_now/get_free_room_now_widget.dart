@@ -37,32 +37,36 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
       bloc: _bloc,
       builder: (BuildContext context, GetFreeRoomNowState state) {
         final Widget? dataFetchedText = _getDataFetchedText(state);
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: state is GetFreeRoomNowWeekendState
-                  ? null
-                  : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: Styles.leftPadding12,
-                    child: Text(_getButtonText(state)),
-                  ),
-                  ButtonLoadingWidget(
-                    showLoading: state is GetFreeRoomNowBusyState,
-                  ),
-                ],
+        return AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          alignment: Alignment.topCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: state is GetFreeRoomNowWeekendState
+                    ? null
+                    : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: Styles.leftPadding12,
+                      child: Text(_getButtonText(state)),
+                    ),
+                    ButtonLoadingWidget(
+                      showLoading: state is GetFreeRoomNowBusyState,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            if (dataFetchedText != null)
-              Padding(
-                padding: Styles.topPadding12,
-                child: dataFetchedText,
-              )
-          ],
+              if (dataFetchedText != null)
+                Padding(
+                  padding: Styles.topPadding12,
+                  child: dataFetchedText,
+                )
+            ],
+          ),
         );
       },
     );

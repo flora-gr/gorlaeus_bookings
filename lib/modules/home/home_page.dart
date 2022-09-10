@@ -65,7 +65,12 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         ...<Widget>[
                           _buildBookingOverviewTile(state),
-                          _buildGetMeAFreeRoomNowTile(state),
+                          ItemBox(
+                            title: Strings.getMeAFreeRoom,
+                            child: GetFreeRoomNowWidget(
+                              widget._getFreeRoomNowBloc,
+                            ),
+                          ),
                           TextButton(
                             onPressed: () => Navigator.of(context)
                                 .pushNamed(Routes.settingsPage),
@@ -226,19 +231,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildGetMeAFreeRoomNowTile(HomeState state) {
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 200),
-      alignment: Alignment.topCenter,
-      child: ItemBox(
-        title: Strings.getMeAFreeRoom,
-        child: GetFreeRoomNowWidget(
-          widget._getFreeRoomNowBloc,
-        ),
-      ),
     );
   }
 }
