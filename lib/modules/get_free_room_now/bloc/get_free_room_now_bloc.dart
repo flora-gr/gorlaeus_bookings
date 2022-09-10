@@ -90,8 +90,10 @@ class GetFreeRoomNowBloc
 
       if (freeRooms.isNotEmpty) {
         final String freeRoom = freeRooms[_random.nextInt(freeRooms.length)];
-        final TimeBlock? nextBooking = roomsOverview[freeRoom]!
-            .firstWhereOrNull(((TimeBlock? bookingTime) =>
+        final List<TimeBlock?> bookingsForFreeRooms =
+            roomsOverview[freeRoom]!.sort();
+        final TimeBlock? nextBooking = bookingsForFreeRooms.firstWhereOrNull(
+            ((TimeBlock? bookingTime) =>
                 bookingTime!.isAfter(timeBlockFromNowUntilHourFromNow)));
 
         yield GetFreeRoomNowReadyState(

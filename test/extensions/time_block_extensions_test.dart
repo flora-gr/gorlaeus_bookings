@@ -129,4 +129,149 @@ void main() {
           false);
     },
   );
+
+  test(
+    'isAfter returns true when time block starts after other time block',
+    () {
+      const TimeBlock timeBlockToCompareTo = TimeBlock(
+        startTime: TimeOfDay(hour: 8, minute: 30),
+        endTime: TimeOfDay(hour: 10, minute: 0),
+      );
+
+      const TimeBlock timeBlockStartingAfterBlockToCompareTo = TimeBlock(
+        startTime: TimeOfDay(hour: 11, minute: 30),
+        endTime: TimeOfDay(hour: 12, minute: 0),
+      );
+      const TimeBlock timeBlockStartingAtEndTimeOfBlockToCompareTo = TimeBlock(
+        startTime: TimeOfDay(hour: 10, minute: 0),
+        endTime: TimeOfDay(hour: 12, minute: 0),
+      );
+
+      expect(
+          timeBlockStartingAfterBlockToCompareTo.isAfter(timeBlockToCompareTo),
+          true);
+      expect(
+          timeBlockStartingAtEndTimeOfBlockToCompareTo
+              .isAfter(timeBlockToCompareTo),
+          true);
+    },
+  );
+
+  test(
+    'isAfter returns false when time block does not start after other time block',
+    () {
+      const TimeBlock timeBlockToCompareTo = TimeBlock(
+        startTime: TimeOfDay(hour: 8, minute: 30),
+        endTime: TimeOfDay(hour: 10, minute: 0),
+      );
+
+      const TimeBlock timeBlockEndingBeforeBlockToCompareTo = TimeBlock(
+        startTime: TimeOfDay(hour: 6, minute: 0),
+        endTime: TimeOfDay(hour: 8, minute: 0),
+      );
+      const TimeBlock timeBlockEndingAtStartTimeOfBlockToCompareTo = TimeBlock(
+        startTime: TimeOfDay(hour: 6, minute: 0),
+        endTime: TimeOfDay(hour: 8, minute: 30),
+      );
+      const TimeBlock timeBlockEndingAfterStartTimeOfBlockToCompareTo =
+          TimeBlock(
+        startTime: TimeOfDay(hour: 6, minute: 0),
+        endTime: TimeOfDay(hour: 8, minute: 30),
+      );
+
+      expect(
+          timeBlockEndingBeforeBlockToCompareTo.isAfter(timeBlockToCompareTo),
+          false);
+      expect(
+          timeBlockEndingAtStartTimeOfBlockToCompareTo
+              .isAfter(timeBlockToCompareTo),
+          false);
+      expect(
+          timeBlockEndingAfterStartTimeOfBlockToCompareTo
+              .isAfter(timeBlockToCompareTo),
+          false);
+      expect(timeBlockToCompareTo.isAfter(timeBlockToCompareTo), false);
+    },
+  );
+
+  test(
+    'sort extension sorts Iterable of TimeBlocks correctly',
+    () {
+      const TimeBlock timeBlock1 = TimeBlock(
+        startTime: TimeOfDay(hour: 4, minute: 0),
+        endTime: TimeOfDay(hour: 5, minute: 0),
+      );
+      const TimeBlock timeBlock2 = TimeBlock(
+        startTime: TimeOfDay(hour: 6, minute: 0),
+        endTime: TimeOfDay(hour: 7, minute: 0),
+      );
+      const TimeBlock timeBlock3 = TimeBlock(
+        startTime: TimeOfDay(hour: 7, minute: 0),
+        endTime: TimeOfDay(hour: 8, minute: 0),
+      );
+      const TimeBlock timeBlock4 = TimeBlock(
+        startTime: TimeOfDay(hour: 12, minute: 0),
+        endTime: TimeOfDay(hour: 13, minute: 30),
+      );
+      const Iterable<TimeBlock> iterableToSort1 = <TimeBlock>[
+        timeBlock2,
+        timeBlock4,
+        timeBlock3,
+        timeBlock1,
+      ];
+      const Iterable<TimeBlock> iterableToSort2 = <TimeBlock>[
+        timeBlock4,
+        timeBlock3,
+        timeBlock2,
+        timeBlock1,
+      ];
+      const Iterable<TimeBlock> iterableToSort3 = <TimeBlock>[
+        timeBlock1,
+        timeBlock2,
+        timeBlock3,
+        timeBlock4,
+      ];
+      const Iterable<TimeBlock> iterableToSort4 = <TimeBlock>[
+        timeBlock2,
+        timeBlock2,
+        timeBlock1,
+        timeBlock1,
+      ];
+      const Iterable<TimeBlock?> iterableToSort5 = <TimeBlock?>[
+        null,
+        timeBlock2,
+        timeBlock1,
+        timeBlock1,
+      ];
+
+      const List<TimeBlock> sortedList123 = <TimeBlock>[
+        timeBlock1,
+        timeBlock2,
+        timeBlock3,
+        timeBlock4,
+      ];
+
+      expect(iterableToSort1.sort(), sortedList123);
+      expect(iterableToSort2.sort(), sortedList123);
+      expect(iterableToSort3.sort(), sortedList123);
+      expect(
+        iterableToSort4.sort(),
+        <TimeBlock>[
+          timeBlock1,
+          timeBlock1,
+          timeBlock2,
+          timeBlock2,
+        ],
+      );
+      expect(
+        iterableToSort5.sort(),
+        <TimeBlock?>[
+          null,
+          timeBlock1,
+          timeBlock1,
+          timeBlock2,
+        ],
+      );
+    },
+  );
 }
