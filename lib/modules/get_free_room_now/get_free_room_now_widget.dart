@@ -35,7 +35,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
     return BlocBuilder<GetFreeRoomNowBloc, GetFreeRoomNowState>(
       bloc: _bloc,
       builder: (BuildContext context, GetFreeRoomNowState state) {
-        final String? dataFetchedText = _getDataFetchedText(state);
+        final Widget? dataFetchedText = _getDataFetchedText(state);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -59,7 +59,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             if (dataFetchedText != null)
               Padding(
                 padding: Styles.topPadding12,
-                child: Text(dataFetchedText),
+                child: dataFetchedText,
               )
           ],
         );
@@ -76,16 +76,33 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             : Strings.search;
   }
 
-  String? _getDataFetchedText(GetFreeRoomNowState state) {
+  Widget? _getDataFetchedText(GetFreeRoomNowState state) {
     if (state is GetFreeRoomNowReadyState && state.freeRoom != null) {
-      return Strings.roomIsFree(
-        state.freeRoom!.toRoomName(),
-        state.nextBooking?.startTimeString(),
+      final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
+      return Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: Strings.roomIsFree1,
+              style: defaultTextStyle,
+            ),
+            TextSpan(
+              text: state.freeRoom!.toRoomName(),
+              style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: Strings.roomIsFree2(
+                state.nextBooking?.startTimeString(),
+              ),
+              style: defaultTextStyle,
+            ),
+          ],
+        ),
       );
     } else if (state is GetFreeRoomNowEmptyState) {
-      return Strings.noRoomFound;
+      return const Text(Strings.noRoomFound);
     } else if (State is GetFreeRoomNowErrorState) {
-      return Strings.getFreeRoomFailed;
+      return const Text(Strings.getFreeRoomFailed);
     }
     return null;
   }

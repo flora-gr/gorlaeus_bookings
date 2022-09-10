@@ -30,10 +30,13 @@ class Strings {
   static const String search = 'Search';
   static const String notAvailableInWeekend = 'Not available on weekends';
 
-  static String roomIsFree(String room, String? endTime) =>
-      'Room $room is available until ${endTime ?? 'end of the day'}.';
+  static const String roomIsFree1 = 'Room ';
+
+  static String roomIsFree2(String? endTime) =>
+      ' is available until ${endTime ?? 'end of the day'}.';
   static const String getFreeRoomFailed = 'Something went wrong.';
-  static const String noRoomFound = 'No available room found.';
+  static const String noRoomFound = 'No available room found. '
+      'Consider adjusting your room selection in \'Settings\'.';
   static const String tryAgain = 'Search again';
 
   // Booking overview page
