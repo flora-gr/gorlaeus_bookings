@@ -33,7 +33,9 @@ void main() {
   late UrlLauncherWrapper urlLauncherWrapper;
   late BookingOverviewBloc sut;
 
-  final DateTime date = DateTime.fromMillisecondsSinceEpoch(0);
+  final DateTime today = DateTime.fromMillisecondsSinceEpoch(0);
+  final DateTime tomorrow = today.add(const Duration(days: 1));
+  final TimeOfDay time = TimeOfDay(hour: today.hour, minute: today.minute);
 
   const List<BookingEntry> bookings = <BookingEntry>[
     BookingEntry(
@@ -70,7 +72,8 @@ void main() {
   });
 
   setUp(() {
-    when(() => dateTimeRepository.getCurrentDateTime()).thenAnswer((_) => date);
+    when(() => dateTimeRepository.getCurrentDateTime())
+        .thenAnswer((_) => today);
     when(() => urlLauncherWrapper.launchEmail(any(),
         subject: any(named: 'subject'),
         body: any(named: 'body'))).thenAnswer((_) async => <dynamic>{});
@@ -78,7 +81,7 @@ void main() {
   });
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
-    'Initialization emits ready state',
+    'Initialization for day that is today emits ready state with timeIfToday non-null',
     setUp: () {
       when(() => bookingRepository.getBookings(any()))
           .thenAnswer((_) async => bookings);
@@ -86,11 +89,34 @@ void main() {
           .thenAnswer((_) async => roomsOverview);
     },
     build: () => sut,
-    act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),
+    act: (BookingOverviewBloc bloc) =>
+        bloc.add(BookingOverviewInitEvent(today)),
     expect: () => <BookingOverviewState>[
       const BookingOverviewBusyState(),
       BookingOverviewReadyState(
-        date: date,
+        date: today,
+        timeIfToday: time,
+        roomsOverview: roomsOverview,
+      ),
+    ],
+  );
+
+  blocTest<BookingOverviewBloc, BookingOverviewState>(
+    'Initialization for day that is not today emits ready state with timeIfToday set to null',
+    setUp: () {
+      when(() => bookingRepository.getBookings(any()))
+          .thenAnswer((_) async => bookings);
+      when(() => mapper.mapToRoomsOverview(bookings))
+          .thenAnswer((_) async => roomsOverview);
+    },
+    build: () => sut,
+    act: (BookingOverviewBloc bloc) =>
+        bloc.add(BookingOverviewInitEvent(tomorrow)),
+    expect: () => <BookingOverviewState>[
+      const BookingOverviewBusyState(),
+      BookingOverviewReadyState(
+        date: tomorrow,
+        timeIfToday: null,
         roomsOverview: roomsOverview,
       ),
     ],
@@ -101,7 +127,8 @@ void main() {
     setUp: () => when(() => bookingRepository.getBookings(any()))
         .thenThrow(Exception('Failed')),
     build: () => sut,
-    act: (BookingOverviewBloc bloc) => bloc.add(BookingOverviewInitEvent(date)),
+    act: (BookingOverviewBloc bloc) =>
+        bloc.add(BookingOverviewInitEvent(today)),
     expect: () => <BookingOverviewState>[
       const BookingOverviewBusyState(),
       const BookingOverviewErrorState(),
@@ -116,7 +143,8 @@ void main() {
     },
     build: () => sut,
     seed: () => BookingOverviewReadyState(
-      date: date,
+      date: today,
+      timeIfToday: null,
       roomsOverview: roomsOverview,
     ),
     act: (BookingOverviewBloc bloc) =>

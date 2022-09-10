@@ -7,12 +7,14 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingTable extends StatelessWidget {
   const BookingTable(
-    this._roomsOverview, {
+    this._roomsOverview,
+    this._timeIfToday, {
     required this.onEmailButtonClicked,
     super.key,
   });
 
   final Map<String, Iterable<TimeBlock?>> _roomsOverview;
+  final TimeOfDay? _timeIfToday;
   final void Function({required String time, required String room})
       onEmailButtonClicked;
 
@@ -35,6 +37,7 @@ class BookingTable extends StatelessWidget {
           .toList(),
       source: BookingDataSource(
         _roomsOverview,
+        _timeIfToday,
         onEmailButtonClicked: onEmailButtonClicked,
         context: context,
       ),

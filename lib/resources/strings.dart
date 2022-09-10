@@ -66,6 +66,9 @@ class Strings {
   static const String cancel = 'Cancel';
   static const String roomBookedDialogHeader = 'Sorry!';
   static const String roomBookedDialogText = 'This room is already booked.';
+  static const String bookingTimePastDialogTitle = 'This was earlier today';
+  static const String bookingTimePastDialogText =
+      'Please select a different time.';
 
   // Settings page
   static const String settingsPageTitle = 'Settings';

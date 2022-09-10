@@ -63,6 +63,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
                     Expanded(
                       child: BookingTable(
                         state.roomsOverview,
+                        state.timeIfToday,
                         onEmailButtonClicked: ({
                           required String time,
                           required String room,

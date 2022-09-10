@@ -9,7 +9,8 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingDataSource extends DataGridSource {
   BookingDataSource(
-    this.roomsOverview, {
+    this.roomsOverview,
+    this.timeIfToday, {
     required this.onEmailButtonClicked,
     required this.context,
   }) {
@@ -30,6 +31,7 @@ class BookingDataSource extends DataGridSource {
   }
 
   final Map<String, Iterable<TimeBlock?>> roomsOverview;
+  final TimeOfDay? timeIfToday;
   final void Function({required String time, required String room})
       onEmailButtonClicked;
   final BuildContext context;
@@ -50,14 +52,18 @@ class BookingDataSource extends DataGridSource {
                   bookingTime.startTimeString() == cell.columnName);
           final bool isFree = !roomsOverview[room]!.any(
               (TimeBlock? time) => time?.overlapsWith(bookingTime) == true);
+          final bool isPast = timeIfToday != null &&
+              TimeBlock(startTime: timeIfToday!, endTime: timeIfToday!)
+                  .isAfter(bookingTime);
           return InkWell(
             onTap: () => _showBookingDialog(
               room: room.toLongRoomName(),
               time: cell.columnName,
               isFree: isFree,
+              isPast: isPast,
             ),
             child: Container(
-              color: isFree ? Styles.freeRoomColor : Styles.bookedRoomColor,
+              color: _getCellColor(isFree: isFree, isPast: isPast),
               alignment: Alignment.centerLeft,
               padding: Styles.padding8,
               child: Text(room.toRoomName()),
@@ -68,24 +74,42 @@ class BookingDataSource extends DataGridSource {
     );
   }
 
+  Color _getCellColor({
+    required bool isFree,
+    required bool isPast,
+  }) {
+    if (isPast) {
+      return isFree
+          ? Styles.freeRoomEarlierColor
+          : Styles.bookedRoomEarlierColor;
+    } else {
+      return isFree ? Styles.freeRoomColor : Styles.bookedRoomColor;
+    }
+  }
+
   void _showBookingDialog({
     required String room,
     required String time,
     required bool isFree,
+    required bool isPast,
   }) {
     showDialog(
       builder: (_) => AlertDialog(
         title: Text(
-          isFree
-              ? Strings.roomFreeDialogHeader
-              : Strings.roomBookedDialogHeader,
+          isPast
+              ? Strings.bookingTimePastDialogTitle
+              : isFree
+                  ? Strings.roomFreeDialogHeader
+                  : Strings.roomBookedDialogHeader,
         ),
         content: Text(
-          isFree
-              ? Strings.roomFreeDialogText(room, time)
-              : Strings.roomBookedDialogText,
+          isPast
+              ? Strings.bookingTimePastDialogText
+              : isFree
+                  ? Strings.roomFreeDialogText(room, time)
+                  : Strings.roomBookedDialogText,
         ),
-        actions: isFree
+        actions: !isPast && isFree
             ? <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),

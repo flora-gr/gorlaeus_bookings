@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
@@ -42,8 +43,14 @@ class BookingOverviewBloc
       final List<BookingEntry>? bookings =
           await _bookingRepository.getBookings(date);
       if (bookings != null) {
+        final DateTime now = _dateTimeRepository.getCurrentDateTime();
+        final TimeOfDay? timeIfToday = now.isOnSameDateAs(date)
+            ? TimeOfDay(hour: now.hour, minute: now.minute)
+            : null;
+
         yield BookingOverviewReadyState(
           date: date,
+          timeIfToday: timeIfToday,
           roomsOverview: (await _mapper.mapToRoomsOverview(bookings))!,
         );
       } else {
