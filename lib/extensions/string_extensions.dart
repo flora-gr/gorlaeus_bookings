@@ -44,8 +44,23 @@ extension StringExtension on String {
   String toRoomName() {
     if (_cRooms.contains(this)) {
       return replaceAll('0', 'C');
+    } else if (this == Rooms.room13) {
+      return 'Atrium*';
+    } else if (this == Rooms.room21) {
+      return 'Entrance Hall*';
     }
-    // TODO: add hall name room extension
     return this;
+  }
+
+  String toLongRoomName() {
+    if (this == Rooms.room13) {
+      return 'the Atrium of the Gorlaeus building';
+    } else if (this == Rooms.room21) {
+      return 'the Entrance Hall of the Gorlaeus Schotel';
+    } else if (this == Rooms.room16) {
+      return 'the Havingazaal of the Gorlaeus';
+    } else {
+      return 'room ${toRoomName()} of the Gorlaeus';
+    }
   }
 }

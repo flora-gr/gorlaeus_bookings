@@ -5,6 +5,7 @@ import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
+import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
@@ -96,6 +97,12 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
               ),
               style: defaultTextStyle,
             ),
+            if (state.freeRoom == Rooms.room13 ||
+                state.freeRoom == Rooms.room21)
+              TextSpan(
+                text: Strings.notLectureRoom,
+                style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
+              ),
           ],
         ),
       );

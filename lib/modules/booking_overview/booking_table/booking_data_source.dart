@@ -52,7 +52,7 @@ class BookingDataSource extends DataGridSource {
               (TimeBlock? time) => time?.overlapsWith(bookingTime) == true);
           return InkWell(
             onTap: () => _showBookingDialog(
-              room: room.toRoomName(),
+              room: room.toLongRoomName(),
               time: cell.columnName,
               isFree: isFree,
             ),

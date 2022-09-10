@@ -29,7 +29,6 @@ class Strings {
   static const String getMeAFreeRoom = 'Find an available room now';
   static const String search = 'Search';
   static const String notAvailableInWeekend = 'Not available on weekends';
-
   static const String roomIsFree1 = 'Room ';
 
   static String roomIsFree2(String? endTime) =>
@@ -45,15 +44,16 @@ class Strings {
   static const String bookingsOn = 'Bookings on';
   static const String noBookings = 'No bookings found for this day.';
   static const String today = 'today';
+  static const String notLectureRoom = '\n*Not a lecture room';
 
   static String onDay(String day) => 'on $day';
 
-  static String bookRoomEmailSubject(String room) => 'Book room $room';
+  static String bookRoomEmailSubject(String room) => 'Book $room';
 
   static String bookRoomEmailBody(
           String room, String dateString, String time, String? emailName) =>
       'Hello,\n\n'
-      'I would like to book room $room $dateString from $time to ...\n\n'
+      'I would like to book $room $dateString from $time to ...\n\n'
       'Thanks in advance'
       '${emailName != null && emailName.trim().isNotEmpty ? ',\n$emailName' : '\n'}';
 
@@ -61,7 +61,7 @@ class Strings {
   static const String roomFreeDialogHeader = 'This room is available';
 
   static String roomFreeDialogText(String room, String time) =>
-      'Do you want to book room $room at $time?';
+      'Do you want to book $room at $time?';
   static const String yesBookRoom = 'Yes, send email';
   static const String cancel = 'Cancel';
   static const String roomBookedDialogHeader = 'Sorry!';
@@ -80,4 +80,6 @@ class Strings {
 
   // Shared
   static const String ok = 'OK';
+  static const String notLectureRooms =
+      '*Indicated locations are not lecture rooms';
 }

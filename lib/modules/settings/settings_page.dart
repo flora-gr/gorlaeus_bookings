@@ -81,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Iterable<Widget> _buildRoomSelectionSection(SettingsReadyState state) {
-    final int halfRoomCount = (state.rooms.length / 2).floor();
+    final int halfRoomCount = (state.rooms.length / 2).floor() + 1;
     final Iterable<String> firstHalfOfRooms = state.rooms.take(halfRoomCount);
     final Iterable<String> secondHalfOfRooms =
         state.rooms.toList().getRange(halfRoomCount, state.rooms.length);
@@ -92,10 +92,19 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       Padding(
         padding: Styles.topPadding12,
-        child: Row(
-          children: <Widget>[
-            _buildCheckBoxColumn(firstHalfOfRooms, state.selectedRooms),
-            _buildCheckBoxColumn(secondHalfOfRooms, state.selectedRooms),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildCheckBoxColumn(firstHalfOfRooms, state.selectedRooms),
+                _buildCheckBoxColumn(secondHalfOfRooms, state.selectedRooms),
+              ],
+            ),
+            const Padding(
+              padding: Styles.verticalPadding8,
+              child: Text(Strings.notLectureRooms),
+            ),
           ],
         ),
       ),
