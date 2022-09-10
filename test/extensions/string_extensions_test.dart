@@ -51,8 +51,8 @@ void main() {
   test(
     'toRoomName returns more clear hall names',
     () {
-      expect(Rooms.room13.toRoomName(), 'Atrium');
-      expect(Rooms.room21.toRoomName(), 'Entrance Hall');
+      expect(Rooms.room13.toRoomName(), 'Atrium*');
+      expect(Rooms.room21.toRoomName(), 'Entrance Hall*');
     },
   );
 

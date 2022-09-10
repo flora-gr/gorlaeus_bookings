@@ -112,7 +112,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
       );
     } else if (state is GetFreeRoomNowEmptyState) {
       return const Text(Strings.noRoomFound);
-    } else if (State is GetFreeRoomNowErrorState) {
+    } else if (state is GetFreeRoomNowErrorState) {
       return const Text(Strings.getFreeRoomFailed);
     }
     return null;

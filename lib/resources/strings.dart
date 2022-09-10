@@ -33,14 +33,16 @@ class Strings {
 
   static String roomIsFree2(String? endTime) =>
       ' is available until ${endTime ?? 'end of the day'}.';
-  static const String getFreeRoomFailed = 'Something went wrong.';
+  static const String getFreeRoomFailed = 'Something went wrong. '
+      'Please check your internet connection.';
   static const String noRoomFound = 'No available room found. '
       'Consider adjusting your room selection in \'Settings\'.';
   static const String tryAgain = 'Search again';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
-  static const String errorFetchingBookings = 'Failed to fetch bookings.';
+  static const String errorFetchingBookings = 'Failed to fetch bookings. '
+      'Please check your internet connection.';
   static const String bookingsOn = 'Bookings on';
   static const String noBookings = 'No bookings found for this day.';
   static const String today = 'today';

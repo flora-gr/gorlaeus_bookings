@@ -57,8 +57,12 @@ class GetFreeRoomNowBloc
     final DateTime now = _dateTimeRepository.getCurrentDateTime();
 
     if (bookings == null) {
-      final List<BookingEntry>? bookingsResponse =
-          await _bookingRepository.getBookings(now);
+      List<BookingEntry>? bookingsResponse;
+      try {
+        bookingsResponse = await _bookingRepository.getBookings(now);
+      } on Exception {
+        yield const GetFreeRoomNowErrorState();
+      }
 
       if (bookingsResponse != null) {
         bookings = bookingsResponse;
