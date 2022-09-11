@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
@@ -15,11 +16,7 @@ import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 class BookingOverviewBloc
     extends Bloc<BookingOverviewEvent, BookingOverviewState> {
   BookingOverviewBloc() : super(const BookingOverviewBusyState()) {
-    _bookingRepository = getIt.get<BookingRepository>();
     _dateTimeRepository = getIt.get<DateTimeRepository>();
-    _mapper = getIt.get<RoomsOverviewMapper>();
-    _sharedPreferencesRepository = getIt.get<SharedPreferencesRepository>();
-    _urlLauncherWrapper = getIt.get<UrlLauncherWrapper>();
     on<BookingOverviewInitEvent>(
         (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
             emit.forEach(_handleInitEvent(event.date),
@@ -29,22 +26,26 @@ class BookingOverviewBloc
         _handleBookRoomEvent(event));
   }
 
-  late BookingRepository _bookingRepository;
   late DateTimeRepository _dateTimeRepository;
-  late RoomsOverviewMapper _mapper;
-  late SharedPreferencesRepository _sharedPreferencesRepository;
-  late UrlLauncherWrapper _urlLauncherWrapper;
 
   Stream<BookingOverviewState> _handleInitEvent(DateTime date) async* {
     yield const BookingOverviewBusyState();
 
     try {
       final List<BookingEntry>? bookings =
-          await _bookingRepository.getBookings(date);
+          await getIt.get<BookingRepository>().getBookings(date);
       if (bookings != null) {
+        final DateTime now = _dateTimeRepository.getCurrentDateTime();
+        final TimeOfDay? timeIfToday = now.isOnSameDateAs(date)
+            ? TimeOfDay(hour: now.hour, minute: now.minute)
+            : null;
+
         yield BookingOverviewReadyState(
           date: date,
-          roomsOverview: (await _mapper.mapToRoomsOverview(bookings))!,
+          timeIfToday: timeIfToday,
+          roomsOverview: (await getIt
+              .get<RoomsOverviewMapper>()
+              .mapToRoomsOverview(bookings))!,
         );
       } else {
         yield const BookingOverviewErrorState();
@@ -61,13 +62,14 @@ class BookingOverviewBloc
             ? Strings.today
             : Strings.onDay(date.formatted);
 
-    final String? emailName = await _sharedPreferencesRepository.getEmailName();
+    final String? emailName =
+        await getIt.get<SharedPreferencesRepository>().getEmailName();
 
-    await _urlLauncherWrapper.launchEmail(
-      ConnectionUrls.serviceDeskEmail,
-      subject: Strings.bookRoomEmailSubject(event.room),
-      body: Strings.bookRoomEmailBody(
-          event.room, dateString, event.time, emailName),
-    );
+    await getIt.get<UrlLauncherWrapper>().launchEmail(
+          ConnectionUrls.serviceDeskEmail,
+          subject: Strings.bookRoomEmailSubject(event.room),
+          body: Strings.bookRoomEmailBody(
+              event.room, dateString, event.time, emailName),
+        );
   }
 }

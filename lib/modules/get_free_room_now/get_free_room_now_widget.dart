@@ -5,6 +5,7 @@ import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
+import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
@@ -35,33 +36,37 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
     return BlocBuilder<GetFreeRoomNowBloc, GetFreeRoomNowState>(
       bloc: _bloc,
       builder: (BuildContext context, GetFreeRoomNowState state) {
-        final String? dataFetchedText = _getDataFetchedText(state);
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: state is GetFreeRoomNowWeekendState
-                  ? null
-                  : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: Styles.leftPadding12,
-                    child: Text(_getButtonText(state)),
-                  ),
-                  ButtonLoadingWidget(
-                    showLoading: state is GetFreeRoomNowBusyState,
-                  ),
-                ],
+        final Widget? dataFetchedText = _getDataFetchedText(state);
+        return AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          alignment: Alignment.topCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: state is GetFreeRoomNowWeekendState
+                    ? null
+                    : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: Styles.leftPadding12,
+                      child: Text(_getButtonText(state)),
+                    ),
+                    ButtonLoadingWidget(
+                      showLoading: state is GetFreeRoomNowBusyState,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            if (dataFetchedText != null)
-              Padding(
-                padding: Styles.topPadding12,
-                child: Text(dataFetchedText),
-              )
-          ],
+              if (dataFetchedText != null)
+                Padding(
+                  padding: Styles.topPadding12,
+                  child: dataFetchedText,
+                )
+            ],
+          ),
         );
       },
     );
@@ -76,16 +81,39 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             : Strings.search;
   }
 
-  String? _getDataFetchedText(GetFreeRoomNowState state) {
+  Widget? _getDataFetchedText(GetFreeRoomNowState state) {
     if (state is GetFreeRoomNowReadyState && state.freeRoom != null) {
-      return Strings.roomIsFree(
-        state.freeRoom!.toRoomName(),
-        state.nextBooking?.startTimeString(),
+      final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
+      return Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: Strings.roomIsFree1,
+              style: defaultTextStyle,
+            ),
+            TextSpan(
+              text: state.freeRoom!.toRoomName(),
+              style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: Strings.roomIsFree2(
+                state.nextBooking?.startTimeString(),
+              ),
+              style: defaultTextStyle,
+            ),
+            if (state.freeRoom == Rooms.room13 ||
+                state.freeRoom == Rooms.room21)
+              TextSpan(
+                text: Strings.notLectureRoom,
+                style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
+              ),
+          ],
+        ),
       );
     } else if (state is GetFreeRoomNowEmptyState) {
-      return Strings.noRoomFound;
-    } else if (State is GetFreeRoomNowErrorState) {
-      return Strings.getFreeRoomFailed;
+      return const Text(Strings.noRoomFound);
+    } else if (state is GetFreeRoomNowErrorState) {
+      return const Text(Strings.getFreeRoomFailed);
     }
     return null;
   }

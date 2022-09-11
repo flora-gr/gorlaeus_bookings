@@ -21,20 +21,19 @@ class BookingRepository {
       _getBookings(date, _building2)
     ];
 
-    try {
-      final List<List<BookingEntry>?> bookings =
-          await Future.wait(bookingTasks);
+    final List<List<BookingEntry>?> bookings = await Future.wait(bookingTasks);
 
-      if (bookings.isNotEmpty && bookings.length == 2) {
-        return <BookingEntry>[
-          if (bookings[0] != null) ...bookings[0]!,
-          if (bookings[1] != null) ...bookings[1]!,
-        ];
-      }
-    } on Exception {
-      return null;
+    if (bookings.isNotEmpty &&
+        bookings.length == 2 &&
+        bookings[0] != null &&
+        bookings[1] != null) {
+      return <BookingEntry>[
+        ...bookings[0]!,
+        ...bookings[1]!,
+      ];
+    } else {
+      throw Exception('Failed to fetch data');
     }
-    return null;
   }
 
   Future<List<BookingEntry>?> _getBookings(

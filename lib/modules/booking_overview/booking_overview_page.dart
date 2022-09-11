@@ -5,6 +5,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_table/booking_table_widget.dart';
+import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/resources/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
@@ -53,9 +54,16 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
+                    if (state.roomsOverview.keys.contains(Rooms.room13) ||
+                        state.roomsOverview.keys.contains(Rooms.room21))
+                      const Padding(
+                        padding: Styles.verticalPadding8,
+                        child: Text(Strings.notLectureRooms),
+                      ),
                     Expanded(
                       child: BookingTable(
                         state.roomsOverview,
+                        state.timeIfToday,
                         onEmailButtonClicked: ({
                           required String time,
                           required String room,
@@ -71,7 +79,13 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
             : Center(
                 child: state is BookingOverviewBusyState
                     ? const LoadingWidget()
-                    : const Text(Strings.errorFetchingBookings),
+                    : const Padding(
+                        padding: Styles.padding16,
+                        child: Text(
+                          Strings.errorFetchingBookings,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
               ),
       ),
     );

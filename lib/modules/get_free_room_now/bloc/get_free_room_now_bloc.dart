@@ -17,9 +17,7 @@ import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 class GetFreeRoomNowBloc
     extends Bloc<GetFreeRoomNowEvent, GetFreeRoomNowState> {
   GetFreeRoomNowBloc() : super(const GetFreeRoomNowReadyState()) {
-    _bookingRepository = getIt.get<BookingRepository>();
     _dateTimeRepository = getIt.get<DateTimeRepository>();
-    _mapper = getIt.get<RoomsOverviewMapper>();
     on<GetFreeRoomNowInitEvent>(
         (GetFreeRoomNowInitEvent event, Emitter<GetFreeRoomNowState> emit) =>
             emit(_handleGetFreeRoomInitEvent()));
@@ -29,9 +27,7 @@ class GetFreeRoomNowBloc
                 onData: (GetFreeRoomNowState state) => state));
   }
 
-  late BookingRepository _bookingRepository;
   late DateTimeRepository _dateTimeRepository;
-  late RoomsOverviewMapper _mapper;
 
   final Random _random = Random();
 
@@ -57,8 +53,13 @@ class GetFreeRoomNowBloc
     final DateTime now = _dateTimeRepository.getCurrentDateTime();
 
     if (bookings == null) {
-      final List<BookingEntry>? bookingsResponse =
-          await _bookingRepository.getBookings(now);
+      List<BookingEntry>? bookingsResponse;
+      try {
+        bookingsResponse =
+            await getIt.get<BookingRepository>().getBookings(now);
+      } on Exception {
+        yield const GetFreeRoomNowErrorState();
+      }
 
       if (bookingsResponse != null) {
         bookings = bookingsResponse;
@@ -66,7 +67,7 @@ class GetFreeRoomNowBloc
     }
 
     final Map<String, Iterable<TimeBlock?>>? roomsOverview =
-        await _mapper.mapToRoomsOverview(bookings);
+        await getIt.get<RoomsOverviewMapper>().mapToRoomsOverview(bookings);
 
     if (roomsOverview != null) {
       final TimeBlock timeBlockFromNowUntilHourFromNow = TimeBlock(
@@ -90,8 +91,10 @@ class GetFreeRoomNowBloc
 
       if (freeRooms.isNotEmpty) {
         final String freeRoom = freeRooms[_random.nextInt(freeRooms.length)];
-        final TimeBlock? nextBooking = roomsOverview[freeRoom]!
-            .firstWhereOrNull(((TimeBlock? bookingTime) =>
+        final List<TimeBlock?> bookingsForFreeRooms =
+            roomsOverview[freeRoom]!.sort();
+        final TimeBlock? nextBooking = bookingsForFreeRooms.firstWhereOrNull(
+            ((TimeBlock? bookingTime) =>
                 bookingTime!.isAfter(timeBlockFromNowUntilHourFromNow)));
 
         yield GetFreeRoomNowReadyState(

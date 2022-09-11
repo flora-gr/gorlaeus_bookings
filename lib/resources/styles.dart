@@ -40,6 +40,8 @@ class Styles {
   static Color outlinedButtonBorderColor = primaryColorSwatch[200]!;
   static Color freeRoomColor = Colors.lightGreen;
   static const Color bookedRoomColor = Color(0xFFF08080);
+  static const Color freeRoomEarlierColor = Color(0xFF889973);
+  static const Color bookedRoomEarlierColor = Color(0xFFA38888);
 
   // Paddings
   static const EdgeInsetsGeometry defaultPagePadding =

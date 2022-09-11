@@ -30,12 +30,30 @@ extension TimeBlockExtension on TimeBlock {
   }
 
   bool isAfter(TimeBlock bookingTime) {
-    final int startTimeMinutes = _getMinutes(startTime);
-    final int bookingEndTimeMinutes = _getMinutes(bookingTime.endTime);
-    return startTimeMinutes >= bookingEndTimeMinutes;
+    return _getMinutes(startTime) >= _getMinutes(bookingTime.endTime);
   }
 
   int _getMinutes(TimeOfDay time) {
     return time.hour * 60 + time.minute;
+  }
+}
+
+extension TimeBlockIterableExtension on Iterable<TimeBlock?> {
+  List<TimeBlock?> sort() {
+    return toList()
+      ..sort(
+        (TimeBlock? a, TimeBlock? b) {
+          if (a == null || b == null) {
+            return 0;
+          } else {
+            if (a.isAfter(b)) {
+              return 1;
+            } else if (b.isAfter(a)) {
+              return -1;
+            }
+            return 0;
+          }
+        },
+      );
   }
 }

@@ -47,4 +47,25 @@ void main() {
       expect(Rooms.room15.toRoomName(), Rooms.room15);
     },
   );
+
+  test(
+    'toRoomName returns more clear hall names',
+    () {
+      expect(Rooms.room13.toRoomName(), 'Atrium*');
+      expect(Rooms.room21.toRoomName(), 'Entrance Hall*');
+    },
+  );
+
+  test(
+    'toLongRoomName returns an explanatory room indication',
+    () {
+      expect(
+          Rooms.room13.toLongRoomName(), 'the Atrium of the Gorlaeus building');
+      expect(Rooms.room21.toLongRoomName(),
+          'the Entrance Hall of the Gorlaeus Schotel');
+      expect(Rooms.room16.toLongRoomName(), 'the Havingazaal of the Gorlaeus');
+      expect(Rooms.room20.toLongRoomName(), 'room C4/5 of the Gorlaeus');
+      expect(Rooms.room15.toLongRoomName(), 'room 04.28 LMUY of the Gorlaeus');
+    },
+  );
 }

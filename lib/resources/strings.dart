@@ -20,7 +20,7 @@ class Strings {
       'Usage of the booking system via this app is at your own risk.\n\n'
       'Feedback such as bug reports and feature requests can be ';
   static const String disclaimerDialogText4 = 'e-mailed';
-  static const String disclaimerDialogText5 = ' or made at our ';
+  static const String disclaimerDialogText5 = ' or posted as an issue at our ';
   static const String disclaimerDialogText6 = 'Github repository';
   static const String disclaimerDialogText7 =
       '.\n\nThanks for using Gorlaeus Bookings!';
@@ -29,28 +29,33 @@ class Strings {
   static const String getMeAFreeRoom = 'Find an available room now';
   static const String search = 'Search';
   static const String notAvailableInWeekend = 'Not available on weekends';
+  static const String roomIsFree1 = 'Room ';
 
-  static String roomIsFree(String room, String? endTime) =>
-      'Room $room is available until ${endTime ?? 'end of the day'}.';
-  static const String getFreeRoomFailed = 'Something went wrong.';
-  static const String noRoomFound = 'No available room found.';
+  static String roomIsFree2(String? endTime) =>
+      ' is available until ${endTime ?? 'end of the day'}.';
+  static const String getFreeRoomFailed = 'Something went wrong. '
+      'Please check your internet connection.';
+  static const String noRoomFound = 'No available room found. '
+      'Consider adjusting your room selection in \'Settings\'.';
   static const String tryAgain = 'Search again';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
-  static const String errorFetchingBookings = 'Failed to fetch bookings.';
+  static const String errorFetchingBookings = 'Failed to fetch bookings. '
+      'Please check your internet connection.';
   static const String bookingsOn = 'Bookings on';
   static const String noBookings = 'No bookings found for this day.';
   static const String today = 'today';
+  static const String notLectureRoom = '\n*Not a lecture room';
 
   static String onDay(String day) => 'on $day';
 
-  static String bookRoomEmailSubject(String room) => 'Book room $room';
+  static String bookRoomEmailSubject(String room) => 'Book $room';
 
   static String bookRoomEmailBody(
           String room, String dateString, String time, String? emailName) =>
       'Hello,\n\n'
-      'I would like to book room $room $dateString from $time to ...\n\n'
+      'I would like to book $room $dateString from $time to ...\n\n'
       'Thanks in advance'
       '${emailName != null && emailName.trim().isNotEmpty ? ',\n$emailName' : '\n'}';
 
@@ -58,11 +63,14 @@ class Strings {
   static const String roomFreeDialogHeader = 'This room is available';
 
   static String roomFreeDialogText(String room, String time) =>
-      'Do you want to book room $room at $time?';
+      'Do you want to book $room at $time?';
   static const String yesBookRoom = 'Yes, send email';
   static const String cancel = 'Cancel';
   static const String roomBookedDialogHeader = 'Sorry!';
   static const String roomBookedDialogText = 'This room is already booked.';
+  static const String bookingTimePastDialogTitle = 'This was earlier today';
+  static const String bookingTimePastDialogText =
+      'Please select a different time.';
 
   // Settings page
   static const String settingsPageTitle = 'Settings';
@@ -77,4 +85,6 @@ class Strings {
 
   // Shared
   static const String ok = 'OK';
+  static const String notLectureRooms =
+      '*Indicated locations are not lecture rooms';
 }

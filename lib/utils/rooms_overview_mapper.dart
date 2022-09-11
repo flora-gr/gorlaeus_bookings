@@ -5,17 +5,13 @@ import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dar
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 class RoomsOverviewMapper {
-  RoomsOverviewMapper() {
-    _sharedPreferencesRepository = getIt.get<SharedPreferencesRepository>();
-  }
-
-  late SharedPreferencesRepository _sharedPreferencesRepository;
+  RoomsOverviewMapper();
 
   Future<Map<String, Iterable<TimeBlock?>>?> mapToRoomsOverview(
       List<BookingEntry>? bookings) async {
     if (bookings != null) {
       final List<String> hiddenRooms =
-          await _sharedPreferencesRepository.getHiddenRooms();
+          await getIt.get<SharedPreferencesRepository>().getHiddenRooms();
       final Iterable<String> roomsToShow =
           Rooms.all.where((String room) => !hiddenRooms.contains(room));
 
@@ -27,7 +23,6 @@ class RoomsOverviewMapper {
         roomsOverview[room] =
             bookingsForRoom.map((BookingEntry? entry) => entry?.time);
       }
-
       return roomsOverview;
     }
     return null;
