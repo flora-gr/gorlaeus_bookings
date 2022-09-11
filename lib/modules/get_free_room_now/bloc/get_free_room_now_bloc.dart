@@ -17,9 +17,7 @@ import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 class GetFreeRoomNowBloc
     extends Bloc<GetFreeRoomNowEvent, GetFreeRoomNowState> {
   GetFreeRoomNowBloc() : super(const GetFreeRoomNowReadyState()) {
-    _bookingRepository = getIt.get<BookingRepository>();
     _dateTimeRepository = getIt.get<DateTimeRepository>();
-    _mapper = getIt.get<RoomsOverviewMapper>();
     on<GetFreeRoomNowInitEvent>(
         (GetFreeRoomNowInitEvent event, Emitter<GetFreeRoomNowState> emit) =>
             emit(_handleGetFreeRoomInitEvent()));
@@ -29,9 +27,7 @@ class GetFreeRoomNowBloc
                 onData: (GetFreeRoomNowState state) => state));
   }
 
-  late BookingRepository _bookingRepository;
   late DateTimeRepository _dateTimeRepository;
-  late RoomsOverviewMapper _mapper;
 
   final Random _random = Random();
 
@@ -59,7 +55,8 @@ class GetFreeRoomNowBloc
     if (bookings == null) {
       List<BookingEntry>? bookingsResponse;
       try {
-        bookingsResponse = await _bookingRepository.getBookings(now);
+        bookingsResponse =
+            await getIt.get<BookingRepository>().getBookings(now);
       } on Exception {
         yield const GetFreeRoomNowErrorState();
       }
@@ -70,7 +67,7 @@ class GetFreeRoomNowBloc
     }
 
     final Map<String, Iterable<TimeBlock?>>? roomsOverview =
-        await _mapper.mapToRoomsOverview(bookings);
+        await getIt.get<RoomsOverviewMapper>().mapToRoomsOverview(bookings);
 
     if (roomsOverview != null) {
       final TimeBlock timeBlockFromNowUntilHourFromNow = TimeBlock(
