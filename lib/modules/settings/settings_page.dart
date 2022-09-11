@@ -93,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
       Padding(
         padding: Styles.topPadding12,
         child: Column(
-          children: [
+          children: <Widget>[
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
