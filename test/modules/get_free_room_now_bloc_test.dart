@@ -33,8 +33,6 @@ void main() {
       endTime: TimeOfDay(hour: 13, minute: 0),
     ),
     room: Rooms.room1,
-    personCount: 10,
-    bookedOnBehalfOf: '',
     activity: '',
     user: '',
   );

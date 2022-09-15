@@ -31,8 +31,6 @@ void main() {
     BookingEntry(
       time: bookingTimeBlock,
       room: Rooms.room1,
-      personCount: 10,
-      bookedOnBehalfOf: '',
       activity: '',
       user: '',
     ),

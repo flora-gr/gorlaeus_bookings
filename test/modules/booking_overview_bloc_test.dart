@@ -44,8 +44,6 @@ void main() {
         endTime: TimeOfDay(hour: 13, minute: 0),
       ),
       room: 'room',
-      personCount: 10,
-      bookedOnBehalfOf: '',
       activity: '',
       user: '',
     ),

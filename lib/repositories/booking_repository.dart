@@ -86,8 +86,6 @@ class BookingRepository {
           BookingEntry(
             time: rowElements[0].parse().toTimeBlock(),
             room: rowElements[1].parse(),
-            personCount: int.tryParse(rowElements[3].parse()),
-            bookedOnBehalfOf: rowElements[4].parse(),
             activity: rowElements[6].parse(),
             user: rowElements[7].parse(),
           ),
