@@ -54,15 +54,15 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
-                    if (state.roomsOverview.keys.contains(Rooms.room13) ||
-                        state.roomsOverview.keys.contains(Rooms.room21))
+                    if (state.bookingsPerRoom.keys.contains(Rooms.room13) ||
+                        state.bookingsPerRoom.keys.contains(Rooms.room21))
                       const Padding(
                         padding: Styles.verticalPadding8,
                         child: Text(Strings.notLectureRooms),
                       ),
                     Expanded(
                       child: BookingTable(
-                        state.roomsOverview,
+                        state.bookingsPerRoom,
                         state.timeIfToday,
                         onEmailButtonClicked: ({
                           required String time,

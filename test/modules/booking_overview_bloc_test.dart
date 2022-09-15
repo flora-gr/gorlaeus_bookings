@@ -49,9 +49,9 @@ void main() {
     ),
   ];
 
-  Map<String, Iterable<TimeBlock?>> roomsOverview =
-      <String, Iterable<TimeBlock?>>{
-    'room': <TimeBlock?>[bookings.first.time],
+  Map<String, Iterable<BookingEntry?>> bookingsPerRoom =
+      <String, Iterable<BookingEntry?>>{
+    'room': <BookingEntry?>[bookings.first],
   };
 
   setUpAll(() {
@@ -83,8 +83,8 @@ void main() {
     setUp: () {
       when(() => bookingRepository.getBookings(any()))
           .thenAnswer((_) async => bookings);
-      when(() => mapper.mapToRoomsOverview(bookings))
-          .thenAnswer((_) async => roomsOverview);
+      when(() => mapper.mapBookingEntries(bookings))
+          .thenAnswer((_) async => bookingsPerRoom);
     },
     build: () => sut,
     act: (BookingOverviewBloc bloc) =>
@@ -94,7 +94,7 @@ void main() {
       BookingOverviewReadyState(
         date: today,
         timeIfToday: time,
-        roomsOverview: roomsOverview,
+        bookingsPerRoom: bookingsPerRoom,
       ),
     ],
   );
@@ -104,8 +104,8 @@ void main() {
     setUp: () {
       when(() => bookingRepository.getBookings(any()))
           .thenAnswer((_) async => bookings);
-      when(() => mapper.mapToRoomsOverview(bookings))
-          .thenAnswer((_) async => roomsOverview);
+      when(() => mapper.mapBookingEntries(bookings))
+          .thenAnswer((_) async => bookingsPerRoom);
     },
     build: () => sut,
     act: (BookingOverviewBloc bloc) =>
@@ -115,7 +115,7 @@ void main() {
       BookingOverviewReadyState(
         date: tomorrow,
         timeIfToday: null,
-        roomsOverview: roomsOverview,
+        bookingsPerRoom: bookingsPerRoom,
       ),
     ],
   );
@@ -143,7 +143,7 @@ void main() {
     seed: () => BookingOverviewReadyState(
       date: today,
       timeIfToday: null,
-      roomsOverview: roomsOverview,
+      bookingsPerRoom: bookingsPerRoom,
     ),
     act: (BookingOverviewBloc bloc) =>
         bloc.add(const BookingOverviewBookRoomEvent('8:00', 'room')),

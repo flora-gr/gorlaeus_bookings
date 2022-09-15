@@ -43,9 +43,9 @@ class BookingOverviewBloc
         yield BookingOverviewReadyState(
           date: date,
           timeIfToday: timeIfToday,
-          roomsOverview: (await getIt
+          bookingsPerRoom: (await getIt
               .get<RoomsOverviewMapper>()
-              .mapToRoomsOverview(bookings))!,
+              .mapBookingEntries(bookings))!,
         );
       } else {
         yield const BookingOverviewErrorState();

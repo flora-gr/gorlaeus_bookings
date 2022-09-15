@@ -37,10 +37,10 @@ void main() {
   ];
 
   test(
-    'mapToRoomsOverview returns map of all rooms with TimeBlocks if available',
+    'mapTimeBlocks returns map of all rooms with TimeBlocks if available',
     () async {
       final Map<String, Iterable<TimeBlock?>>? result =
-          await sut.mapToRoomsOverview(bookings);
+          await sut.mapTimeBlocks(bookings);
 
       expect(
         result!.length == Rooms.all.length - 1,

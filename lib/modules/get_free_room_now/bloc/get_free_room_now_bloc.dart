@@ -66,10 +66,10 @@ class GetFreeRoomNowBloc
       }
     }
 
-    final Map<String, Iterable<TimeBlock?>>? roomsOverview =
-        await getIt.get<RoomsOverviewMapper>().mapToRoomsOverview(bookings);
+    final Map<String, Iterable<TimeBlock?>>? timeBlocksPerRoom =
+        await getIt.get<RoomsOverviewMapper>().mapTimeBlocks(bookings);
 
-    if (roomsOverview != null) {
+    if (timeBlocksPerRoom != null) {
       final TimeBlock timeBlockFromNowUntilHourFromNow = TimeBlock(
         startTime: TimeOfDay(
           hour: now.hour,
@@ -81,9 +81,9 @@ class GetFreeRoomNowBloc
         ),
       );
 
-      final List<String> freeRooms = roomsOverview.keys
+      final List<String> freeRooms = timeBlocksPerRoom.keys
           .where((String key) =>
-              roomsOverview[key]?.any((TimeBlock? timeBlock) =>
+              timeBlocksPerRoom[key]?.any((TimeBlock? timeBlock) =>
                   timeBlock?.overlapsWith(timeBlockFromNowUntilHourFromNow) ==
                   true) ==
               false)
@@ -92,7 +92,7 @@ class GetFreeRoomNowBloc
       if (freeRooms.isNotEmpty) {
         final String freeRoom = freeRooms[_random.nextInt(freeRooms.length)];
         final List<TimeBlock?> bookingsForFreeRooms =
-            roomsOverview[freeRoom]!.sort();
+            timeBlocksPerRoom[freeRoom]!.sort();
         final TimeBlock? nextBooking = bookingsForFreeRooms.firstWhereOrNull(
             ((TimeBlock? bookingTime) =>
                 bookingTime!.isAfter(timeBlockFromNowUntilHourFromNow)));

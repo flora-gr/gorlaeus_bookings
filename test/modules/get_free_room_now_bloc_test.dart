@@ -41,7 +41,7 @@ void main() {
     defaultBookingEntry
   ];
 
-  Map<String, Iterable<TimeBlock?>> roomsOverview =
+  Map<String, Iterable<TimeBlock?>> timeBlocksPerRoom =
       <String, Iterable<TimeBlock?>>{
     Rooms.room1: <TimeBlock?>[defaultBookingEntry.time],
   };
@@ -51,7 +51,7 @@ void main() {
     endTime: TimeOfDay(hour: 18, minute: 0),
   );
 
-  Map<String, Iterable<TimeBlock?>> fullyBookedMappedBookings() {
+  Map<String, Iterable<TimeBlock?>> fullyBookedTimeBlocksPerRoom() {
     final Iterable<Iterable<TimeBlock?>> timeBlocks =
         Rooms.all.map((String room) => <TimeBlock?>[overlappingTimeBlock]);
     return Map<String, Iterable<TimeBlock?>>.fromIterables(
@@ -73,8 +73,8 @@ void main() {
         .thenAnswer((_) async => defaultBookingResponse);
     when(() => dateTimeRepository.getCurrentDateTime())
         .thenAnswer((_) => todayAtTwo);
-    when(() => mapper.mapToRoomsOverview(any()))
-        .thenAnswer((_) async => roomsOverview);
+    when(() => mapper.mapTimeBlocks(any()))
+        .thenAnswer((_) async => timeBlocksPerRoom);
     sut = GetFreeRoomNowBloc();
   });
 
@@ -109,7 +109,7 @@ void main() {
       predicate(
         (GetFreeRoomNowReadyState state) =>
             state.bookings == seedState.bookings &&
-            roomsOverview.keys.contains(state.freeRoom),
+            timeBlocksPerRoom.keys.contains(state.freeRoom),
       ),
     ],
     verify: (_) {
@@ -119,8 +119,8 @@ void main() {
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
     'Failure to fetch data emits error state',
-    setUp: () => when(() => mapper.mapToRoomsOverview(any()))
-        .thenAnswer((_) async => null),
+    setUp: () =>
+        when(() => mapper.mapTimeBlocks(any())).thenAnswer((_) async => null),
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
@@ -132,8 +132,8 @@ void main() {
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
     'All rooms booked emits empty state',
-    setUp: () => when(() => mapper.mapToRoomsOverview(any()))
-        .thenAnswer((_) async => fullyBookedMappedBookings()),
+    setUp: () => when(() => mapper.mapTimeBlocks(any()))
+        .thenAnswer((_) async => fullyBookedTimeBlocksPerRoom()),
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),

@@ -66,11 +66,18 @@ class Strings {
       'Do you want to book $room at $time?';
   static const String yesBookRoom = 'Yes, send email';
   static const String cancel = 'Cancel';
-  static const String roomBookedDialogHeader = 'Sorry!';
-  static const String roomBookedDialogText = 'This room is already booked.';
-  static const String bookingTimePastDialogTitle = 'This was earlier today';
-  static const String bookingTimePastDialogText =
+  static const String roomFreeInPastDialogHeader = 'This was earlier today';
+  static const String roomFreeInPastDialogText =
       'Please select a different time.';
+
+  static const String roomBookedDialogHeader = 'Booked';
+
+  static String roomBookedDialogText(
+          bool isPast, String? user, String? activity, String timeBlock) =>
+      'This room ${isPast ? 'was' : 'is'} booked'
+      '${user?.isNotEmpty == true ? ' by $user,' : ''}'
+      '${activity?.isNotEmpty == true ? ' for $activity,' : ''}'
+      ' from $timeBlock.';
 
   // Settings page
   static const String settingsPageTitle = 'Settings';
