@@ -72,11 +72,11 @@ class Strings {
 
   static const String roomBookedDialogHeader = 'Booked';
 
-  static String roomBookedDialogText(
-          bool isPast, String? user, String? activity, String timeBlock) =>
-      'This room ${isPast ? 'was' : 'is'} booked'
+  static String roomBookedDialogText(String room, bool isPast, String? user,
+          String? activity, String timeBlock) =>
+      '$room ${isPast ? 'was' : 'is'} booked'
       '${user?.isNotEmpty == true ? ' by $user,' : ''}'
-      '${activity?.isNotEmpty == true ? ' for $activity,' : ''}'
+      '${activity?.isNotEmpty == true ? ' for "$activity",' : ''}'
       ' from $timeBlock.';
 
   // Settings page

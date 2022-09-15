@@ -62,7 +62,7 @@ class BookingDataSource extends DataGridSource {
           return InkWell(
             onTap: () => _showBookingDialog(
               booking: booking,
-              room: room,
+              room: room.toLongRoomName(),
               time: bookingTime.startTimeString(),
               isFree: isFree,
               isPast: isPast,
@@ -114,6 +114,7 @@ class BookingDataSource extends DataGridSource {
                   ? Strings.roomFreeInPastDialogText
                   : Strings.roomFreeDialogText(room, time)
               : Strings.roomBookedDialogText(
+                  room.capitalize(),
                   isPast,
                   booking!.user,
                   booking.activity,

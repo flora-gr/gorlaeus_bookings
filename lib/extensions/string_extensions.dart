@@ -48,6 +48,10 @@ extension StringExtension on String {
       return 'Atrium*';
     } else if (this == Rooms.room21) {
       return 'Entrance Hall*';
+    } else if (this == Rooms.room22) {
+      return 'Sitter';
+    } else if (Rooms.building3.contains(this)) {
+      return 'HUY $this';
     }
     return this;
   }
@@ -59,8 +63,16 @@ extension StringExtension on String {
       return 'the Entrance Hall of the Gorlaeus Schotel';
     } else if (this == Rooms.room16) {
       return 'the Havingazaal of the Gorlaeus';
+    } else if (this == Rooms.room22) {
+      return 'the Sitterzaal in the Huygens building';
+    } else if (Rooms.building3.contains(this)) {
+      return 'Huygens room $this';
     } else {
       return 'room ${toRoomName()} of the Gorlaeus';
     }
+  }
+
+  String capitalize() {
+    return '${this[0].toUpperCase()}${substring(1)}';
   }
 }

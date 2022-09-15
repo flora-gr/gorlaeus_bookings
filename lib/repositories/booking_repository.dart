@@ -13,23 +13,27 @@ class BookingRepository {
 
   static const String _building1 = 'GORLB+GORLB - Gorlaeus Building';
   static const String _building2 = 'GORL+GORL - Gorlaeus Lecture Hall';
+  static const String _building3 = 'HUYGENS+HUYGENS - Huygens';
 
   Future<List<BookingEntry>?> getBookings(DateTime date) async {
     final List<Future<List<BookingEntry>?>> bookingTasks =
         <Future<List<BookingEntry>?>>[
       _getBookings(date, _building1),
-      _getBookings(date, _building2)
+      _getBookings(date, _building2),
+      _getBookings(date, _building3)
     ];
 
     final List<List<BookingEntry>?> bookings = await Future.wait(bookingTasks);
 
     if (bookings.isNotEmpty &&
-        bookings.length == 2 &&
+        bookings.length == 3 &&
         bookings[0] != null &&
-        bookings[1] != null) {
+        bookings[1] != null &&
+        bookings[2] != null) {
       return <BookingEntry>[
         ...bookings[0]!,
         ...bookings[1]!,
+        ...bookings[2]!,
       ];
     } else {
       throw Exception('Failed to fetch data');
