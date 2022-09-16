@@ -57,6 +57,14 @@ void main() {
   );
 
   test(
+    'toRoomName returns more clear names for Huygens rooms',
+    () {
+      expect(Rooms.room22.toRoomName(), 'Sitter');
+      expect(Rooms.room23.toRoomName(), 'HUY 106-109');
+    },
+  );
+
+  test(
     'toLongRoomName returns an explanatory room indication',
     () {
       expect(
@@ -66,6 +74,20 @@ void main() {
       expect(Rooms.room16.toLongRoomName(), 'the Havingazaal of the Gorlaeus');
       expect(Rooms.room20.toLongRoomName(), 'room C4/5 of the Gorlaeus');
       expect(Rooms.room15.toLongRoomName(), 'room 04.28 LMUY of the Gorlaeus');
+      expect(Rooms.room22.toLongRoomName(),
+          'the Sitterzaal in the Huygens building');
+      expect(Rooms.room23.toLongRoomName(), 'Huygens room 106-109');
     },
   );
+
+  test(
+      'capitalize capitalizes the first character and leaves the rest of the string intact',
+      () {
+    expect('test'.capitalize(), 'Test');
+    expect('tesT'.capitalize(), 'TesT');
+    expect('Test'.capitalize(), 'Test');
+    expect('TEST'.capitalize(), 'TEST');
+    expect('t'.capitalize(), 'T');
+    expect('T'.capitalize(), 'T');
+  });
 }

@@ -63,7 +63,7 @@ class BookingDataSource extends DataGridSource {
             onTap: () => _showBookingDialog(
               booking: booking,
               room: room.toLongRoomName(),
-              time: bookingTime.startTimeString(),
+              time: cell.columnName,
               isFree: isFree,
               isPast: isPast,
             ),

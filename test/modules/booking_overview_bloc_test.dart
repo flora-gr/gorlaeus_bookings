@@ -134,6 +134,23 @@ void main() {
   );
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
+    'Empty bookingsPerRoom emits empty state',
+    setUp: () {
+      when(() => bookingRepository.getBookings(any()))
+          .thenAnswer((_) async => bookings);
+      when(() => mapper.mapBookingEntries(bookings))
+          .thenAnswer((_) async => <String, Iterable<BookingEntry?>>{});
+    },
+    build: () => sut,
+    act: (BookingOverviewBloc bloc) =>
+        bloc.add(BookingOverviewInitEvent(today)),
+    expect: () => <BookingOverviewState>[
+      const BookingOverviewBusyState(),
+      const BookingOverviewEmptyState(),
+    ],
+  );
+
+  blocTest<BookingOverviewBloc, BookingOverviewState>(
     'Book room event launches email',
     setUp: () {
       when(() => sharedPreferencesRepository.getEmailName())
