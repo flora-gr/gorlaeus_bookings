@@ -31,18 +31,46 @@ void main() {
     BookingEntry(
       time: bookingTimeBlock,
       room: Rooms.room1,
-      personCount: 10,
-      bookedOnBehalfOf: '',
       activity: '',
       user: '',
     ),
   ];
 
   test(
-    'mapToRoomsOverview returns map of all rooms with TimeBlocks if available',
+    'mapBookingEntries returns map of all rooms with BookingEntries if available',
+    () async {
+      final Map<String, Iterable<BookingEntry?>>? result =
+          await sut.mapBookingEntries(bookings);
+
+      expect(
+        result!.length == Rooms.all.length - 1,
+        true,
+        reason: 'Should include all rooms except for one',
+      );
+      expect(
+        result[Rooms.room1]?.length == 1 &&
+            result[Rooms.room1]!.first == bookings.first,
+        true,
+        reason: 'Should include booking entry from bookings',
+      );
+      expect(
+        result[Rooms.room2]?.isEmpty,
+        true,
+        reason: 'Should have empty list if no entry in bookings',
+      );
+      expect(
+        result[Rooms.room3] == null,
+        true,
+        reason: 'Room should be hidden',
+      );
+    },
+  );
+
+  test(
+    'mapTimeBlocks returns map of all rooms with TimeBlocks if available',
     () async {
       final Map<String, Iterable<TimeBlock?>>? result =
-          await sut.mapToRoomsOverview(bookings);
+          await sut.mapTimeBlocks(bookings);
 
       expect(
         result!.length == Rooms.all.length - 1,

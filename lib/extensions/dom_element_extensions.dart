@@ -9,6 +9,7 @@ extension DomElementExtensions on dom.Element {
         .replaceAll('&amp;', '&')
         .replaceAll('GORLB/', '')
         .replaceAll('GORL/', '')
+        .replaceAll('HUYGENS/', '')
         .replaceAll('VER', '')
         .replaceAll('SEM', '')
         .trim();

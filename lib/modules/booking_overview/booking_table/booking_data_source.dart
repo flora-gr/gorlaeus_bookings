@@ -1,6 +1,8 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
+import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
@@ -9,12 +11,12 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingDataSource extends DataGridSource {
   BookingDataSource(
-    this.roomsOverview,
+    this.bookingsPerRoom,
     this.timeIfToday, {
     required this.onEmailButtonClicked,
     required this.context,
   }) {
-    _bookingData = roomsOverview.keys
+    _bookingData = bookingsPerRoom.keys
         .map(
           (String room) => DataGridRow(
             cells: BookingTimes.all
@@ -30,7 +32,7 @@ class BookingDataSource extends DataGridSource {
         .toList();
   }
 
-  final Map<String, Iterable<TimeBlock?>> roomsOverview;
+  final Map<String, Iterable<BookingEntry?>> bookingsPerRoom;
   final TimeOfDay? timeIfToday;
   final void Function({required String time, required String room})
       onEmailButtonClicked;
@@ -50,13 +52,16 @@ class BookingDataSource extends DataGridSource {
           final TimeBlock bookingTime = BookingTimes.all.singleWhere(
               (TimeBlock bookingTime) =>
                   bookingTime.startTimeString() == cell.columnName);
-          final bool isFree = !roomsOverview[room]!.any(
-              (TimeBlock? time) => time?.overlapsWith(bookingTime) == true);
+          final BookingEntry? booking = bookingsPerRoom[room]!
+              .singleWhereOrNull((BookingEntry? booking) =>
+                  booking?.time?.overlapsWith(bookingTime) == true);
+          final bool isFree = booking == null;
           final bool isPast = timeIfToday != null &&
               TimeBlock(startTime: timeIfToday!, endTime: timeIfToday!)
                   .isAfter(bookingTime);
           return InkWell(
             onTap: () => _showBookingDialog(
+              booking: booking,
               room: room.toLongRoomName(),
               time: cell.columnName,
               isFree: isFree,
@@ -88,6 +93,7 @@ class BookingDataSource extends DataGridSource {
   }
 
   void _showBookingDialog({
+    required BookingEntry? booking,
     required String room,
     required String time,
     required bool isFree,
@@ -96,34 +102,44 @@ class BookingDataSource extends DataGridSource {
     showDialog(
       builder: (_) => AlertDialog(
         title: Text(
-          isPast
-              ? Strings.bookingTimePastDialogTitle
-              : isFree
-                  ? Strings.roomFreeDialogHeader
-                  : Strings.roomBookedDialogHeader,
+          isFree
+              ? isPast
+                  ? Strings.roomFreeInPastDialogHeader
+                  : Strings.roomFreeDialogHeader
+              : Strings.roomBookedDialogHeader,
         ),
         content: Text(
-          isPast
-              ? Strings.bookingTimePastDialogText
-              : isFree
-                  ? Strings.roomFreeDialogText(room, time)
-                  : Strings.roomBookedDialogText,
+          isFree
+              ? isPast
+                  ? Strings.roomFreeInPastDialogText
+                  : Strings.roomFreeDialogText(room, time)
+              : Strings.roomBookedDialogText(
+                  room.capitalize(),
+                  isPast,
+                  booking!.user,
+                  booking.activity,
+                  booking.time!.asString(),
+                ),
         ),
-        actions: !isPast && isFree
-            ? <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text(Strings.cancel),
-                ),
-                TextButton(
-                  onPressed: () {
-                    onEmailButtonClicked(time: time, room: room);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(Strings.yesBookRoom),
-                ),
-              ]
-            : null,
+        actions: <Widget>[
+          if (!isPast && isFree) ...<Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(Strings.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                onEmailButtonClicked(time: time, room: room);
+                Navigator.of(context).pop();
+              },
+              child: const Text(Strings.yesBookRoom),
+            ),
+          ] else
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(Strings.ok),
+            ),
+        ],
       ),
       context: context,
     );

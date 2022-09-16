@@ -41,6 +41,8 @@ class Strings {
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
+  static const String bookingsEmpty = 'No bookings found. '
+      'Consider adjusting your room selection in \'Settings\'.';
   static const String errorFetchingBookings = 'Failed to fetch bookings. '
       'Please check your internet connection.';
   static const String bookingsOn = 'Bookings on';
@@ -66,11 +68,18 @@ class Strings {
       'Do you want to book $room at $time?';
   static const String yesBookRoom = 'Yes, send email';
   static const String cancel = 'Cancel';
-  static const String roomBookedDialogHeader = 'Sorry!';
-  static const String roomBookedDialogText = 'This room is already booked.';
-  static const String bookingTimePastDialogTitle = 'This was earlier today';
-  static const String bookingTimePastDialogText =
+  static const String roomFreeInPastDialogHeader = 'This was earlier today';
+  static const String roomFreeInPastDialogText =
       'Please select a different time.';
+
+  static const String roomBookedDialogHeader = 'Booked';
+
+  static String roomBookedDialogText(String room, bool isPast, String? user,
+          String? activity, String timeBlock) =>
+      '$room ${isPast ? 'was' : 'is'} booked'
+      '${user?.isNotEmpty == true ? ' by $user,' : ''}'
+      '${activity?.isNotEmpty == true ? ' for "$activity",' : ''}'
+      ' from $timeBlock.';
 
   // Settings page
   static const String settingsPageTitle = 'Settings';

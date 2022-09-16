@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/models/time_block.dart';
+import 'package:gorlaeus_bookings/models/booking_entry.dart';
 
 abstract class BookingOverviewState extends Equatable {
   const BookingOverviewState();
@@ -17,15 +17,22 @@ class BookingOverviewReadyState extends BookingOverviewState {
   const BookingOverviewReadyState({
     required this.date,
     required this.timeIfToday,
-    required this.roomsOverview,
+    required this.bookingsPerRoom,
   });
 
   final DateTime date;
   final TimeOfDay? timeIfToday;
-  final Map<String, Iterable<TimeBlock?>> roomsOverview;
+  final Map<String, Iterable<BookingEntry?>> bookingsPerRoom;
 
   @override
-  List<Object?> get props => <Object?>[date, timeIfToday, roomsOverview];
+  List<Object?> get props => <Object?>[date, timeIfToday, bookingsPerRoom];
+}
+
+class BookingOverviewEmptyState extends BookingOverviewState {
+  const BookingOverviewEmptyState();
+
+  @override
+  List<Object?> get props => <Object?>[];
 }
 
 class BookingOverviewErrorState extends BookingOverviewState {

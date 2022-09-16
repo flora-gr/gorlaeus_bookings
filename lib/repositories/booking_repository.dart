@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/dom_element_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
+import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:http/http.dart' as http;
@@ -13,24 +16,36 @@ class BookingRepository {
 
   static const String _building1 = 'GORLB+GORLB - Gorlaeus Building';
   static const String _building2 = 'GORL+GORL - Gorlaeus Lecture Hall';
+  static const String _building3 = 'HUYGENS+HUYGENS - Huygens';
 
   Future<List<BookingEntry>?> getBookings(DateTime date) async {
+    final List<String> hiddenRooms =
+        await getIt.get<SharedPreferencesRepository>().getHiddenRooms();
+
     final List<Future<List<BookingEntry>?>> bookingTasks =
         <Future<List<BookingEntry>?>>[
-      _getBookings(date, _building1),
-      _getBookings(date, _building2)
+      if (!Rooms.building1.every((String room) => hiddenRooms.contains(room)))
+        _getBookings(date, _building1),
+      if (!Rooms.building2.every((String room) => hiddenRooms.contains(room)))
+        _getBookings(date, _building2),
+      if (!Rooms.building3.every((String room) => hiddenRooms.contains(room)))
+        _getBookings(date, _building3)
     ];
 
-    final List<List<BookingEntry>?> bookings = await Future.wait(bookingTasks);
+    if (bookingTasks.isEmpty) {
+      return <BookingEntry>[];
+    }
+
+    final Iterable<Iterable<BookingEntry>?> bookings =
+        await Future.wait(bookingTasks);
 
     if (bookings.isNotEmpty &&
-        bookings.length == 2 &&
-        bookings[0] != null &&
-        bookings[1] != null) {
-      return <BookingEntry>[
-        ...bookings[0]!,
-        ...bookings[1]!,
-      ];
+        bookings.length == bookingTasks.length &&
+        !bookings.any((Iterable<BookingEntry>? bookingsForBuilding) =>
+            bookingsForBuilding == null)) {
+      return bookings
+          .expand<BookingEntry>((Iterable<BookingEntry>? booking) => booking!)
+          .toList();
     } else {
       throw Exception('Failed to fetch data');
     }
@@ -65,7 +80,8 @@ class BookingRepository {
       if (response.statusCode == 200) {
         return _mapResponse(response);
       }
-    } on Exception {
+    } on Exception catch (e) {
+      debugPrint(e.toString());
       return null;
     }
     return null;
@@ -86,8 +102,6 @@ class BookingRepository {
           BookingEntry(
             time: rowElements[0].parse().toTimeBlock(),
             room: rowElements[1].parse(),
-            personCount: int.tryParse(rowElements[3].parse()),
-            bookedOnBehalfOf: rowElements[4].parse(),
             activity: rowElements[6].parse(),
             user: rowElements[7].parse(),
           ),
