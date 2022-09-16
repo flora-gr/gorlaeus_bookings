@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/app_theme.dart';
@@ -16,7 +14,6 @@ import 'package:gorlaeus_bookings/resources/routes.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   di.init();
-  HttpOverrides.global = MyHttpOverrides();
   runApp(const GorlaeusBookingApp());
 }
 
@@ -80,15 +77,5 @@ class GorlaeusBookingApp extends StatelessWidget {
       settings: settings,
       fullscreenDialog: fullscreenDialog,
     );
-  }
-}
-
-// Temporary until zrs certificate is restored
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
   }
 }
