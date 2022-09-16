@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gorlaeus_bookings/app_theme.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart' as di;
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
@@ -9,11 +12,11 @@ import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
-import 'package:gorlaeus_bookings/resources/styles.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   di.init();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const GorlaeusBookingApp());
 }
 
@@ -24,7 +27,7 @@ class GorlaeusBookingApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Gorlaeus Bookings',
-      theme: _themeData,
+      theme: AppTheme.themeDataLight,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       supportedLocales: const <Locale>[
@@ -35,36 +38,6 @@ class GorlaeusBookingApp extends StatelessWidget {
       onGenerateRoute: _onGenerateRoute,
     );
   }
-
-  static final ThemeData _themeData = ThemeData(
-    colorScheme: ColorScheme.fromSwatch(
-      primarySwatch: Styles.primaryColorSwatch,
-    ).copyWith(
-      secondary: Styles.secondaryColorSwatch,
-    ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        side: const BorderSide().copyWith(
-          color: Styles.outlinedButtonBorderColor,
-        ),
-      ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: Styles.secondaryColorSwatch,
-      ),
-    ),
-    textTheme: const TextTheme().copyWith(
-      headline6: const TextStyle(
-        color: Styles.primaryColorSwatch,
-      ),
-      bodyText2: TextStyle(
-        fontSize: Styles.defaultFontSize,
-        height: Styles.defaultFontHeight,
-      ),
-    ),
-    scaffoldBackgroundColor: Styles.backgroundColor,
-  );
 
   MaterialPageRoute<void> _onGenerateRoute(RouteSettings settings) {
     debugPrint(settings.toString());
@@ -107,5 +80,15 @@ class GorlaeusBookingApp extends StatelessWidget {
       settings: settings,
       fullscreenDialog: fullscreenDialog,
     );
+  }
+}
+
+// Temporary until zrs certificate is restored
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

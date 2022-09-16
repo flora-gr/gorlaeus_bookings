@@ -69,7 +69,8 @@ class BookingRepository {
       if (response.statusCode == 200) {
         return _mapResponse(response);
       }
-    } on Exception {
+    } on Exception catch (e) {
+      debugPrint(e.toString());
       return null;
     }
     return null;
