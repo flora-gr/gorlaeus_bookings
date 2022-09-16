@@ -39,14 +39,20 @@ class BookingOverviewBloc
         final TimeOfDay? timeIfToday = now.isOnSameDateAs(date)
             ? TimeOfDay(hour: now.hour, minute: now.minute)
             : null;
+        final Map<String, Iterable<BookingEntry?>> bookingsPerRoom =
+            (await getIt
+                .get<RoomsOverviewMapper>()
+                .mapBookingEntries(bookings))!;
 
-        yield BookingOverviewReadyState(
-          date: date,
-          timeIfToday: timeIfToday,
-          bookingsPerRoom: (await getIt
-              .get<RoomsOverviewMapper>()
-              .mapBookingEntries(bookings))!,
-        );
+        if (bookingsPerRoom.isEmpty) {
+          yield const BookingOverviewEmptyState();
+        } else {
+          yield BookingOverviewReadyState(
+            date: date,
+            timeIfToday: timeIfToday,
+            bookingsPerRoom: bookingsPerRoom,
+          );
+        }
       } else {
         yield const BookingOverviewErrorState();
       }

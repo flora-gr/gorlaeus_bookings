@@ -41,6 +41,8 @@ class Strings {
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
+  static const String bookingsEmpty = 'No bookings found. '
+      'Consider adjusting your room selection in \'Settings\'.';
   static const String errorFetchingBookings = 'Failed to fetch bookings. '
       'Please check your internet connection.';
   static const String bookingsOn = 'Bookings on';

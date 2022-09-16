@@ -28,6 +28,13 @@ class BookingOverviewReadyState extends BookingOverviewState {
   List<Object?> get props => <Object?>[date, timeIfToday, bookingsPerRoom];
 }
 
+class BookingOverviewEmptyState extends BookingOverviewState {
+  const BookingOverviewEmptyState();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
+
 class BookingOverviewErrorState extends BookingOverviewState {
   const BookingOverviewErrorState();
 

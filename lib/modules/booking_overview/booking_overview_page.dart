@@ -79,10 +79,12 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
             : Center(
                 child: state is BookingOverviewBusyState
                     ? const LoadingWidget()
-                    : const Padding(
+                    : Padding(
                         padding: Styles.padding16,
                         child: Text(
-                          Strings.errorFetchingBookings,
+                          state is BookingOverviewEmptyState
+                              ? Strings.bookingsEmpty
+                              : Strings.errorFetchingBookings,
                           textAlign: TextAlign.center,
                         ),
                       ),
