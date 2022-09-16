@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _openDisclaimerDialog() {
-    final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
+    final TextStyle defaultTextStyle = Theme.of(context).textTheme.subtitle1!;
     final TextStyle linkTextStyle = defaultTextStyle.copyWith(
       color: Styles.secondaryColorSwatch,
       decoration: TextDecoration.underline,
