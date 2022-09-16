@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
@@ -12,12 +13,18 @@ class MockSharedPreferencesRepository extends Mock
     implements SharedPreferencesRepository {}
 
 void main() {
+  late SharedPreferencesRepository sharedPreferencesRepository;
   late RoomsOverviewMapper sut;
 
-  setUp(() {
+  setUpAll(() {
+    GetIt getIt = GetIt.instance;
+    sharedPreferencesRepository = MockSharedPreferencesRepository();
     getIt.registerSingleton<SharedPreferencesRepository>(
-        MockSharedPreferencesRepository());
-    when(() => getIt.get<SharedPreferencesRepository>().getHiddenRooms())
+        sharedPreferencesRepository);
+  });
+
+  setUp(() {
+    when(() => sharedPreferencesRepository.getHiddenRooms())
         .thenAnswer((_) async => <String>[Rooms.room3]);
     sut = RoomsOverviewMapper();
   });
