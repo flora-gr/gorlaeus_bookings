@@ -40,7 +40,7 @@ class GorlaeusBookingApp extends StatelessWidget {
     debugPrint(settings.toString());
     switch (settings.name) {
       case Routes.bookingOverviewPage:
-        return _getRoute(
+        return _getRoute<void>(
           BookingOverviewPage(
             BookingOverviewBloc(),
             settings.arguments as DateTime,
@@ -48,7 +48,7 @@ class GorlaeusBookingApp extends StatelessWidget {
           settings,
         );
       case Routes.settingsPage:
-        return _getRoute(
+        return _getRoute<bool>(
           SettingsPage(
             SettingsBloc(),
           ),
@@ -57,7 +57,7 @@ class GorlaeusBookingApp extends StatelessWidget {
         );
       case Routes.homePage:
       default:
-        return _getRoute(
+        return _getRoute<void>(
           HomePage(
             HomeBloc(),
             GetFreeRoomNowBloc(),
@@ -67,12 +67,12 @@ class GorlaeusBookingApp extends StatelessWidget {
     }
   }
 
-  MaterialPageRoute<void> _getRoute(
+  MaterialPageRoute<void> _getRoute<T>(
     Widget page,
     RouteSettings settings, {
     bool fullscreenDialog = false,
   }) {
-    return MaterialPageRoute<void>(
+    return MaterialPageRoute<T>(
       builder: (_) => page,
       settings: settings,
       fullscreenDialog: fullscreenDialog,

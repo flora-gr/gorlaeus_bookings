@@ -37,12 +37,12 @@ class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
 
 class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
   const GetFreeRoomNowBusyState({
-    List<BookingEntry>? bookings,
     String? freeRoom,
+    TimeBlock? nextBooking,
     bool? isOnlyRoom,
   }) : super(
-          bookings: bookings,
           freeRoom: freeRoom,
+          nextBooking: nextBooking,
           isOnlyRoom: isOnlyRoom,
         );
 

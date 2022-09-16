@@ -20,18 +20,22 @@ class GetFreeRoomNowBloc
     _dateTimeRepository = getIt.get<DateTimeRepository>();
     on<GetFreeRoomNowInitEvent>(
         (GetFreeRoomNowInitEvent event, Emitter<GetFreeRoomNowState> emit) =>
-            emit(_handleGetFreeRoomInitEvent()));
+            emit(_handleInitEvent()));
     on<GetFreeRoomNowSearchEvent>(
         (GetFreeRoomNowSearchEvent event, Emitter<GetFreeRoomNowState> emit) =>
-            emit.forEach(_handleGetFreeRoomNowSearchEvent(),
+            emit.forEach(_handleSearchEvent(),
                 onData: (GetFreeRoomNowState state) => state));
+    on<GetFreeRoomNowSharedPreferencesChangedEvent>(
+        (GetFreeRoomNowSharedPreferencesChangedEvent event,
+                Emitter<GetFreeRoomNowState> emit) =>
+            emit(_handleSharedPreferencesChangedEvent()));
   }
 
   late DateTimeRepository _dateTimeRepository;
 
   final Random _random = Random();
 
-  GetFreeRoomNowState _handleGetFreeRoomInitEvent() {
+  GetFreeRoomNowState _handleInitEvent() {
     if (_dateTimeRepository.getCurrentDateTime().isWeekendDay()) {
       return const GetFreeRoomNowWeekendState();
     } else {
@@ -39,27 +43,29 @@ class GetFreeRoomNowBloc
     }
   }
 
-  Stream<GetFreeRoomNowState> _handleGetFreeRoomNowSearchEvent() async* {
+  Stream<GetFreeRoomNowState> _handleSearchEvent() async* {
     List<BookingEntry>? bookings;
     String? currentFreeRoom;
+    TimeBlock? currentNextBooking;
     bool? currentIsOnlyRoom;
 
     if (state is GetFreeRoomNowReadyState) {
-      final GetFreeRoomNowReadyState readyState =
+      final GetFreeRoomNowReadyState currentState =
           state as GetFreeRoomNowReadyState;
-      bookings = readyState.bookings;
-      currentFreeRoom = readyState.freeRoom;
-      currentIsOnlyRoom = readyState.isOnlyRoom;
+      bookings = currentState.bookings;
+      currentFreeRoom = currentState.freeRoom;
+      currentNextBooking = currentState.nextBooking;
+      currentIsOnlyRoom = currentState.isOnlyRoom;
     }
 
     yield GetFreeRoomNowBusyState(
       freeRoom: currentFreeRoom,
+      nextBooking: currentNextBooking,
       isOnlyRoom: currentIsOnlyRoom,
     );
 
     final DateTime now = _dateTimeRepository.getCurrentDateTime();
 
-    // TODO(fgroothuizen): fix bug where no new search is done when sharedprefs are changed to include more buildings
     if (bookings == null) {
       List<BookingEntry>? bookingsResponse;
       try {
@@ -117,5 +123,20 @@ class GetFreeRoomNowBloc
     } else {
       yield const GetFreeRoomNowErrorState();
     }
+  }
+
+  GetFreeRoomNowState _handleSharedPreferencesChangedEvent() {
+    if (state is GetFreeRoomNowReadyState) {
+      final GetFreeRoomNowReadyState currentState =
+          state as GetFreeRoomNowReadyState;
+      return GetFreeRoomNowReadyState(
+        freeRoom: currentState.freeRoom,
+        nextBooking: currentState.nextBooking,
+        isOnlyRoom: false,
+      );
+    } else if (state is GetFreeRoomNowEmptyState) {
+      return const GetFreeRoomNowReadyState();
+    }
+    return state;
   }
 }

@@ -51,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       _bloc.add(const SettingsSaveEvent());
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(true);
                     },
                     child: const Text(Strings.save),
                   ),

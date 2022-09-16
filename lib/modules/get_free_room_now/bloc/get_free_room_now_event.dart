@@ -17,3 +17,10 @@ class GetFreeRoomNowSearchEvent extends GetFreeRoomNowEvent {
   @override
   List<Object?> get props => <Object?>[];
 }
+
+class GetFreeRoomNowSharedPreferencesChangedEvent extends GetFreeRoomNowEvent {
+  const GetFreeRoomNowSharedPreferencesChangedEvent();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}

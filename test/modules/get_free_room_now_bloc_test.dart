@@ -96,6 +96,8 @@ void main() {
   GetFreeRoomNowReadyState seedState = GetFreeRoomNowReadyState(
     bookings: defaultBookingResponse,
     freeRoom: Rooms.room1,
+    nextBooking: defaultBookingEntry.time,
+    isOnlyRoom: false,
   );
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
@@ -105,7 +107,11 @@ void main() {
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      GetFreeRoomNowBusyState(freeRoom: seedState.freeRoom),
+      GetFreeRoomNowBusyState(
+        freeRoom: seedState.freeRoom,
+        nextBooking: seedState.nextBooking,
+        isOnlyRoom: seedState.isOnlyRoom,
+      ),
       predicate(
         (GetFreeRoomNowReadyState state) =>
             state.bookings == seedState.bookings &&
@@ -141,5 +147,38 @@ void main() {
       const GetFreeRoomNowBusyState(),
       const GetFreeRoomNowEmptyState(),
     ],
+  );
+
+  GetFreeRoomNowReadyState seedStateWithSingleFreeRoom =
+      GetFreeRoomNowReadyState(
+    bookings: defaultBookingResponse,
+    freeRoom: Rooms.room1,
+    isOnlyRoom: true,
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'SharedPreferencesChangedEvent resets bookings in ready state to null and isOnlyRoom to false',
+    build: () => sut,
+    seed: () => seedStateWithSingleFreeRoom,
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSharedPreferencesChangedEvent()),
+    expect: () => <dynamic>[
+      predicate(
+        (GetFreeRoomNowReadyState state) =>
+            state.bookings == null &&
+            state.freeRoom == seedStateWithSingleFreeRoom.freeRoom &&
+            state.nextBooking == seedStateWithSingleFreeRoom.nextBooking &&
+            state.isOnlyRoom == false,
+      ),
+    ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'SharedPreferencesChangedEvent when in empty state emits empty ready state',
+    build: () => sut,
+    seed: () => const GetFreeRoomNowEmptyState(),
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSharedPreferencesChangedEvent()),
+    expect: () => <GetFreeRoomNowState>[const GetFreeRoomNowReadyState()],
   );
 }

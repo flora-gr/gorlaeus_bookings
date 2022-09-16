@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
+import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/get_free_room_now_widget.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
@@ -72,8 +73,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed(Routes.settingsPage),
+                            onPressed: () async {
+                              final bool? hasChangedSettings =
+                                  await Navigator.of(context)
+                                      .pushNamed(Routes.settingsPage);
+                              if (hasChangedSettings == true) {
+                                widget._getFreeRoomNowBloc.add(
+                                    const GetFreeRoomNowSharedPreferencesChangedEvent());
+                              }
+                            },
                             child: const Text(
                               Strings.adjustSettings,
                               style: TextStyle(
