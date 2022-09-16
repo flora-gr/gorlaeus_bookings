@@ -98,6 +98,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             TextSpan(
               text: Strings.roomIsFree2(
                 state.nextBooking?.startTimeString(),
+                isOnlyRoom: state.isOnlyRoom!,
               ),
               style: defaultTextStyle,
             ),

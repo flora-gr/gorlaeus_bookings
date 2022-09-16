@@ -31,8 +31,9 @@ class Strings {
   static const String notAvailableInWeekend = 'Not available on weekends';
   static const String roomIsFree1 = 'Room ';
 
-  static String roomIsFree2(String? endTime) =>
-      ' is available until ${endTime ?? 'end of the day'}.';
+  static String roomIsFree2(String? endTime, {required bool isOnlyRoom}) =>
+      ' is available until ${endTime ?? 'end of the day'}'
+      '${isOnlyRoom ? ' (the only available room within your selection)' : ''}.';
   static const String getFreeRoomFailed = 'Something went wrong. '
       'Please check your internet connection.';
   static const String noRoomFound = 'No available room found. '

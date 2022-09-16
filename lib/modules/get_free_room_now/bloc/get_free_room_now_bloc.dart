@@ -42,16 +42,24 @@ class GetFreeRoomNowBloc
   Stream<GetFreeRoomNowState> _handleGetFreeRoomNowSearchEvent() async* {
     List<BookingEntry>? bookings;
     String? currentFreeRoom;
+    bool? currentIsOnlyRoom;
 
     if (state is GetFreeRoomNowReadyState) {
-      bookings = (state as GetFreeRoomNowReadyState).bookings;
-      currentFreeRoom = (state as GetFreeRoomNowReadyState).freeRoom;
+      final GetFreeRoomNowReadyState readyState =
+          state as GetFreeRoomNowReadyState;
+      bookings = readyState.bookings;
+      currentFreeRoom = readyState.freeRoom;
+      currentIsOnlyRoom = readyState.isOnlyRoom;
     }
 
-    yield GetFreeRoomNowBusyState(freeRoom: currentFreeRoom);
+    yield GetFreeRoomNowBusyState(
+      freeRoom: currentFreeRoom,
+      isOnlyRoom: currentIsOnlyRoom,
+    );
 
     final DateTime now = _dateTimeRepository.getCurrentDateTime();
 
+    // TODO(fgroothuizen): fix bug where no new search is done when sharedprefs are changed to include more buildings
     if (bookings == null) {
       List<BookingEntry>? bookingsResponse;
       try {
@@ -101,6 +109,7 @@ class GetFreeRoomNowBloc
           bookings: bookings,
           freeRoom: freeRoom,
           nextBooking: nextBooking,
+          isOnlyRoom: freeRooms.length == 1,
         );
       } else {
         yield const GetFreeRoomNowEmptyState();

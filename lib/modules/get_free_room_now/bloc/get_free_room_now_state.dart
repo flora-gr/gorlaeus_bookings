@@ -18,21 +18,33 @@ class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
     this.bookings,
     this.freeRoom,
     this.nextBooking,
+    this.isOnlyRoom,
   });
 
   final List<BookingEntry>? bookings;
   final String? freeRoom;
   final TimeBlock? nextBooking;
+  final bool? isOnlyRoom;
 
   @override
-  List<Object?> get props => <Object?>[bookings, freeRoom, nextBooking];
+  List<Object?> get props => <Object?>[
+        bookings,
+        freeRoom,
+        nextBooking,
+        isOnlyRoom,
+      ];
 }
 
 class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
   const GetFreeRoomNowBusyState({
     List<BookingEntry>? bookings,
     String? freeRoom,
-  }) : super(bookings: bookings, freeRoom: freeRoom);
+    bool? isOnlyRoom,
+  }) : super(
+          bookings: bookings,
+          freeRoom: freeRoom,
+          isOnlyRoom: isOnlyRoom,
+        );
 
   @override
   List<Object?> get props => <Object?>[...super.props];
