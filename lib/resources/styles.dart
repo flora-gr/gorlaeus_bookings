@@ -55,6 +55,8 @@ class Styles {
 
   // Other
   static BorderRadius borderRadius = BorderRadius.circular(6);
+  static const BoxConstraints defaultWidthConstraint =
+      BoxConstraints(maxWidth: 600);
   static double defaultFontSize = 14;
   static double defaultFontHeight = 1.3;
 }

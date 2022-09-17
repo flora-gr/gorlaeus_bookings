@@ -148,15 +148,18 @@ class _SettingsPageState extends State<SettingsPage> {
           dialogText: Strings.setEmailNameInfoI,
         ),
       ),
-      Padding(
-        padding: Styles.verticalPadding8,
-        child: TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-          ),
-          initialValue: state.emailName ?? '',
-          onChanged: (String value) => _bloc.add(
-            SettingsEmailNameChangedEvent(emailName: value),
+      ConstrainedBox(
+        constraints: Styles.defaultWidthConstraint,
+        child: Padding(
+          padding: Styles.verticalPadding8,
+          child: TextFormField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            initialValue: state.emailName ?? '',
+            onChanged: (String value) => _bloc.add(
+              SettingsEmailNameChangedEvent(emailName: value),
+            ),
           ),
         ),
       ),
