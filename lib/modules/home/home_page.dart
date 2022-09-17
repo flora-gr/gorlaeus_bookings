@@ -72,32 +72,7 @@ class _HomePageState extends State<HomePage> {
                               widget._getFreeRoomNowBloc,
                             ),
                           ),
-                          TextButton(
-                            onPressed: () async {
-                              final bool? hasChangedSettings =
-                                  await Navigator.of(context)
-                                      .pushNamed(Routes.settingsPage);
-                              if (hasChangedSettings == true) {
-                                widget._getFreeRoomNowBloc.add(
-                                    const GetFreeRoomNowSharedPreferencesChangedEvent());
-                              }
-                            },
-                            child: const Text(
-                              Strings.adjustSettings,
-                              style: TextStyle(
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    color: Styles.secondaryColorSwatch,
-                                    offset: Offset(0, -2),
-                                  ),
-                                ],
-                                color: Colors.transparent,
-                                decoration: TextDecoration.underline,
-                                decorationThickness: 1.5,
-                                decorationColor: Styles.secondaryColorSwatch,
-                              ),
-                            ),
-                          ),
+                          _buildGoToSettingsButton(),
                         ],
                       ],
                     ),
@@ -239,6 +214,34 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildGoToSettingsButton() {
+    return TextButton(
+      onPressed: () async {
+        final bool? hasChangedSettings =
+            await Navigator.of(context).pushNamed(Routes.settingsPage);
+        if (hasChangedSettings == true) {
+          widget._getFreeRoomNowBloc
+              .add(const GetFreeRoomNowSharedPreferencesChangedEvent());
+        }
+      },
+      child: const Text(
+        Strings.adjustSettings,
+        style: TextStyle(
+          shadows: <Shadow>[
+            Shadow(
+              color: Styles.secondaryColorSwatch,
+              offset: Offset(0, -2),
+            ),
+          ],
+          color: Colors.transparent,
+          decoration: TextDecoration.underline,
+          decorationThickness: 1.5,
+          decorationColor: Styles.secondaryColorSwatch,
+        ),
+      ),
     );
   }
 }
