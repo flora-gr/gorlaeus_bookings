@@ -3,13 +3,6 @@ import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
 extension StringExtension on String {
-  static const List<String> _cRooms = <String>[
-    Rooms.room17,
-    Rooms.room18,
-    Rooms.room19,
-    Rooms.room20,
-  ];
-
   TimeBlock? toTimeBlock() {
     if (length == 11) {
       TimeOfDay? startTime = substring(0, 5).toTimeOfDay();
@@ -42,7 +35,7 @@ extension StringExtension on String {
   }
 
   String toRoomName() {
-    if (_cRooms.contains(this)) {
+    if (Rooms.cRooms.contains(this)) {
       return replaceAll('0', 'C');
     } else if (this == Rooms.room13) {
       return 'Atrium*';

@@ -17,7 +17,12 @@ class SharedPreferencesRepository {
 
   Future<List<String>> getHiddenRooms() async {
     return (await _prefs).getStringList(hiddenRoomsKey) ??
-        <String>[Rooms.room13, Rooms.room21, ...Rooms.building3];
+        <String>[
+          Rooms.room13,
+          ...Rooms.cRooms,
+          Rooms.room21,
+          ...Rooms.building3,
+        ];
   }
 
   Future<bool> setEmailName(String name) async {

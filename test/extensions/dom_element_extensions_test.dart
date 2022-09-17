@@ -7,11 +7,11 @@ void main() {
     'parse returns correct String',
     () {
       final dom.Element element = dom.Element.html(
-          '<p>This &nbsp;is the correct String &amp; from theGORL/ inner html of a GORLB/dom element</p>');
+          '<p> This&nbsp;is the correct String&amp;from theGORL/ inner HUYGENS/html of a GORLB/dom element </p>');
 
       expect(
         element.parse(),
-        'This is the correct String & from the inner html of a dom element',
+        'This is the correct String&from the inner html of a dom element',
       );
     },
   );
