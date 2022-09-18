@@ -57,28 +57,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: state is HomeReadyState
-            ? SizedBox(
-                width: double.infinity,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: Styles.defaultPagePadding,
-                    child: Column(
-                      children: <Widget>[
-                        ...<Widget>[
-                          _buildBookingOverviewTile(state),
-                          ItemBox(
-                            title: Strings.getMeAFreeRoom,
-                            child: GetFreeRoomNowWidget(
-                              widget._getFreeRoomNowBloc,
-                            ),
-                          ),
-                          _buildGoToSettingsButton(),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-              )
+            ? _buildReadyBody(state)
             : const Center(
                 child: LoadingWidget(),
               ),
@@ -155,6 +134,31 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       context: context,
+    );
+  }
+
+  Widget _buildReadyBody(HomeReadyState state) {
+    return SizedBox(
+      width: double.infinity,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: Styles.defaultPagePadding,
+          child: Column(
+            children: <Widget>[
+              ...<Widget>[
+                _buildBookingOverviewTile(state),
+                ItemBox(
+                  title: Strings.getMeAFreeRoom,
+                  child: GetFreeRoomNowWidget(
+                    widget._getFreeRoomNowBloc,
+                  ),
+                ),
+                _buildGoToSettingsButton(),
+              ],
+            ],
+          ),
+        ),
+      ),
     );
   }
 

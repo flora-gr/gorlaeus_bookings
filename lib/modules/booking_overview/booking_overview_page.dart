@@ -42,53 +42,61 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
           title: const Text(Strings.bookingOverviewPageTitle),
         ),
         body: state is BookingOverviewReadyState
-            ? Padding(
-                padding: Styles.defaultPagePadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: Styles.verticalPadding8,
-                      child: Text(
-                        '${Strings.bookingsOn} ${state.date.formatted}',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ),
-                    if (state.bookingsPerRoom.keys.contains(Rooms.room13) ||
-                        state.bookingsPerRoom.keys.contains(Rooms.room21))
-                      const Padding(
-                        padding: Styles.verticalPadding8,
-                        child: Text(Strings.notLectureRooms),
-                      ),
-                    Expanded(
-                      child: BookingTable(
-                        state.bookingsPerRoom,
-                        state.timeIfToday,
-                        onEmailButtonClicked: ({
-                          required String time,
-                          required String room,
-                        }) =>
-                            _bloc.add(
-                          BookingOverviewBookRoomEvent(time, room),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
+            ? _buildReadyBody(state)
             : Center(
                 child: state is BookingOverviewBusyState
                     ? const LoadingWidget()
-                    : Padding(
-                        padding: Styles.padding16,
-                        child: Text(
-                          state is BookingOverviewEmptyState
-                              ? Strings.bookingsEmpty
-                              : Strings.errorFetchingBookings,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                    : _buildEmptyOrErrorBody(state),
               ),
+      ),
+    );
+  }
+
+  Widget _buildReadyBody(BookingOverviewReadyState state) {
+    return Padding(
+      padding: Styles.defaultPagePadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: Styles.verticalPadding8,
+            child: Text(
+              '${Strings.bookingsOn} ${state.date.formatted}',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+          ),
+          if (state.bookingsPerRoom.keys.contains(Rooms.room13) ||
+              state.bookingsPerRoom.keys.contains(Rooms.room21))
+            const Padding(
+              padding: Styles.verticalPadding8,
+              child: Text(Strings.notLectureRooms),
+            ),
+          Expanded(
+            child: BookingTable(
+              state.bookingsPerRoom,
+              state.timeIfToday,
+              onEmailButtonClicked: ({
+                required String time,
+                required String room,
+              }) =>
+                  _bloc.add(
+                BookingOverviewBookRoomEvent(time, room),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyOrErrorBody(BookingOverviewState state) {
+    return Padding(
+      padding: Styles.padding16,
+      child: Text(
+        state is BookingOverviewEmptyState
+            ? Strings.bookingsEmpty
+            : Strings.errorFetchingBookings,
+        textAlign: TextAlign.center,
       ),
     );
   }

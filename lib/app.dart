@@ -25,7 +25,7 @@ class GorlaeusBookingApp extends StatelessWidget {
     return MaterialApp(
       title: 'Gorlaeus Bookings',
       theme: AppTheme.themeDataLight,
-      debugShowCheckedModeBanner: false,
+      darkTheme: AppTheme.themeDataDark,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       supportedLocales: const <Locale>[
         Locale('nl', 'NL'),
