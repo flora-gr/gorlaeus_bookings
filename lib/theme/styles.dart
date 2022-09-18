@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Styles {
   Styles._();
 
-  // Colors
+  // Light mode colors
   static const MaterialColor primaryColorSwatch = MaterialColor(
     0xFF001158,
     <int, Color>{
@@ -17,23 +17,6 @@ class Styles {
       700: Color(0xFF000E46),
       800: Color(0xFF000C3E),
       900: Color(0xFF000A35),
-    },
-  );
-
-  // Colors
-  static const MaterialColor primaryColorSwatchDark = MaterialColor(
-    0xFF4D588A,
-    <int, Color>{
-      50: Color(0xFF000A35), // TODO
-      100: Color(0xFF000A35),
-      200: Color(0xFF000C3E),
-      300: Color(0xFF000E46),
-      400: Color(0xFF000F4F),
-      500: Color(0xFF001158),
-      600: Color(0xFF1A2969),
-      700: Color(0xFF334179),
-      800: Color(0xFF4D588A),
-      900: Color(0xFF66709B),
     },
   );
 
@@ -53,8 +36,28 @@ class Styles {
     },
   );
 
+  static Color backgroundColor = Colors.grey.shade100;
+  static Color outlinedButtonBorderColor = primaryColorSwatch[200]!;
+
+  // Dark mode colors
+  static const MaterialColor primaryColorSwatchDark = MaterialColor(
+    0xFFADA9BB,
+    <int, Color>{
+      50: Color(0xFF000A35), // TODO
+      100: Color(0xFF000A35),
+      200: Color(0xFF000C3E),
+      300: Color(0xFF000E46),
+      400: Color(0xFF000F4F),
+      500: Color(0xFF001158),
+      600: Color(0xFF1A2969),
+      700: Color(0xFF334179),
+      800: Color(0xFF4D588A),
+      900: Color(0xFFADA9BB),
+    },
+  );
+
   static const MaterialColor secondaryColorSwatchDark = MaterialColor(
-    0xFFF57D47,
+    0xFFF79A70,
     <int, Color>{
       50: Color(0xFF92421E), // TODO
       100: Color(0xFF92421E),
@@ -63,18 +66,16 @@ class Styles {
       400: Color(0xFFDC632D),
       500: Color(0xFFF46E32),
       600: Color(0xFFF57D47),
-      700: Color(0xFFF68B5b),
+      700: Color(0xFFF68B5B),
       800: Color(0xFFF79A70),
       900: Color(0xFFF8A884),
     },
   );
 
-  static Color backgroundColor = Colors.grey.shade100;
-  static Color outlinedButtonBorderColor = primaryColorSwatch[200]!;
-  static Color freeRoomColor = Colors.lightGreen;
-  static const Color bookedRoomColor = Color(0xFFF08080);
-  static const Color freeRoomEarlierColor = Color(0xFF889973);
-  static const Color bookedRoomEarlierColor = Color(0xFFA38888);
+  static const Color backgroundColorDark = Color(0xFF1A2039);
+  static const Color appBarColorDark = Color(0xFF000723);
+  static Color textColorDark = Colors.grey.shade50;
+  static Color outlinedButtonBorderColorDark = primaryColorSwatchDark[900]!;
 
   // Paddings
   static const EdgeInsetsGeometry defaultPagePadding =

@@ -5,7 +5,7 @@ import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -179,7 +179,7 @@ class _SettingsPageState extends State<SettingsPage> {
         IconButton(
           icon: Icon(
             Icons.info_outline,
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).textTheme.headline6!.color,
           ),
           onPressed: () => showDialog(
             builder: (_) => AlertDialog(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:gorlaeus_bookings/app_theme.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart' as di;
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
@@ -12,6 +11,8 @@ import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
 import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
+import 'package:gorlaeus_bookings/theme/app_theme.dart';
+import 'package:gorlaeus_bookings/theme/table_colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,8 +38,10 @@ class App extends StatelessWidget {
       builder: (_, ThemeMode currentMode, __) {
         return MaterialApp(
           title: 'Gorlaeus Bookings',
-          theme: AppTheme.themeDataLight,
-          darkTheme: AppTheme.themeDataDark,
+          theme: AppTheme.themeDataLight.copyWith(
+              extensions: <ThemeExtension<TableColors>>[TableColorsLight()]),
+          darkTheme: AppTheme.themeDataDark.copyWith(
+              extensions: <ThemeExtension<TableColors>>[TableColorsDark()]),
           themeMode: currentMode,
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
           supportedLocales: const <Locale>[

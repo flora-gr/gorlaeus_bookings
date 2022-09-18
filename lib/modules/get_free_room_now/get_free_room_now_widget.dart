@@ -7,7 +7,7 @@ import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_n
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class GetFreeRoomNowWidget extends StatefulWidget {

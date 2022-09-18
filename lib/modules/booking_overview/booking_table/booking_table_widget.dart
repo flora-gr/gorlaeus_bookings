@@ -30,7 +30,10 @@ class BookingTable extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 child: Padding(
                   padding: const EdgeInsets.all(2),
-                  child: Text(bookingTime.startTimeString()),
+                  child: Text(
+                    bookingTime.startTimeString(),
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
                 ),
               ),
             ),

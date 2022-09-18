@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gorlaeus_bookings/app.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
@@ -13,7 +12,7 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
@@ -54,7 +53,9 @@ class _HomePageState extends State<HomePage> {
           actions: <Widget>[
             IconButton(
               icon: Icon(
-                isLightTheme ? Icons.dark_mode : Icons.light_mode,
+                isLightTheme
+                    ? Icons.dark_mode_outlined
+                    : Icons.light_mode_outlined,
               ),
               onPressed: () {
                 _bloc.add(
@@ -210,7 +211,7 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 4),
         Text(
           '${Strings.dateToCheck} ${state.selectedDate.formatted}',
-          style: Theme.of(context).textTheme.titleSmall,
+          style: Theme.of(context).textTheme.subtitle2,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 12),
