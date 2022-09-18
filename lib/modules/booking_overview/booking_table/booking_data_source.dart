@@ -6,7 +6,8 @@ import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/theme/styles.dart';
+import 'package:gorlaeus_bookings/theme/table_colors.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BookingDataSource extends DataGridSource {
@@ -83,12 +84,13 @@ class BookingDataSource extends DataGridSource {
     required bool isFree,
     required bool isPast,
   }) {
+    final TableColors tableColors = Theme.of(context).extension<TableColors>()!;
     if (isPast) {
       return isFree
-          ? Styles.freeRoomEarlierColor
-          : Styles.bookedRoomEarlierColor;
+          ? tableColors.freeRoomEarlierColor
+          : tableColors.bookedRoomEarlierColor;
     } else {
-      return isFree ? Styles.freeRoomColor : Styles.bookedRoomColor;
+      return isFree ? tableColors.freeRoomColor : tableColors.bookedRoomColor;
     }
   }
 

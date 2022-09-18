@@ -12,7 +12,7 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return BlocBuilder<HomeBloc, HomeState>(
       bloc: _bloc,
       builder: (BuildContext context, HomeState state) => Scaffold(
@@ -51,59 +52,27 @@ class _HomePageState extends State<HomePage> {
           title: const Text(Strings.homePageTitle),
           actions: <Widget>[
             IconButton(
-              onPressed: _openDisclaimerDialog,
+              icon: Icon(
+                isLightTheme
+                    ? Icons.dark_mode_outlined
+                    : Icons.light_mode_outlined,
+              ),
+              onPressed: () {
+                _bloc.add(
+                  HomeThemeModeChangedEvent(
+                    isLightTheme ? ThemeMode.dark : ThemeMode.light,
+                  ),
+                );
+              },
+            ),
+            IconButton(
               icon: const Icon(Icons.info_outline),
+              onPressed: _openDisclaimerDialog,
             ),
           ],
         ),
         body: state is HomeReadyState
-            ? SizedBox(
-                width: double.infinity,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: Styles.defaultPagePadding,
-                    child: Column(
-                      children: <Widget>[
-                        ...<Widget>[
-                          _buildBookingOverviewTile(state),
-                          ItemBox(
-                            title: Strings.getMeAFreeRoom,
-                            child: GetFreeRoomNowWidget(
-                              widget._getFreeRoomNowBloc,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              final bool? hasChangedSettings =
-                                  await Navigator.of(context)
-                                      .pushNamed(Routes.settingsPage);
-                              if (hasChangedSettings == true) {
-                                widget._getFreeRoomNowBloc.add(
-                                    const GetFreeRoomNowSharedPreferencesChangedEvent());
-                              }
-                            },
-                            child: const Text(
-                              Strings.adjustSettings,
-                              style: TextStyle(
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    color: Styles.secondaryColorSwatch,
-                                    offset: Offset(0, -2),
-                                  ),
-                                ],
-                                color: Colors.transparent,
-                                decoration: TextDecoration.underline,
-                                decorationThickness: 1.5,
-                                decorationColor: Styles.secondaryColorSwatch,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-              )
+            ? _buildReadyBody(state)
             : const Center(
                 child: LoadingWidget(),
               ),
@@ -114,7 +83,7 @@ class _HomePageState extends State<HomePage> {
   void _openDisclaimerDialog() {
     final TextStyle defaultTextStyle = Theme.of(context).textTheme.subtitle1!;
     final TextStyle linkTextStyle = defaultTextStyle.copyWith(
-      color: Styles.secondaryColorSwatch,
+      color: Theme.of(context).colorScheme.secondary,
       decoration: TextDecoration.underline,
     );
     showDialog(
@@ -183,6 +152,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildReadyBody(HomeReadyState state) {
+    return SizedBox(
+      width: double.infinity,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: Styles.defaultPagePadding,
+          child: Column(
+            children: <Widget>[
+              ...<Widget>[
+                _buildBookingOverviewTile(state),
+                ItemBox(
+                  title: Strings.getMeAFreeRoom,
+                  child: GetFreeRoomNowWidget(
+                    widget._getFreeRoomNowBloc,
+                  ),
+                ),
+                _buildGoToSettingsButton(),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBookingOverviewTile(HomeReadyState state) {
     return ItemBox(
       title: Strings.bookingOverview,
@@ -217,7 +211,7 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 4),
         Text(
           '${Strings.dateToCheck} ${state.selectedDate.formatted}',
-          style: Theme.of(context).textTheme.titleSmall,
+          style: Theme.of(context).textTheme.subtitle2,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 12),
@@ -239,6 +233,34 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildGoToSettingsButton() {
+    return TextButton(
+      onPressed: () async {
+        final bool? hasChangedSettings =
+            await Navigator.of(context).pushNamed(Routes.settingsPage);
+        if (hasChangedSettings == true) {
+          widget._getFreeRoomNowBloc
+              .add(const GetFreeRoomNowSharedPreferencesChangedEvent());
+        }
+      },
+      child: Text(
+        Strings.adjustSettings,
+        style: TextStyle(
+          shadows: <Shadow>[
+            Shadow(
+              color: Theme.of(context).colorScheme.secondary,
+              offset: const Offset(0, -2),
+            ),
+          ],
+          color: Colors.transparent,
+          decoration: TextDecoration.underline,
+          decorationThickness: 1.5,
+          decorationColor: Theme.of(context).colorScheme.secondary,
+        ),
+      ),
     );
   }
 }

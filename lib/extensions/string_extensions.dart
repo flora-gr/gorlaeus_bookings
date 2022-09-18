@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
@@ -67,5 +68,11 @@ extension StringExtension on String {
 
   String capitalize() {
     return '${this[0].toUpperCase()}${substring(1)}';
+  }
+
+  T? toEnum<T>(List<T> values) {
+    return values.firstWhereOrNull(
+      (T e) => e.toString().toLowerCase().split('.').last == toLowerCase(),
+    ); //return null if not found
   }
 }

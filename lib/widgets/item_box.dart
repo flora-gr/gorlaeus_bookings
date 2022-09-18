@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/theme/styles.dart';
 
 class ItemBox extends StatelessWidget {
   const ItemBox({
@@ -14,13 +14,13 @@ class ItemBox extends StatelessWidget {
   @override
   build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 600),
+      constraints: Styles.defaultWidthConstraint,
       child: Container(
         margin: Styles.padding8,
         padding: Styles.padding16,
         decoration: BoxDecoration(
           border: Border.all(
-            color: Styles.secondaryColorSwatch,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           borderRadius: Styles.borderRadius,
         ),

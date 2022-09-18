@@ -5,7 +5,7 @@ import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
-import 'package:gorlaeus_bookings/resources/styles.dart';
+import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -124,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text(room.toRoomName()),
                 controlAffinity: ListTileControlAffinity.leading,
                 visualDensity: VisualDensity.compact,
-                activeColor: Styles.secondaryColorSwatch,
+                activeColor: Theme.of(context).colorScheme.secondary,
                 value: selectedRooms.contains(room),
                 onChanged: (bool? value) => _bloc.add(
                   SettingsRoomSelectionChangedEvent(
@@ -148,15 +148,18 @@ class _SettingsPageState extends State<SettingsPage> {
           dialogText: Strings.setEmailNameInfoI,
         ),
       ),
-      Padding(
-        padding: Styles.verticalPadding8,
-        child: TextFormField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-          ),
-          initialValue: state.emailName ?? '',
-          onChanged: (String value) => _bloc.add(
-            SettingsEmailNameChangedEvent(emailName: value),
+      ConstrainedBox(
+        constraints: Styles.defaultWidthConstraint,
+        child: Padding(
+          padding: Styles.verticalPadding8,
+          child: TextFormField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            initialValue: state.emailName ?? '',
+            onChanged: (String value) => _bloc.add(
+              SettingsEmailNameChangedEvent(emailName: value),
+            ),
           ),
         ),
       ),
@@ -174,6 +177,10 @@ class _SettingsPageState extends State<SettingsPage> {
           style: Theme.of(context).textTheme.headline6,
         ),
         IconButton(
+          icon: Icon(
+            Icons.info_outline,
+            color: Theme.of(context).textTheme.headline6!.color,
+          ),
           onPressed: () => showDialog(
             builder: (_) => AlertDialog(
               title: Text(title),
@@ -187,11 +194,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             context: context,
           ),
-          icon: const Icon(
-            Icons.info_outline,
-            color: Styles.primaryColorSwatch,
-          ),
-        )
+        ),
       ],
     );
   }
