@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
   void _openDisclaimerDialog() {
     final TextStyle defaultTextStyle = Theme.of(context).textTheme.subtitle1!;
     final TextStyle linkTextStyle = defaultTextStyle.copyWith(
-      color: Styles.secondaryColorSwatch,
+      color: Theme.of(context).colorScheme.secondary,
       decoration: TextDecoration.underline,
     );
     showDialog(
@@ -245,19 +245,19 @@ class _HomePageState extends State<HomePage> {
               .add(const GetFreeRoomNowSharedPreferencesChangedEvent());
         }
       },
-      child: const Text(
+      child: Text(
         Strings.adjustSettings,
         style: TextStyle(
           shadows: <Shadow>[
             Shadow(
-              color: Styles.secondaryColorSwatch,
-              offset: Offset(0, -2),
+              color: Theme.of(context).colorScheme.secondary,
+              offset: const Offset(0, -2),
             ),
           ],
           color: Colors.transparent,
           decoration: TextDecoration.underline,
           decorationThickness: 1.5,
-          decorationColor: Styles.secondaryColorSwatch,
+          decorationColor: Theme.of(context).colorScheme.secondary,
         ),
       ),
     );

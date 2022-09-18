@@ -124,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text(room.toRoomName()),
                 controlAffinity: ListTileControlAffinity.leading,
                 visualDensity: VisualDensity.compact,
-                activeColor: Styles.secondaryColorSwatch,
+                activeColor: Theme.of(context).colorScheme.secondary,
                 value: selectedRooms.contains(room),
                 onChanged: (bool? value) => _bloc.add(
                   SettingsRoomSelectionChangedEvent(
@@ -177,6 +177,10 @@ class _SettingsPageState extends State<SettingsPage> {
           style: Theme.of(context).textTheme.headline6,
         ),
         IconButton(
+          icon: Icon(
+            Icons.info_outline,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           onPressed: () => showDialog(
             builder: (_) => AlertDialog(
               title: Text(title),
@@ -190,11 +194,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             context: context,
           ),
-          icon: const Icon(
-            Icons.info_outline,
-            color: Styles.primaryColorSwatch,
-          ),
-        )
+        ),
       ],
     );
   }

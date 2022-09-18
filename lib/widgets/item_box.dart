@@ -20,7 +20,7 @@ class ItemBox extends StatelessWidget {
         padding: Styles.padding16,
         decoration: BoxDecoration(
           border: Border.all(
-            color: Styles.secondaryColorSwatch,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           borderRadius: Styles.borderRadius,
         ),
