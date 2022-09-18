@@ -7,32 +7,65 @@ class Styles {
   static const MaterialColor primaryColorSwatch = MaterialColor(
     0xFF001158,
     <int, Color>{
-      50: Color(0xFF99a0bc),
-      100: Color(0xFF66709b),
-      200: Color(0xFF4d588a),
+      50: Color(0xFF99A0BC),
+      100: Color(0xFF66709B),
+      200: Color(0xFF4D588A),
       300: Color(0xFF334179),
-      400: Color(0xFF1a2969),
+      400: Color(0xFF1A2969),
       500: Color(0xFF001158),
-      600: Color(0xFF000f4f),
-      700: Color(0xFF000e46),
-      800: Color(0xFF000c3e),
-      900: Color(0xFF000a35),
+      600: Color(0xFF000F4F),
+      700: Color(0xFF000E46),
+      800: Color(0xFF000C3E),
+      900: Color(0xFF000A35),
+    },
+  );
+
+  // Colors
+  static const MaterialColor primaryColorSwatchDark = MaterialColor(
+    0xFF4D588A,
+    <int, Color>{
+      50: Color(0xFF000A35), // TODO
+      100: Color(0xFF000A35),
+      200: Color(0xFF000C3E),
+      300: Color(0xFF000E46),
+      400: Color(0xFF000F4F),
+      500: Color(0xFF001158),
+      600: Color(0xFF1A2969),
+      700: Color(0xFF334179),
+      800: Color(0xFF4D588A),
+      900: Color(0xFF66709B),
     },
   );
 
   static const MaterialColor secondaryColorSwatch = MaterialColor(
-    0xFFf46e32,
+    0xFFF46E32,
     <int, Color>{
-      50: Color(0xFFfbc5ad),
-      100: Color(0xFFf8a884),
-      200: Color(0xFFf79a70),
-      300: Color(0xFFf68b5b),
-      400: Color(0xFFf57d47),
-      500: Color(0xFFf46e32),
-      600: Color(0xFFdc632d),
-      700: Color(0xFFc35828),
-      800: Color(0xFFab4d23),
-      900: Color(0xFF92421e),
+      50: Color(0xFFFBC5AD),
+      100: Color(0xFFF8A884),
+      200: Color(0xFFF79A70),
+      300: Color(0xFFF68B5b),
+      400: Color(0xFFF57D47),
+      500: Color(0xFFF46E32),
+      600: Color(0xFFDC632D),
+      700: Color(0xFFC35828),
+      800: Color(0xFFAB4D23),
+      900: Color(0xFF92421E),
+    },
+  );
+
+  static const MaterialColor secondaryColorSwatchDark = MaterialColor(
+    0xFFF57D47,
+    <int, Color>{
+      50: Color(0xFF92421E), // TODO
+      100: Color(0xFF92421E),
+      200: Color(0xFFAB4D23),
+      300: Color(0xFFC35828),
+      400: Color(0xFFDC632D),
+      500: Color(0xFFF46E32),
+      600: Color(0xFFF57D47),
+      700: Color(0xFFF68B5b),
+      800: Color(0xFFF79A70),
+      900: Color(0xFFF8A884),
     },
   );
 

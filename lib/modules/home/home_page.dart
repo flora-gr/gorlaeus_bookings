@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/app.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLightTheme = Theme.of(context).brightness == Brightness.light;
     return BlocBuilder<HomeBloc, HomeState>(
       bloc: _bloc,
       builder: (BuildContext context, HomeState state) => Scaffold(
@@ -51,8 +53,20 @@ class _HomePageState extends State<HomePage> {
           title: const Text(Strings.homePageTitle),
           actions: <Widget>[
             IconButton(
-              onPressed: _openDisclaimerDialog,
+              icon: Icon(
+                isLightTheme ? Icons.dark_mode : Icons.light_mode,
+              ),
+              onPressed: () {
+                _bloc.add(
+                  HomeThemeModeChangedEvent(
+                    isLightTheme ? ThemeMode.dark : ThemeMode.light,
+                  ),
+                );
+              },
+            ),
+            IconButton(
               icon: const Icon(Icons.info_outline),
+              onPressed: _openDisclaimerDialog,
             ),
           ],
         ),

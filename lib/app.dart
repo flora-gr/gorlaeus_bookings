@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/app_theme.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart' as di;
+import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_overview_page.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
@@ -9,30 +10,45 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_bloc.dart';
 import 'package:gorlaeus_bookings/modules/home/home_page.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/settings_page.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   di.init();
-  runApp(const GorlaeusBookingApp());
+  final ThemeMode themeMode =
+      await getIt.get<SharedPreferencesRepository>().getThemeMode();
+  runApp(App(themeMode));
 }
 
-class GorlaeusBookingApp extends StatelessWidget {
-  const GorlaeusBookingApp({super.key});
+class App extends StatelessWidget {
+  const App(this.themeMode, {super.key});
+
+  final ThemeMode themeMode;
+
+  static final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier<ThemeMode>(ThemeMode.system);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Gorlaeus Bookings',
-      theme: AppTheme.themeDataLight,
-      darkTheme: AppTheme.themeDataDark,
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      supportedLocales: const <Locale>[
-        Locale('nl', 'NL'),
-        Locale('en', 'GB'),
-      ],
-      initialRoute: Routes.homePage,
-      onGenerateRoute: _onGenerateRoute,
+    themeNotifier.value = themeMode;
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return MaterialApp(
+          title: 'Gorlaeus Bookings',
+          theme: AppTheme.themeDataLight,
+          darkTheme: AppTheme.themeDataDark,
+          themeMode: currentMode,
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          supportedLocales: const <Locale>[
+            Locale('nl', 'NL'),
+            Locale('en', 'GB'),
+          ],
+          initialRoute: Routes.homePage,
+          onGenerateRoute: _onGenerateRoute,
+        );
+      },
     );
   }
 

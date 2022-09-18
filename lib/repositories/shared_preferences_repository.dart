@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,6 +12,7 @@ class SharedPreferencesRepository {
 
   static const String hiddenRoomsKey = 'hiddenRooms';
   static const String emailNameKey = 'emailName';
+  static const String themeModeKey = 'themeMode';
 
   Future<bool> setHiddenRooms(List<String> rooms) async {
     return (await _prefs).setStringList(hiddenRoomsKey, rooms);
@@ -31,5 +34,16 @@ class SharedPreferencesRepository {
 
   Future<String?> getEmailName() async {
     return (await _prefs).getString(emailNameKey);
+  }
+
+  Future<bool> setThemeMode(ThemeMode themeMode) async {
+    return (await _prefs).setString(themeModeKey, themeMode.name);
+  }
+
+  Future<ThemeMode> getThemeMode() async {
+    return (await _prefs)
+            .getString(themeModeKey)
+            ?.toEnum<ThemeMode>(ThemeMode.values) ??
+        ThemeMode.system;
   }
 }
