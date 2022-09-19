@@ -73,6 +73,6 @@ extension StringExtension on String {
   T? toEnum<T>(List<T> values) {
     return values.firstWhereOrNull(
       (T e) => e.toString().toLowerCase().split('.').last == toLowerCase(),
-    ); //return null if not found
+    );
   }
 }

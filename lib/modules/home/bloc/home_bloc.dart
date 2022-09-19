@@ -11,8 +11,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeInitEvent>((HomeInitEvent event, Emitter<HomeState> emit) =>
         emit(_handleInitEvent()));
     on<HomeThemeModeChangedEvent>(
-        (HomeThemeModeChangedEvent event, Emitter<HomeState> emit) =>
-            emit(_handleThemeModeChangedEvent(event)));
+        (HomeThemeModeChangedEvent event, Emitter<void> emit) =>
+            _handleThemeModeChangedEvent(event));
     on<HomeDateChangedEvent>((HomeDateChangedEvent event,
             Emitter<HomeState> emit) =>
         emit((state as HomeReadyState).copyWith(newSelectedDate: event.date)));
@@ -28,9 +28,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
   }
 
-  HomeState _handleThemeModeChangedEvent(HomeThemeModeChangedEvent event) {
+  void _handleThemeModeChangedEvent(HomeThemeModeChangedEvent event) {
     App.themeNotifier.value = event.themeMode;
     getIt.get<SharedPreferencesRepository>().setThemeMode(event.themeMode);
-    return state;
   }
 }

@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text(Strings.ok),
+            child: const Text(Strings.okButton),
           ),
         ],
       ),
@@ -161,12 +161,9 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: <Widget>[
               ...<Widget>[
-                _buildBookingOverviewTile(state),
-                ItemBox(
-                  title: Strings.getMeAFreeRoom,
-                  child: GetFreeRoomNowWidget(
-                    widget._getFreeRoomNowBloc,
-                  ),
+                _buildBookingOverviewItem(state),
+                GetFreeRoomNowWidget(
+                  widget._getFreeRoomNowBloc,
                 ),
                 _buildGoToSettingsButton(),
               ],
@@ -177,9 +174,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildBookingOverviewTile(HomeReadyState state) {
+  Widget _buildBookingOverviewItem(HomeReadyState state) {
     return ItemBox(
-      title: Strings.bookingOverview,
+      title: Strings.bookingOverviewItemTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -193,7 +190,7 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const <Widget>[
-                  Text(Strings.goToPageButtonText),
+                  Text(Strings.goToBookingsButton),
                   Icon(Icons.arrow_right)
                 ],
               ),
@@ -229,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                 _bloc.add(HomeDateChangedEvent(newDate));
               }
             },
-            child: const Text(Strings.chooseADate),
+            child: const Text(Strings.dateSelectionButton),
           ),
         ),
       ],

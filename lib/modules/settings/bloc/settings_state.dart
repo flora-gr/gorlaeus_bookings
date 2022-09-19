@@ -13,12 +13,10 @@ class SettingsBusyState extends SettingsState {
 
 class SettingsReadyState extends SettingsState {
   const SettingsReadyState({
-    required this.rooms,
     required this.selectedRooms,
     this.emailName,
   });
 
-  final Iterable<String> rooms;
   final Iterable<String> selectedRooms;
   final String? emailName;
 
@@ -27,12 +25,11 @@ class SettingsReadyState extends SettingsState {
     String? emailName,
   }) {
     return SettingsReadyState(
-      rooms: rooms,
       selectedRooms: selectedRooms ?? this.selectedRooms,
       emailName: emailName ?? this.emailName,
     );
   }
 
   @override
-  List<Object?> get props => <Object?>[rooms, selectedRooms, emailName];
+  List<Object?> get props => <Object?>[selectedRooms, emailName];
 }

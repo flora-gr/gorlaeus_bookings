@@ -151,7 +151,7 @@ void main() {
   );
 
   blocTest<BookingOverviewBloc, BookingOverviewState>(
-    'Book room event launches email',
+    'BookRoomEvent launches email',
     setUp: () {
       when(() => sharedPreferencesRepository.getEmailName())
           .thenAnswer((_) async => 'name');

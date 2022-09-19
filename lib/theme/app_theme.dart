@@ -23,7 +23,7 @@ class AppTheme {
         foregroundColor: Styles.secondaryColorSwatch,
       ),
     ),
-    textTheme: textTheme(
+    textTheme: _textTheme(
       headline6Color: Styles.primaryColorSwatch,
     ),
   );
@@ -46,7 +46,7 @@ class AppTheme {
       secondary: Styles.secondaryColorSwatchDark,
     ),
     dialogTheme: const DialogTheme(
-      backgroundColor: Styles.backgroundColorDark,
+      backgroundColor: Styles.dialogBackgroundColorDark,
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
@@ -61,12 +61,12 @@ class AppTheme {
         foregroundColor: Styles.secondaryColorSwatchDark,
       ),
     ),
-    textTheme: textTheme(
+    textTheme: _textTheme(
       defaultColorOverride: Styles.textColorDark,
     ),
   );
 
-  static TextTheme textTheme({
+  static TextTheme _textTheme({
     Color? headline6Color,
     Color? defaultColorOverride,
   }) =>

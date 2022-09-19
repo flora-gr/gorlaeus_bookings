@@ -75,7 +75,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
             child: BookingTable(
               state.bookingsPerRoom,
               state.timeIfToday,
-              onEmailButtonClicked: ({
+              onEmailButtonTapped: ({
                 required String time,
                 required String room,
               }) =>
@@ -94,8 +94,8 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
       padding: Styles.padding16,
       child: Text(
         state is BookingOverviewEmptyState
-            ? Strings.bookingsEmpty
-            : Strings.errorFetchingBookings,
+            ? Strings.noBookingsFound
+            : Strings.fetchingBookingsFailed,
         textAlign: TextAlign.center,
       ),
     );

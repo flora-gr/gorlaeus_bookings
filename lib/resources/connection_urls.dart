@@ -14,5 +14,5 @@ class ConnectionUrls {
 
   // Email
   static const String serviceDeskEmail = 'servicedesk@science.leidenuniv.nl';
-  static String appDeveloperEmail = 'gorlaeusbookings@gmail.com';
+  static const String appDeveloperEmail = 'gorlaeusbookings@gmail.com';
 }

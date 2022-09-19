@@ -34,7 +34,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     final String? emailName = await _sharedPreferencesRepository.getEmailName();
 
     yield SettingsReadyState(
-      rooms: Rooms.all,
       selectedRooms:
           Rooms.all.whereNot((String room) => hiddenRooms.contains(room)),
       emailName: emailName,
@@ -56,7 +55,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   void _handleSettingsSaveEvent() {
     final SettingsReadyState currentState = (state as SettingsReadyState);
-    final Iterable<String> hiddenRooms = currentState.rooms
+    final Iterable<String> hiddenRooms = Rooms.all
         .whereNot((String room) => currentState.selectedRooms.contains(room));
     _sharedPreferencesRepository.setHiddenRooms(hiddenRooms.toList());
     if (currentState.emailName != null &&

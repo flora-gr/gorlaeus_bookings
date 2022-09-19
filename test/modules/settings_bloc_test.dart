@@ -45,7 +45,6 @@ void main() {
     expect: () => <dynamic>[
       predicate(
         (SettingsReadyState state) =>
-            state.rooms == Rooms.all &&
             state.selectedRooms.length == 1 &&
             state.selectedRooms.single == Rooms.room1,
       ),
@@ -53,7 +52,6 @@ void main() {
   );
 
   const SettingsReadyState seedState = SettingsReadyState(
-    rooms: Rooms.all,
     selectedRooms: <String>[Rooms.room1],
   );
 
@@ -70,7 +68,6 @@ void main() {
     expect: () => <dynamic>[
       predicate(
         (SettingsReadyState state) =>
-            state.rooms == Rooms.all &&
             state.selectedRooms.length == 2 &&
             state.selectedRooms.contains(Rooms.room2),
       ),
@@ -88,8 +85,7 @@ void main() {
       ),
     ),
     expect: () => <dynamic>[
-      predicate((SettingsReadyState state) =>
-          state.rooms == Rooms.all && state.selectedRooms.isEmpty),
+      predicate((SettingsReadyState state) => state.selectedRooms.isEmpty),
     ],
   );
 
