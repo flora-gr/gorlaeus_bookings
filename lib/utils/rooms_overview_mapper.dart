@@ -9,29 +9,25 @@ class RoomsOverviewMapper {
 
   Future<Map<String, Iterable<BookingEntry?>>?> mapBookingEntries(
       List<BookingEntry>? bookings) async {
-    if (bookings != null) {
-      final Map<String, Iterable<BookingEntry?>> bookingsPerRoom =
-          <String, Iterable<BookingEntry?>>{};
-      for (String room in await _getRoomsToShow()) {
-        final Iterable<BookingEntry?> bookingsForRoom =
-            bookings.where((BookingEntry entry) => entry.room == room);
-        bookingsPerRoom[room] = bookingsForRoom;
-      }
-      return bookingsPerRoom;
-    }
-    return null;
+    return _mapForRooms<BookingEntry>(bookings, (BookingEntry? entry) => entry);
   }
 
   Future<Map<String, Iterable<TimeBlock?>>?> mapTimeBlocks(
       List<BookingEntry>? bookings) async {
+    return _mapForRooms<TimeBlock>(
+        bookings, (BookingEntry? entry) => entry?.time);
+  }
+
+  Future<Map<String, Iterable<T?>>?> _mapForRooms<T>(
+      List<BookingEntry>? bookings,
+      T? Function(BookingEntry? entry) mapper) async {
     if (bookings != null) {
-      final Map<String, Iterable<TimeBlock?>> timeBlocksPerRoom =
-          <String, Iterable<TimeBlock?>>{};
+      final Map<String, Iterable<T?>> timeBlocksPerRoom =
+          <String, Iterable<T?>>{};
       for (String room in await _getRoomsToShow()) {
         final Iterable<BookingEntry?> bookingsForRoom =
             bookings.where((BookingEntry entry) => entry.room == room);
-        timeBlocksPerRoom[room] =
-            bookingsForRoom.map((BookingEntry? entry) => entry?.time);
+        timeBlocksPerRoom[room] = bookingsForRoom.map(mapper);
       }
       return timeBlocksPerRoom;
     }
