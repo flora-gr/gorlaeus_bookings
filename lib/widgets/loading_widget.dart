@@ -28,8 +28,8 @@ class ButtonLoadingWidget extends StatelessWidget {
         height: 20,
         width: 20,
         child: showLoading
-            ? const CircularProgressIndicator(
-                color: Colors.white,
+            ? CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.onPrimary,
                 strokeWidth: 2,
               )
             : null,
