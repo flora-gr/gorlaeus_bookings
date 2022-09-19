@@ -4,6 +4,7 @@ import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
+import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
@@ -81,10 +82,10 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Iterable<Widget> _buildRoomSelectionSection(SettingsReadyState state) {
-    final int halfRoomCount = (state.rooms.length / 2).floor() + 1;
-    final Iterable<String> firstHalfOfRooms = state.rooms.take(halfRoomCount);
+    final int halfRoomCount = (Rooms.all.length / 2).floor() + 1;
+    final Iterable<String> firstHalfOfRooms = Rooms.all.take(halfRoomCount);
     final Iterable<String> secondHalfOfRooms =
-        state.rooms.toList().getRange(halfRoomCount, state.rooms.length);
+        Rooms.all.toList().getRange(halfRoomCount, Rooms.all.length);
     return <Widget>[
       _buildHeaderWithInfoI(
         title: Strings.selectRoomsTitle,

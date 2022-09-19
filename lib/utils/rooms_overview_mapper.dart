@@ -22,14 +22,14 @@ class RoomsOverviewMapper {
       List<BookingEntry>? bookings,
       T? Function(BookingEntry? entry) mapper) async {
     if (bookings != null) {
-      final Map<String, Iterable<T?>> timeBlocksPerRoom =
+      final Map<String, Iterable<T?>> iterableOfTPerRoom =
           <String, Iterable<T?>>{};
       for (String room in await _getRoomsToShow()) {
         final Iterable<BookingEntry?> bookingsForRoom =
             bookings.where((BookingEntry entry) => entry.room == room);
-        timeBlocksPerRoom[room] = bookingsForRoom.map(mapper);
+        iterableOfTPerRoom[room] = bookingsForRoom.map(mapper);
       }
-      return timeBlocksPerRoom;
+      return iterableOfTPerRoom;
     }
     return null;
   }
