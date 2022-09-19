@@ -5,11 +5,11 @@ class Strings {
   static const String homePageTitle = 'Gorlaeus Bookings';
   static const String adjustSettings = 'Adjust settings';
 
-  // Booking overview tile
-  static const String bookingOverview = 'Booking overview';
+  // Booking overview item
+  static const String bookingOverviewItemTitle = 'Booking overview';
   static const String dateToCheck = 'Date to check:';
-  static const String chooseADate = 'Choose a different date';
-  static const String goToPageButtonText = 'Check bookings';
+  static const String dateSelectionButton = 'Choose a different date';
+  static const String goToBookingsButton = 'Check bookings';
 
   // Disclaimer dialog
   static const String disclaimerDialogTitle = 'Disclaimer';
@@ -25,10 +25,11 @@ class Strings {
   static const String disclaimerDialogText7 =
       '.\n\nThanks for using Gorlaeus Bookings!';
 
-  // Get me a free room tile
-  static const String getMeAFreeRoom = 'Find an available room now';
-  static const String search = 'Search';
-  static const String notAvailableInWeekend = 'Not available on weekends';
+  // Get free room item
+  static const String getFreeRoomItemTitle = 'Find an available room now';
+  static const String searchButton = 'Search';
+  static const String searchAgainButton = 'Search again';
+  static const String notAvailableInWeekendButton = 'Not available on weekends';
   static const String roomIsFree1 = 'Room ';
 
   static String roomIsFree2(String? endTime, {required bool isOnlyRoom}) =>
@@ -36,24 +37,22 @@ class Strings {
       '${isOnlyRoom ? ' (the only available room within your selection)' : ''}.';
   static const String getFreeRoomFailed = 'Something went wrong. '
       'Please check your internet connection.';
-  static const String noRoomFound = 'No available room found. '
+  static const String noFreeRoomFound = 'No available room found. '
       'Consider adjusting your room selection in \'Settings\'.';
-  static const String tryAgain = 'Search again';
 
   // Booking overview page
   static const String bookingOverviewPageTitle = 'Bookings';
-  static const String bookingsEmpty = 'No bookings found. '
+  static const String noBookingsFound = 'No bookings found. '
       'Consider adjusting your room selection in \'Settings\'.';
-  static const String errorFetchingBookings = 'Failed to fetch bookings. '
+  static const String fetchingBookingsFailed = 'Failed to fetch bookings. '
       'Please check your internet connection.';
   static const String bookingsOn = 'Bookings on';
-  static const String noBookings = 'No bookings found for this day.';
-  static const String today = 'today';
   static const String notLectureRoom = '\n*Not a lecture room';
 
-  static String onDay(String day) => 'on $day';
-
   static String bookRoomEmailSubject(String room) => 'Book $room';
+  static const String today = 'today';
+
+  static String onDay(String day) => 'on $day';
 
   static String bookRoomEmailBody(
           String room, String dateString, String time, String? emailName) =>
@@ -62,18 +61,18 @@ class Strings {
       'Thanks in advance'
       '${emailName != null && emailName.trim().isNotEmpty ? ',\n$emailName' : '\n'}';
 
-  // Booking table
-  static const String roomFreeDialogHeader = 'This room is available';
+  // Booking dialog
+  static const String roomFreeDialogTitle = 'This room is available';
 
   static String roomFreeDialogText(String room, String time) =>
       'Do you want to book $room at $time?';
-  static const String yesBookRoom = 'Yes, send email';
-  static const String cancel = 'Cancel';
-  static const String roomFreeInPastDialogHeader = 'This was earlier today';
+  static const String yesBookRoomButton = 'Yes, send email';
+  static const String cancelButton = 'Cancel';
+  static const String roomFreeInPastDialogTitle = 'This was earlier today';
   static const String roomFreeInPastDialogText =
       'Please select a different time.';
 
-  static const String roomBookedDialogHeader = 'Booked';
+  static const String roomBookedDialogTitle = 'Booked';
 
   static String roomBookedDialogText(String room, bool isPast, String? user,
           String? activity, String timeBlock) =>
@@ -84,17 +83,17 @@ class Strings {
 
   // Settings page
   static const String settingsPageTitle = 'Settings';
-  static const String selectRooms = 'Select rooms';
+  static const String selectRoomsTitle = 'Select rooms';
   static const String selectRoomsInfoI =
       'Selected rooms will be shown in the \'Booking overview\' '
       'and will be suggested in \'Find an available room now\'.';
-  static const String save = 'Save changes';
-  static const String setEmailName = 'Email signature';
+  static const String setEmailNameTitle = 'Email signature';
   static const String setEmailNameInfoI =
       'Enter the name you want to use when booking a room on the \'Booking overview\'.';
+  static const String saveButton = 'Save changes';
 
   // Shared
-  static const String ok = 'OK';
+  static const String okButton = 'OK';
   static const String notLectureRooms =
       '*Indicated locations are not lecture rooms';
 }

@@ -74,11 +74,11 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
 
   String _getButtonText(GetFreeRoomNowState state) {
     return state is GetFreeRoomNowWeekendState
-        ? Strings.notAvailableInWeekend
+        ? Strings.notAvailableInWeekendButton
         : state is GetFreeRoomNowErrorState ||
                 state is GetFreeRoomNowReadyState && state.freeRoom != null
-            ? Strings.tryAgain
-            : Strings.search;
+            ? Strings.searchAgainButton
+            : Strings.searchButton;
   }
 
   Widget? _getDataFetchedText(GetFreeRoomNowState state) {
@@ -112,7 +112,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
         ),
       );
     } else if (state is GetFreeRoomNowEmptyState) {
-      return const Text(Strings.noRoomFound);
+      return const Text(Strings.noFreeRoomFound);
     } else if (state is GetFreeRoomNowErrorState) {
       return const Text(Strings.getFreeRoomFailed);
     }

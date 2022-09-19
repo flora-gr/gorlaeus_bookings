@@ -53,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       _bloc.add(const SettingsSaveEvent());
                       Navigator.of(context).pop(true);
                     },
-                    child: const Text(Strings.save),
+                    child: const Text(Strings.saveButton),
                   ),
                 ),
               ],
@@ -87,7 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
         state.rooms.toList().getRange(halfRoomCount, state.rooms.length);
     return <Widget>[
       _buildHeaderWithInfoI(
-        title: Strings.selectRooms,
+        title: Strings.selectRoomsTitle,
         dialogText: Strings.selectRoomsInfoI,
       ),
       Padding(
@@ -102,8 +102,10 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             const Padding(
-              padding: Styles.verticalPadding8,
-              child: Text(Strings.notLectureRooms),
+              padding: Styles.padding8,
+              child: Text(
+                Strings.notLectureRooms,
+              ),
             ),
           ],
         ),
@@ -144,7 +146,7 @@ class _SettingsPageState extends State<SettingsPage> {
       Padding(
         padding: Styles.topPadding12,
         child: _buildHeaderWithInfoI(
-          title: Strings.setEmailName,
+          title: Strings.setEmailNameTitle,
           dialogText: Strings.setEmailNameInfoI,
         ),
       ),
@@ -188,7 +190,7 @@ class _SettingsPageState extends State<SettingsPage> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text(Strings.ok),
+                  child: const Text(Strings.okButton),
                 ),
               ],
             ),

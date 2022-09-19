@@ -14,7 +14,7 @@ class BookingDataSource extends DataGridSource {
   BookingDataSource(
     this.bookingsPerRoom,
     this.timeIfToday, {
-    required this.onEmailButtonClicked,
+    required this.onEmailButtonTapped,
     required this.context,
   }) {
     _bookingData = bookingsPerRoom.keys
@@ -36,7 +36,7 @@ class BookingDataSource extends DataGridSource {
   final Map<String, Iterable<BookingEntry?>> bookingsPerRoom;
   final TimeOfDay? timeIfToday;
   final void Function({required String time, required String room})
-      onEmailButtonClicked;
+      onEmailButtonTapped;
   final BuildContext context;
 
   List<DataGridRow> _bookingData = <DataGridRow>[];
@@ -106,9 +106,9 @@ class BookingDataSource extends DataGridSource {
         title: Text(
           isFree
               ? isPast
-                  ? Strings.roomFreeInPastDialogHeader
-                  : Strings.roomFreeDialogHeader
-              : Strings.roomBookedDialogHeader,
+                  ? Strings.roomFreeInPastDialogTitle
+                  : Strings.roomFreeDialogTitle
+              : Strings.roomBookedDialogTitle,
         ),
         content: Text(
           isFree
@@ -127,19 +127,19 @@ class BookingDataSource extends DataGridSource {
           if (!isPast && isFree) ...<Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text(Strings.cancel),
+              child: const Text(Strings.cancelButton),
             ),
             TextButton(
               onPressed: () {
-                onEmailButtonClicked(time: time, room: room);
+                onEmailButtonTapped(time: time, room: room);
                 Navigator.of(context).pop();
               },
-              child: const Text(Strings.yesBookRoom),
+              child: const Text(Strings.yesBookRoomButton),
             ),
           ] else
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text(Strings.ok),
+              child: const Text(Strings.okButton),
             ),
         ],
       ),
