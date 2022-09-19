@@ -43,7 +43,7 @@ class Styles {
   static const MaterialColor primaryColorSwatchDark = MaterialColor(
     0xFFADA9BB,
     <int, Color>{
-      50: Color(0xFF000A35), // TODO
+      50: Color(0xFF00092C),
       100: Color(0xFF000A35),
       200: Color(0xFF000C3E),
       300: Color(0xFF000E46),
@@ -59,7 +59,7 @@ class Styles {
   static const MaterialColor secondaryColorSwatchDark = MaterialColor(
     0xFFF79A70,
     <int, Color>{
-      50: Color(0xFF92421E), // TODO
+      50: Color(0xFF7A3719),
       100: Color(0xFF92421E),
       200: Color(0xFFAB4D23),
       300: Color(0xFFC35828),
