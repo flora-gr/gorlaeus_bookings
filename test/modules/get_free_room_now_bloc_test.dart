@@ -79,7 +79,7 @@ void main() {
   });
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-    'FetchGetFreeRoomNowSearchEventing fetches data and emits ready state with bookings and freeRoom',
+    'GetFreeRoomNowSearchEvent fetches data and emits ready state with bookings and freeRoom',
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),

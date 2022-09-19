@@ -8,6 +8,7 @@ import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_n
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
+import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
 
 class GetFreeRoomNowWidget extends StatefulWidget {
@@ -37,35 +38,38 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
       bloc: _bloc,
       builder: (BuildContext context, GetFreeRoomNowState state) {
         final Widget? dataFetchedText = _getDataFetchedText(state);
-        return AnimatedSize(
-          duration: const Duration(milliseconds: 200),
-          alignment: Alignment.topCenter,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: state is GetFreeRoomNowWeekendState
-                    ? null
-                    : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: Styles.leftPadding12,
-                      child: Text(_getButtonText(state)),
-                    ),
-                    ButtonLoadingWidget(
-                      showLoading: state is GetFreeRoomNowBusyState,
-                    ),
-                  ],
+        return ItemBox(
+          title: Strings.getFreeRoomItemTitle,
+          child: AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            alignment: Alignment.topCenter,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: state is GetFreeRoomNowWeekendState
+                      ? null
+                      : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: Styles.leftPadding12,
+                        child: Text(_getButtonText(state)),
+                      ),
+                      ButtonLoadingWidget(
+                        showLoading: state is GetFreeRoomNowBusyState,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              if (dataFetchedText != null)
-                Padding(
-                  padding: Styles.topPadding12,
-                  child: dataFetchedText,
-                )
-            ],
+                if (dataFetchedText != null)
+                  Padding(
+                    padding: Styles.topPadding12,
+                    child: dataFetchedText,
+                  )
+              ],
+            ),
           ),
         );
       },

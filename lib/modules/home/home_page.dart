@@ -162,11 +162,8 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               ...<Widget>[
                 _buildBookingOverviewItem(state),
-                ItemBox(
-                  title: Strings.getFreeRoomItemTitle,
-                  child: GetFreeRoomNowWidget(
-                    widget._getFreeRoomNowBloc,
-                  ),
+                GetFreeRoomNowWidget(
+                  widget._getFreeRoomNowBloc,
                 ),
                 _buildGoToSettingsButton(),
               ],
