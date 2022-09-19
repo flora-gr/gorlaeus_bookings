@@ -46,7 +46,7 @@ class AppTheme {
       secondary: Styles.secondaryColorSwatchDark,
     ),
     dialogTheme: const DialogTheme(
-      backgroundColor: Styles.backgroundColorDark,
+      backgroundColor: Styles.dialogBackgroundColorDark,
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(

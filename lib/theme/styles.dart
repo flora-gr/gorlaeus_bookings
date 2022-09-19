@@ -73,6 +73,7 @@ class Styles {
   );
 
   static const Color backgroundColorDark = Color(0xFF1A2039);
+  static const Color dialogBackgroundColorDark = Color(0xFF1A2035);
   static const Color appBarColorDark = Color(0xFF000723);
   static Color textColorDark = Colors.grey.shade50;
   static Color outlinedButtonBorderColorDark = primaryColorSwatchDark[900]!;
