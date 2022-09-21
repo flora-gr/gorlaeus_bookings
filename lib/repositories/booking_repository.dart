@@ -24,11 +24,11 @@ class BookingRepository {
 
     final List<Future<List<BookingEntry>?>> bookingTasks =
         <Future<List<BookingEntry>?>>[
-      if (!Rooms.building1.every((String room) => hiddenRooms.contains(room)))
+      if (Rooms.building1.any((String room) => !hiddenRooms.contains(room)))
         _getBookings(date, _building1),
-      if (!Rooms.building2.every((String room) => hiddenRooms.contains(room)))
+      if (Rooms.building2.any((String room) => !hiddenRooms.contains(room)))
         _getBookings(date, _building2),
-      if (!Rooms.building3.every((String room) => hiddenRooms.contains(room)))
+      if (Rooms.building3.any((String room) => !hiddenRooms.contains(room)))
         _getBookings(date, _building3)
     ];
 
@@ -44,7 +44,8 @@ class BookingRepository {
         !bookings.any((Iterable<BookingEntry>? bookingsForBuilding) =>
             bookingsForBuilding == null)) {
       return bookings
-          .expand<BookingEntry>((Iterable<BookingEntry>? booking) => booking!)
+          .expand<BookingEntry>((Iterable<BookingEntry>? bookingsForBuilding) =>
+              bookingsForBuilding!)
           .toList();
     } else {
       throw Exception('Failed to fetch data');
