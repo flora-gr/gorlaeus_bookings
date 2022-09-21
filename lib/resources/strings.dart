@@ -3,7 +3,7 @@ class Strings {
 
   // Home page
   static const String homePageTitle = 'Gorlaeus Bookings';
-  static const String adjustSettings = 'Adjust settings';
+  static const String adjustSettingsButton = 'Adjust search settings';
 
   // Booking overview item
   static const String bookingOverviewItemTitle = 'Booking overview';

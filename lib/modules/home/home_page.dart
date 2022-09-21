@@ -234,28 +234,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildGoToSettingsButton() {
-    return TextButton(
-      onPressed: () async {
-        final bool? hasChangedSettings =
-            await Navigator.of(context).pushNamed(Routes.settingsPage);
-        if (hasChangedSettings == true) {
-          widget._getFreeRoomNowBloc
-              .add(const GetFreeRoomNowSharedPreferencesChangedEvent());
-        }
-      },
-      child: Text(
-        Strings.adjustSettings,
-        style: TextStyle(
-          shadows: <Shadow>[
-            Shadow(
-              color: Theme.of(context).colorScheme.secondary,
-              offset: const Offset(0, -2),
+    return Padding(
+      padding: Styles.padding8,
+      child: TextButton(
+        onPressed: () async {
+          final bool? hasChangedSettings =
+              await Navigator.of(context).pushNamed(Routes.settingsPage);
+          if (hasChangedSettings == true) {
+            widget._getFreeRoomNowBloc
+                .add(const GetFreeRoomNowSharedPreferencesChangedEvent());
+          }
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(Icons.check_box_outlined),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                Strings.adjustSettingsButton,
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
             ),
           ],
-          color: Colors.transparent,
-          decoration: TextDecoration.underline,
-          decorationThickness: 1.5,
-          decorationColor: Theme.of(context).colorScheme.secondary,
         ),
       ),
     );
