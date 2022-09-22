@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
-extension StringExtension on String {
+extension StringExtensions on String {
   TimeBlock? toTimeBlock() {
     if (length == 11) {
       TimeOfDay? startTime = substring(0, 5).toTimeOfDay();
