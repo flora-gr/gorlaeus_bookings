@@ -74,12 +74,41 @@ class Strings {
 
   static const String roomBookedDialogTitle = 'Booked';
 
-  static String roomBookedDialogText(String room, bool isPast, String? user,
-          String? activity, String timeBlock) =>
+  static String roomBookedDialogText({
+    required String room,
+    required bool isPast,
+    required String? user,
+    required String? activity,
+    required String timeBlock,
+    String? additionalBookings,
+  }) =>
       '$room ${isPast ? 'was' : 'is'} booked'
+      '${_bookingSpecifications(
+        user: user,
+        activity: activity,
+        timeBlock: timeBlock,
+      )}'
+      '${additionalBookings ?? ''}.';
+
+  static String additionalBookingDialogText({
+    required String? user,
+    required String? activity,
+    required String timeBlock,
+  }) =>
+      ', and${_bookingSpecifications(
+        user: user,
+        activity: activity,
+        timeBlock: timeBlock,
+      )}';
+
+  static String _bookingSpecifications({
+    required String? user,
+    required String? activity,
+    required String timeBlock,
+  }) =>
       '${user?.isNotEmpty == true ? ' by $user,' : ''}'
       '${activity?.isNotEmpty == true ? ' for "$activity",' : ''}'
-      ' from $timeBlock.';
+      ' from $timeBlock';
 
   // Settings page
   static const String settingsPageTitle = 'Settings';

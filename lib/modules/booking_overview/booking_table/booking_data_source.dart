@@ -53,16 +53,16 @@ class BookingDataSource extends DataGridSource {
           final TimeBlock bookingTime = BookingTimes.all.singleWhere(
               (TimeBlock bookingTime) =>
                   bookingTime.startTimeString() == cell.columnName);
-          final BookingEntry? booking = bookingsPerRoom[room]!
-              .singleWhereOrNull((BookingEntry? booking) =>
+          final Iterable<BookingEntry?> bookings = bookingsPerRoom[room]!.where(
+              (BookingEntry? booking) =>
                   booking?.time?.overlapsWith(bookingTime) == true);
-          final bool isFree = booking == null;
+          final bool isFree = bookings.isEmpty;
           final bool isPast = timeIfToday != null &&
               TimeBlock(startTime: timeIfToday!, endTime: timeIfToday!)
                   .isAfter(bookingTime);
           return InkWell(
             onTap: () => _showBookingDialog(
-              booking: booking,
+              bookings: bookings,
               room: room.toLongRoomName(),
               time: cell.columnName,
               isFree: isFree,
@@ -95,7 +95,7 @@ class BookingDataSource extends DataGridSource {
   }
 
   void _showBookingDialog({
-    required BookingEntry? booking,
+    required Iterable<BookingEntry?> bookings,
     required String room,
     required String time,
     required bool isFree,
@@ -115,12 +115,10 @@ class BookingDataSource extends DataGridSource {
               ? isPast
                   ? Strings.roomFreeInPastDialogText
                   : Strings.roomFreeDialogText(room, time)
-              : Strings.roomBookedDialogText(
-                  room.capitalize(),
-                  isPast,
-                  booking!.user,
-                  booking.activity,
-                  booking.time!.asString(),
+              : _getRoomBookedText(
+                  room: room,
+                  isPast: isPast,
+                  bookings: bookings,
                 ),
         ),
         actions: <Widget>[
@@ -144,6 +142,37 @@ class BookingDataSource extends DataGridSource {
         ],
       ),
       context: context,
+    );
+  }
+
+  String _getRoomBookedText({
+    required String room,
+    required bool isPast,
+    required Iterable<BookingEntry?> bookings,
+  }) {
+    final List<BookingEntry?> uniqueBookings = bookings.toSet().toList();
+    String? additionalBookings;
+    if (uniqueBookings.length > 1) {
+      additionalBookings = '';
+      uniqueBookings.forEachIndexed((int i, BookingEntry? booking) {
+        if (i != 0) {
+          String additionalBooking = Strings.additionalBookingDialogText(
+            user: booking!.user,
+            activity: booking.activity,
+            timeBlock: booking.time!.asString(),
+          );
+          additionalBookings = additionalBookings! + additionalBooking;
+        }
+      });
+    }
+
+    return Strings.roomBookedDialogText(
+      room: room.capitalize(),
+      isPast: isPast,
+      user: uniqueBookings.first!.user,
+      activity: uniqueBookings.first!.activity,
+      timeBlock: uniqueBookings.first!.time!.asString(),
+      additionalBookings: additionalBookings,
     );
   }
 }
