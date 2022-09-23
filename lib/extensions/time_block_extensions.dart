@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/extensions/time_of_day_extensions.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 
