@@ -15,7 +15,8 @@ class Strings {
   static const String disclaimerDialogTitle = 'Disclaimer';
   static const String disclaimerDialogText1 = 'This app uses the ';
   static const String disclaimerDialogText2 = 'https://zrs.leidenuniv.nl';
-  static const String disclaimerDialogText3 = ' website to fetch data. '
+  static const String disclaimerDialogText3 =
+      ' website to fetch data but is not officially endorsed by Leiden University. '
       'It is a hobby project and although all data is presented in good faith, it may contain errors. '
       'Usage of the booking system via this app is at your own risk.\n\n'
       'Feedback such as bug reports and feature requests can be ';
