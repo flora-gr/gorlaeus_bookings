@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:gorlaeus_bookings/extensions/time_of_day_extensions.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 
-extension TimeBlockExtension on TimeBlock {
+extension TimeBlockExtensions on TimeBlock {
   String asString() {
     return '${startTimeString()}'
         ' - '
@@ -17,10 +17,10 @@ extension TimeBlockExtension on TimeBlock {
   }
 
   bool overlapsWith(TimeBlock bookingTime) {
-    final int startTimeMinutes = _getMinutes(startTime);
-    final int endTimeMinutes = _getMinutes(endTime);
-    final int bookingStartTimeMinutes = _getMinutes(bookingTime.startTime);
-    final int bookingEndTimeMinutes = _getMinutes(bookingTime.endTime);
+    final int startTimeMinutes = startTime.asMinutes();
+    final int endTimeMinutes = endTime.asMinutes();
+    final int bookingStartTimeMinutes = bookingTime.startTime.asMinutes();
+    final int bookingEndTimeMinutes = bookingTime.endTime.asMinutes();
     return startTimeMinutes >= bookingStartTimeMinutes &&
             startTimeMinutes < bookingEndTimeMinutes ||
         endTimeMinutes > bookingStartTimeMinutes &&
@@ -30,11 +30,7 @@ extension TimeBlockExtension on TimeBlock {
   }
 
   bool isAfter(TimeBlock bookingTime) {
-    return _getMinutes(startTime) >= _getMinutes(bookingTime.endTime);
-  }
-
-  int _getMinutes(TimeOfDay time) {
-    return time.hour * 60 + time.minute;
+    return startTime.asMinutes() >= bookingTime.endTime.asMinutes();
   }
 }
 

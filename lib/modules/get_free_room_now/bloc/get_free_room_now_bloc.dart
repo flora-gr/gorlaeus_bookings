@@ -6,12 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
+import 'package:gorlaeus_bookings/extensions/time_of_day_extensions.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 
 class GetFreeRoomNowBloc
@@ -84,22 +86,11 @@ class GetFreeRoomNowBloc
         await getIt.get<RoomsOverviewMapper>().mapTimeBlocks(bookings);
 
     if (timeBlocksPerRoom != null) {
-      final TimeBlock timeBlockFromNowUntilHourFromNow = TimeBlock(
-        startTime: TimeOfDay(
-          hour: now.hour,
-          minute: now.minute,
-        ),
-        endTime: TimeOfDay(
-          hour: now.hour + 1,
-          minute: now.minute,
-        ),
-      );
-
+      final TimeBlock timeBlockToCheck = _getTimeBlockToCheck(now);
       final List<String> freeRooms = timeBlocksPerRoom.keys
           .where((String key) =>
               timeBlocksPerRoom[key]?.any((TimeBlock? timeBlock) =>
-                  timeBlock?.overlapsWith(timeBlockFromNowUntilHourFromNow) ==
-                  true) ==
+                  timeBlock?.overlapsWith(timeBlockToCheck) == true) ==
               false)
           .toList();
 
@@ -109,7 +100,7 @@ class GetFreeRoomNowBloc
             timeBlocksPerRoom[freeRoom]!.sort();
         final TimeBlock? nextBooking = bookingsForFreeRooms.firstWhereOrNull(
             ((TimeBlock? bookingTime) =>
-                bookingTime!.isAfter(timeBlockFromNowUntilHourFromNow)));
+                bookingTime!.isAfter(timeBlockToCheck)));
 
         yield GetFreeRoomNowReadyState(
           bookings: bookings,
@@ -123,6 +114,23 @@ class GetFreeRoomNowBloc
     } else {
       yield const GetFreeRoomNowErrorState();
     }
+  }
+
+  TimeBlock _getTimeBlockToCheck(DateTime now) {
+    final TimeOfDay hourFromNow = TimeOfDay(
+      hour: now.hour + 1,
+      minute: now.minute,
+    );
+    final TimeOfDay endTime = BookingTimes.time1.startTime.isAfter(hourFromNow)
+        ? BookingTimes.time1.endTime
+        : hourFromNow;
+    return TimeBlock(
+      startTime: TimeOfDay(
+        hour: now.hour,
+        minute: now.minute,
+      ),
+      endTime: endTime,
+    );
   }
 
   GetFreeRoomNowState _handleSharedPreferencesChangedEvent() {

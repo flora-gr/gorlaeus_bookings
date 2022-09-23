@@ -15,7 +15,8 @@ class Strings {
   static const String disclaimerDialogTitle = 'Disclaimer';
   static const String disclaimerDialogText1 = 'This app uses the ';
   static const String disclaimerDialogText2 = 'https://zrs.leidenuniv.nl';
-  static const String disclaimerDialogText3 = ' website to fetch data. '
+  static const String disclaimerDialogText3 =
+      ' website to fetch data but is not officially endorsed by Leiden University. '
       'It is a hobby project and although all data is presented in good faith, it may contain errors. '
       'Usage of the booking system via this app is at your own risk.\n\n'
       'Feedback such as bug reports and feature requests can be ';
@@ -74,12 +75,41 @@ class Strings {
 
   static const String roomBookedDialogTitle = 'Booked';
 
-  static String roomBookedDialogText(String room, bool isPast, String? user,
-          String? activity, String timeBlock) =>
+  static String roomBookedDialogText({
+    required String room,
+    required bool isPast,
+    required String? user,
+    required String? activity,
+    required String timeBlock,
+    String? additionalBookings,
+  }) =>
       '$room ${isPast ? 'was' : 'is'} booked'
+      '${_bookingSpecifications(
+        user: user,
+        activity: activity,
+        timeBlock: timeBlock,
+      )}'
+      '${additionalBookings ?? ''}.';
+
+  static String additionalBookingDialogText({
+    required String? user,
+    required String? activity,
+    required String timeBlock,
+  }) =>
+      ', and${_bookingSpecifications(
+        user: user,
+        activity: activity,
+        timeBlock: timeBlock,
+      )}';
+
+  static String _bookingSpecifications({
+    required String? user,
+    required String? activity,
+    required String timeBlock,
+  }) =>
       '${user?.isNotEmpty == true ? ' by $user,' : ''}'
       '${activity?.isNotEmpty == true ? ' for "$activity",' : ''}'
-      ' from $timeBlock.';
+      ' from $timeBlock';
 
   // Settings page
   static const String settingsPageTitle = 'Settings';
