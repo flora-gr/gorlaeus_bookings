@@ -66,47 +66,47 @@ class GetFreeRoomNowBloc
       isOnlyRoom: currentIsOnlyRoom,
     );
 
-    final DateTime now = _dateTimeRepository.getCurrentDateTime();
+    try {
+      final DateTime now = _dateTimeRepository.getCurrentDateTime();
 
-    if (timeBlocksPerRoom == null) {
-      try {
+      if (timeBlocksPerRoom == null) {
         final List<BookingEntry>? bookingsResponse =
             await getIt.get<BookingRepository>().getBookings(now);
         timeBlocksPerRoom = await getIt
             .get<RoomsOverviewMapper>()
             .mapTimeBlocks(bookingsResponse);
-      } on Exception {
+      }
+
+      if (timeBlocksPerRoom != null) {
+        final TimeBlock timeBlockToCheck = _getTimeBlockToCheck(now);
+        final List<String> freeRooms = timeBlocksPerRoom.keys
+            .where((String key) =>
+                timeBlocksPerRoom![key]?.any((TimeBlock? timeBlock) =>
+                    timeBlock?.overlapsWith(timeBlockToCheck) == true) ==
+                false)
+            .toList();
+
+        if (freeRooms.isNotEmpty) {
+          final String freeRoom = freeRooms[_random.nextInt(freeRooms.length)];
+          final List<TimeBlock?> bookingsForFreeRooms =
+              timeBlocksPerRoom[freeRoom]!.sort();
+          final TimeBlock? nextBooking = bookingsForFreeRooms.firstWhereOrNull(
+              ((TimeBlock? bookingTime) =>
+                  bookingTime!.isAfter(timeBlockToCheck)));
+
+          yield GetFreeRoomNowReadyState(
+            timeBlocksPerRoom: timeBlocksPerRoom,
+            freeRoom: freeRoom,
+            nextBooking: nextBooking,
+            isOnlyRoom: freeRooms.length == 1,
+          );
+        } else {
+          yield const GetFreeRoomNowEmptyState();
+        }
+      } else {
         yield const GetFreeRoomNowErrorState();
       }
-    }
-
-    if (timeBlocksPerRoom != null) {
-      final TimeBlock timeBlockToCheck = _getTimeBlockToCheck(now);
-      final List<String> freeRooms = timeBlocksPerRoom.keys
-          .where((String key) =>
-              timeBlocksPerRoom![key]?.any((TimeBlock? timeBlock) =>
-                  timeBlock?.overlapsWith(timeBlockToCheck) == true) ==
-              false)
-          .toList();
-
-      if (freeRooms.isNotEmpty) {
-        final String freeRoom = freeRooms[_random.nextInt(freeRooms.length)];
-        final List<TimeBlock?> bookingsForFreeRooms =
-            timeBlocksPerRoom[freeRoom]!.sort();
-        final TimeBlock? nextBooking = bookingsForFreeRooms.firstWhereOrNull(
-            ((TimeBlock? bookingTime) =>
-                bookingTime!.isAfter(timeBlockToCheck)));
-
-        yield GetFreeRoomNowReadyState(
-          timeBlocksPerRoom: timeBlocksPerRoom,
-          freeRoom: freeRoom,
-          nextBooking: nextBooking,
-          isOnlyRoom: freeRooms.length == 1,
-        );
-      } else {
-        yield const GetFreeRoomNowEmptyState();
-      }
-    } else {
+    } on Exception {
       yield const GetFreeRoomNowErrorState();
     }
   }
