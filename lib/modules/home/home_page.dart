@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> _buildDateContent(HomeReadyState state) {
+  Iterable<Widget> _buildDateContent(HomeReadyState state) {
     return <Widget>[
       Padding(
         padding: Styles.topPadding4,

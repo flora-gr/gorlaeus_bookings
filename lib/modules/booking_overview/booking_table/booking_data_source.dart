@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:gorlaeus_bookings/extensions/data_grid_cell_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
@@ -49,17 +50,13 @@ class BookingDataSource extends DataGridSource {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>(
         (DataGridCell cell) {
-          final String room = cell.value as String;
-          final TimeBlock bookingTime = BookingTimes.all.singleWhere(
-              (TimeBlock bookingTime) =>
-                  bookingTime.startTimeString() == cell.columnName);
+          final String room = cell.room();
+          final TimeBlock bookingTime = cell.bookingTime();
           final Iterable<BookingEntry?> bookings = bookingsPerRoom[room]!.where(
               (BookingEntry? booking) =>
                   booking?.time?.overlapsWith(bookingTime) == true);
           final bool isFree = bookings.isEmpty;
-          final bool isPast = timeIfToday != null &&
-              TimeBlock(startTime: timeIfToday!, endTime: timeIfToday!)
-                  .isAfter(bookingTime);
+          final bool isPast = cell.isPast(timeIfToday);
           return InkWell(
             onTap: () => _showBookingDialog(
               bookings: bookings,
