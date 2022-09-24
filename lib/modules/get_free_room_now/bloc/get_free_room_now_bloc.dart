@@ -46,7 +46,7 @@ class GetFreeRoomNowBloc
   }
 
   Stream<GetFreeRoomNowState> _handleSearchEvent() async* {
-    List<BookingEntry>? bookings;
+    Map<String, Iterable<TimeBlock?>>? timeBlocksPerRoom;
     String? currentFreeRoom;
     TimeBlock? currentNextBooking;
     bool? currentIsOnlyRoom;
@@ -54,7 +54,7 @@ class GetFreeRoomNowBloc
     if (state is GetFreeRoomNowReadyState) {
       final GetFreeRoomNowReadyState currentState =
           state as GetFreeRoomNowReadyState;
-      bookings = currentState.bookings;
+      timeBlocksPerRoom = currentState.timeBlocksPerRoom;
       currentFreeRoom = currentState.freeRoom;
       currentNextBooking = currentState.nextBooking;
       currentIsOnlyRoom = currentState.isOnlyRoom;
@@ -68,28 +68,23 @@ class GetFreeRoomNowBloc
 
     final DateTime now = _dateTimeRepository.getCurrentDateTime();
 
-    if (bookings == null) {
-      List<BookingEntry>? bookingsResponse;
+    if (timeBlocksPerRoom == null) {
       try {
-        bookingsResponse =
+        final List<BookingEntry>? bookingsResponse =
             await getIt.get<BookingRepository>().getBookings(now);
+        timeBlocksPerRoom = await getIt
+            .get<RoomsOverviewMapper>()
+            .mapTimeBlocks(bookingsResponse);
       } on Exception {
         yield const GetFreeRoomNowErrorState();
       }
-
-      if (bookingsResponse != null) {
-        bookings = bookingsResponse;
-      }
     }
-
-    final Map<String, Iterable<TimeBlock?>>? timeBlocksPerRoom =
-        await getIt.get<RoomsOverviewMapper>().mapTimeBlocks(bookings);
 
     if (timeBlocksPerRoom != null) {
       final TimeBlock timeBlockToCheck = _getTimeBlockToCheck(now);
       final List<String> freeRooms = timeBlocksPerRoom.keys
           .where((String key) =>
-              timeBlocksPerRoom[key]?.any((TimeBlock? timeBlock) =>
+              timeBlocksPerRoom![key]?.any((TimeBlock? timeBlock) =>
                   timeBlock?.overlapsWith(timeBlockToCheck) == true) ==
               false)
           .toList();
@@ -103,7 +98,7 @@ class GetFreeRoomNowBloc
                 bookingTime!.isAfter(timeBlockToCheck)));
 
         yield GetFreeRoomNowReadyState(
-          bookings: bookings,
+          timeBlocksPerRoom: timeBlocksPerRoom,
           freeRoom: freeRoom,
           nextBooking: nextBooking,
           isOnlyRoom: freeRooms.length == 1,
