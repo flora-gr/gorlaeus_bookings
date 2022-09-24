@@ -49,7 +49,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
               Padding(
                 padding: Styles.verticalPadding8,
                 child: Text(
-                  '${Strings.bookingsOn} ${widget._date.formatted}',
+                  Strings.bookingsOn(widget._date.formatted),
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ),

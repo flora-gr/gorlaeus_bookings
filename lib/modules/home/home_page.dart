@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
       Padding(
         padding: Styles.topPadding4,
         child: Text(
-          '${Strings.dateToCheck} ${state.selectedDate.formatted}',
+          Strings.dateToCheck(state.selectedDate.formatted),
           style: Theme.of(context).textTheme.subtitle2,
         ),
       ),

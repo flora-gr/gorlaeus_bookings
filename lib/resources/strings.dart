@@ -7,7 +7,8 @@ class Strings {
 
   // Booking overview item
   static const String bookingOverviewItemTitle = 'Booking overview';
-  static const String dateToCheck = 'Date to check:';
+
+  static String dateToCheck(String date) => 'Date to check: $date';
   static const String dateSelectionButton = 'Choose a different date';
   static const String goToBookingsButton = 'Check bookings';
 
@@ -47,7 +48,8 @@ class Strings {
       'Consider adjusting your room selection in \'Settings\'.';
   static const String fetchingBookingsFailed = 'Failed to fetch bookings. '
       'Please check your internet connection.';
-  static const String bookingsOn = 'Bookings on';
+
+  static String bookingsOn(String date) => 'Bookings on $date';
   static const String notLectureRoom = '\n*Not a lecture room';
 
   static String bookRoomEmailSubject(String room) => 'Book $room';

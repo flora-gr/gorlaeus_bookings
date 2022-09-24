@@ -80,10 +80,9 @@ class GetFreeRoomNowBloc
       if (timeBlocksPerRoom != null) {
         final TimeBlock timeBlockToCheck = _getTimeBlockToCheck(now);
         final List<String> freeRooms = timeBlocksPerRoom.keys
-            .where((String key) =>
-                timeBlocksPerRoom![key]?.any((TimeBlock? timeBlock) =>
-                    timeBlock?.overlapsWith(timeBlockToCheck) == true) ==
-                false)
+            .where((String key) => !timeBlocksPerRoom![key]!.any(
+                (TimeBlock? timeBlock) =>
+                    timeBlock?.overlapsWith(timeBlockToCheck) == true))
             .toList();
 
         if (freeRooms.isNotEmpty) {
