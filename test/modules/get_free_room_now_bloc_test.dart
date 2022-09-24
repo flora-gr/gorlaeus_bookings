@@ -58,6 +58,17 @@ void main() {
         Rooms.all, timeBlocks);
   }
 
+  Map<String, Iterable<TimeBlock?>> timeBlocksWithOnlyRoom1StartingAfterNine =
+      <String, Iterable<TimeBlock?>>{
+    Rooms.room1: <TimeBlock?>[],
+    Rooms.room2: <TimeBlock?>[
+      const TimeBlock(
+        startTime: TimeOfDay(hour: 9, minute: 0),
+        endTime: TimeOfDay(hour: 11, minute: 0),
+      ),
+    ],
+  };
+
   setUpAll(() {
     GetIt getIt = GetIt.instance;
     bookingRepository = MockBookingRepository();
@@ -121,6 +132,25 @@ void main() {
     verify: (_) {
       verifyNever(() => bookingRepository.getBookings(any()));
     },
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'GetFreeRoomNowSearchEvent before 8:00 searches for room that is free until at least 10',
+    setUp: () {
+      when(() => dateTimeRepository.getCurrentDateTime())
+          .thenAnswer((_) => DateTime(2022, 2, 2, 7, 30));
+      when(() => mapper.mapTimeBlocks(any()))
+          .thenAnswer((_) async => timeBlocksWithOnlyRoom1StartingAfterNine);
+    },
+    build: () => sut,
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSearchEvent()),
+    expect: () => <dynamic>[
+      const GetFreeRoomNowBusyState(),
+      predicate(
+        (GetFreeRoomNowReadyState state) => state.freeRoom == Rooms.room1,
+      ),
+    ],
   );
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
