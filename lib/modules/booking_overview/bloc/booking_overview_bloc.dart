@@ -48,7 +48,6 @@ class BookingOverviewBloc
           yield const BookingOverviewEmptyState();
         } else {
           yield BookingOverviewReadyState(
-            date: date,
             timeIfToday: timeIfToday,
             bookingsPerRoom: bookingsPerRoom,
           );
@@ -62,11 +61,10 @@ class BookingOverviewBloc
   }
 
   Future<void> _handleBookRoomEvent(BookingOverviewBookRoomEvent event) async {
-    final DateTime date = (state as BookingOverviewReadyState).date;
     final String dateString =
-        date.isOnSameDateAs(_dateTimeRepository.getCurrentDateTime())
+        event.date.isOnSameDateAs(_dateTimeRepository.getCurrentDateTime())
             ? Strings.today
-            : Strings.onDay(date.formatted);
+            : Strings.onDay(event.date.formatted);
 
     final String? emailName =
         await getIt.get<SharedPreferencesRepository>().getEmailName();

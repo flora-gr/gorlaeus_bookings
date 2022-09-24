@@ -15,17 +15,15 @@ class BookingOverviewBusyState extends BookingOverviewState {
 
 class BookingOverviewReadyState extends BookingOverviewState {
   const BookingOverviewReadyState({
-    required this.date,
     required this.timeIfToday,
     required this.bookingsPerRoom,
   });
 
-  final DateTime date;
   final TimeOfDay? timeIfToday;
   final Map<String, Iterable<BookingEntry?>> bookingsPerRoom;
 
   @override
-  List<Object?> get props => <Object?>[date, timeIfToday, bookingsPerRoom];
+  List<Object?> get props => <Object?>[timeIfToday, bookingsPerRoom];
 }
 
 class BookingOverviewEmptyState extends BookingOverviewState {

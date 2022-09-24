@@ -68,9 +68,11 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Padding(
-            padding: Styles.leftPadding12,
-            child: Text(_getButtonText(state)),
+          Flexible(
+            child: Padding(
+              padding: Styles.leftPadding12,
+              child: Text(_getButtonText(state)),
+            ),
           ),
           ButtonLoadingWidget(
             showLoading: state is GetFreeRoomNowBusyState,

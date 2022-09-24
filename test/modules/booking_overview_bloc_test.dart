@@ -92,7 +92,6 @@ void main() {
     expect: () => <BookingOverviewState>[
       const BookingOverviewBusyState(),
       BookingOverviewReadyState(
-        date: today,
         timeIfToday: time,
         bookingsPerRoom: bookingsPerRoom,
       ),
@@ -113,7 +112,6 @@ void main() {
     expect: () => <BookingOverviewState>[
       const BookingOverviewBusyState(),
       BookingOverviewReadyState(
-        date: tomorrow,
         timeIfToday: null,
         bookingsPerRoom: bookingsPerRoom,
       ),
@@ -158,12 +156,16 @@ void main() {
     },
     build: () => sut,
     seed: () => BookingOverviewReadyState(
-      date: today,
       timeIfToday: null,
       bookingsPerRoom: bookingsPerRoom,
     ),
-    act: (BookingOverviewBloc bloc) =>
-        bloc.add(const BookingOverviewBookRoomEvent('8:00', 'room')),
+    act: (BookingOverviewBloc bloc) => bloc.add(
+      BookingOverviewBookRoomEvent(
+        date: today,
+        time: '8:00',
+        room: 'room',
+      ),
+    ),
     verify: (_) {
       verify(
         () => urlLauncherWrapper.launchEmail(

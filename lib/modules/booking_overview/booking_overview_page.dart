@@ -41,52 +41,61 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
         appBar: AppBar(
           title: const Text(Strings.bookingOverviewPageTitle),
         ),
-        body: state is BookingOverviewReadyState
-            ? _buildReadyBody(state)
-            : Center(
-                child: state is BookingOverviewBusyState
-                    ? const LoadingWidget()
-                    : _buildEmptyOrErrorBody(state),
+        body: Padding(
+          padding: Styles.defaultPagePadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: Styles.verticalPadding8,
+                child: Text(
+                  '${Strings.bookingsOn} ${widget._date.formatted}',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
               ),
+              if (state is BookingOverviewReadyState)
+                ..._buildReadyBody(state)
+              else
+                Expanded(
+                  child: Center(
+                    child: state is BookingOverviewBusyState
+                        ? const LoadingWidget()
+                        : _buildEmptyOrErrorBody(state),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildReadyBody(BookingOverviewReadyState state) {
-    return Padding(
-      padding: Styles.defaultPagePadding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: Styles.verticalPadding8,
-            child: Text(
-              '${Strings.bookingsOn} ${state.date.formatted}',
-              style: Theme.of(context).textTheme.headline6,
+  Iterable<Widget> _buildReadyBody(BookingOverviewReadyState state) {
+    return <Widget>[
+      if (state.bookingsPerRoom.keys.contains(Rooms.room13) ||
+          state.bookingsPerRoom.keys.contains(Rooms.room21))
+        const Padding(
+          padding: Styles.verticalPadding8,
+          child: Text(Strings.notLectureRooms),
+        ),
+      Expanded(
+        child: BookingTable(
+          state.bookingsPerRoom,
+          state.timeIfToday,
+          onEmailButtonTapped: ({
+            required String time,
+            required String room,
+          }) =>
+              _bloc.add(
+            BookingOverviewBookRoomEvent(
+              date: widget._date,
+              time: time,
+              room: room,
             ),
           ),
-          if (state.bookingsPerRoom.keys.contains(Rooms.room13) ||
-              state.bookingsPerRoom.keys.contains(Rooms.room21))
-            const Padding(
-              padding: Styles.verticalPadding8,
-              child: Text(Strings.notLectureRooms),
-            ),
-          Expanded(
-            child: BookingTable(
-              state.bookingsPerRoom,
-              state.timeIfToday,
-              onEmailButtonTapped: ({
-                required String time,
-                required String room,
-              }) =>
-                  _bloc.add(
-                BookingOverviewBookRoomEvent(time, room),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
-    );
+    ];
   }
 
   Widget _buildEmptyOrErrorBody(BookingOverviewState state) {
