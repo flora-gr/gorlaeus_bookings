@@ -79,14 +79,14 @@ void main() {
   });
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-    'GetFreeRoomNowSearchEvent fetches data and emits ready state with bookings and freeRoom',
+    'GetFreeRoomNowSearchEvent fetches data and emits ready state with timeBlocksPerRoom and freeRoom',
     build: () => sut,
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
       const GetFreeRoomNowBusyState(),
       predicate((GetFreeRoomNowReadyState state) =>
-          state.bookings != null && state.freeRoom != null),
+          state.timeBlocksPerRoom != null && state.freeRoom != null),
     ],
     verify: (_) {
       verify(() => bookingRepository.getBookings(any())).called(1);
@@ -94,14 +94,14 @@ void main() {
   );
 
   GetFreeRoomNowReadyState seedState = GetFreeRoomNowReadyState(
-    bookings: defaultBookingResponse,
+    timeBlocksPerRoom: timeBlocksPerRoom,
     freeRoom: Rooms.room1,
     nextBooking: defaultBookingEntry.time,
     isOnlyRoom: false,
   );
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-    'GetFreeRoomNowSearchEvent when bookings is available emits ready state with bookings and freeRoom without fetching new data',
+    'GetFreeRoomNowSearchEvent when timeBlocksPerRoom is available emits ready state with timeBlocksPerRoom and freeRoom without fetching new data',
     build: () => sut,
     seed: () => seedState,
     act: (GetFreeRoomNowBloc bloc) =>
@@ -114,7 +114,7 @@ void main() {
       ),
       predicate(
         (GetFreeRoomNowReadyState state) =>
-            state.bookings == seedState.bookings &&
+            state.timeBlocksPerRoom == seedState.timeBlocksPerRoom &&
             timeBlocksPerRoom.keys.contains(state.freeRoom),
       ),
     ],
@@ -151,13 +151,13 @@ void main() {
 
   GetFreeRoomNowReadyState seedStateWithSingleFreeRoom =
       GetFreeRoomNowReadyState(
-    bookings: defaultBookingResponse,
+    timeBlocksPerRoom: timeBlocksPerRoom,
     freeRoom: Rooms.room1,
     isOnlyRoom: true,
   );
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-    'SharedPreferencesChangedEvent resets bookings in ready state to null and isOnlyRoom to false',
+    'SharedPreferencesChangedEvent resets timeBlocksPerRoom in ready state to null and isOnlyRoom to false',
     build: () => sut,
     seed: () => seedStateWithSingleFreeRoom,
     act: (GetFreeRoomNowBloc bloc) =>
@@ -165,7 +165,7 @@ void main() {
     expect: () => <dynamic>[
       predicate(
         (GetFreeRoomNowReadyState state) =>
-            state.bookings == null &&
+            state.timeBlocksPerRoom == null &&
             state.freeRoom == seedStateWithSingleFreeRoom.freeRoom &&
             state.nextBooking == seedStateWithSingleFreeRoom.nextBooking &&
             state.isOnlyRoom == false,

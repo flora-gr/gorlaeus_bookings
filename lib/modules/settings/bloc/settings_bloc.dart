@@ -16,7 +16,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SettingsRoomSelectionChangedEvent>(
         (SettingsRoomSelectionChangedEvent event,
                 Emitter<SettingsState> emit) =>
-            emit(_handleSelectionChangedEvent(event)));
+            emit(_handleRoomSelectionChangedEvent(event)));
     on<SettingsEmailNameChangedEvent>(
         (SettingsEmailNameChangedEvent event, Emitter<SettingsState> emit) =>
             emit((state as SettingsReadyState)
@@ -40,7 +40,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
   }
 
-  SettingsState _handleSelectionChangedEvent(
+  SettingsState _handleRoomSelectionChangedEvent(
       SettingsRoomSelectionChangedEvent event) {
     final SettingsReadyState currentState = (state as SettingsReadyState);
     Iterable<String>? newSelectedRooms;

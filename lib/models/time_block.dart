@@ -11,5 +11,5 @@ class TimeBlock extends Equatable {
   final TimeOfDay endTime;
 
   @override
-  List<Object?> get props => <Object>[startTime, endTime];
+  List<Object?> get props => <Object?>[startTime, endTime];
 }

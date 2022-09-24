@@ -15,7 +15,7 @@ import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
-import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
+import 'package:gorlaeus_bookings/widgets/loading_widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(
@@ -180,57 +180,54 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          ...<Widget>[
-            _buildDateContent(state),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed(
-                Routes.bookingOverviewPage,
-                arguments: state.selectedDate,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  Text(Strings.goToBookingsButton),
-                  Icon(Icons.arrow_right)
-                ],
-              ),
+          ..._buildDateContent(state),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pushNamed(
+              Routes.bookingOverviewPage,
+              arguments: state.selectedDate,
             ),
-          ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const <Widget>[
+                Text(Strings.goToBookingsButton),
+                Icon(Icons.arrow_right),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDateContent(HomeReadyState state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const SizedBox(height: 4),
-        Text(
+  List<Widget> _buildDateContent(HomeReadyState state) {
+    return <Widget>[
+      Padding(
+        padding: Styles.topPadding4,
+        child: Text(
           '${Strings.dateToCheck} ${state.selectedDate.formatted}',
           style: Theme.of(context).textTheme.subtitle2,
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 4, bottom: 12),
-          child: OutlinedButton(
-            onPressed: () async {
-              final DateTime? newDate = await showDatePicker(
-                context: context,
-                initialDate: state.selectedDate,
-                firstDate: state.minimumDate,
-                lastDate: state.maximumDate,
-                locale: const Locale('en', 'GB'),
-                selectableDayPredicate: (DateTime date) => !date.isWeekendDay(),
-              );
-              if (newDate != null) {
-                _bloc.add(HomeDateChangedEvent(newDate));
-              }
-            },
-            child: const Text(Strings.dateSelectionButton),
-          ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 4, bottom: 12),
+        child: OutlinedButton(
+          onPressed: () async {
+            final DateTime? newDate = await showDatePicker(
+              context: context,
+              initialDate: state.selectedDate,
+              firstDate: state.minimumDate,
+              lastDate: state.maximumDate,
+              locale: const Locale('en', 'GB'),
+              selectableDayPredicate: (DateTime date) => !date.isWeekendDay(),
+            );
+            if (newDate != null) {
+              _bloc.add(HomeDateChangedEvent(newDate));
+            }
+          },
+          child: const Text(Strings.dateSelectionButton),
         ),
-      ],
-    );
+      ),
+    ];
   }
 
   Widget _buildGoToSettingsButton() {
@@ -251,7 +248,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             const Icon(Icons.check_box_outlined),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: Styles.horizontalPadding8,
               child: Text(
                 Strings.adjustSettingsButton,
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(

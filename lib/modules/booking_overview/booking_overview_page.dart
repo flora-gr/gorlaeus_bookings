@@ -8,7 +8,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/booking_table/booking
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
-import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
+import 'package:gorlaeus_bookings/widgets/loading_widgets.dart';
 
 class BookingOverviewPage extends StatefulWidget {
   const BookingOverviewPage(

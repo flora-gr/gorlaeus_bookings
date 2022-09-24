@@ -12,7 +12,7 @@ class ConnectionUrls {
   static Uri githubRepositoryLink =
       Uri.https('github.com', '/flora-gr/gorlaeus_bookings');
 
-  // Email
+  // Email addresses
   static const String serviceDeskEmail = 'servicedesk@science.leidenuniv.nl';
   static const String appDeveloperEmail = 'gorlaeusbookings@gmail.com';
 }

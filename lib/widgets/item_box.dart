@@ -31,10 +31,10 @@ class ItemBox extends StatelessWidget {
               title,
               style: Theme.of(context).textTheme.headline6,
             ),
-            const SizedBox(
-              height: 16,
+            Padding(
+              padding: Styles.topPadding16,
+              child: child,
             ),
-            child,
           ],
         ),
       ),

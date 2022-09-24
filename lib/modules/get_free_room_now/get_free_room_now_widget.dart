@@ -9,7 +9,7 @@ import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
-import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
+import 'package:gorlaeus_bookings/widgets/loading_widgets.dart';
 
 class GetFreeRoomNowWidget extends StatefulWidget {
   const GetFreeRoomNowWidget(
@@ -46,23 +46,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ElevatedButton(
-                  onPressed: state is GetFreeRoomNowWeekendState
-                      ? null
-                      : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: Styles.leftPadding12,
-                        child: Text(_getButtonText(state)),
-                      ),
-                      ButtonLoadingWidget(
-                        showLoading: state is GetFreeRoomNowBusyState,
-                      ),
-                    ],
-                  ),
-                ),
+                _buildButton(state),
                 if (dataFetchedText != null)
                   Padding(
                     padding: Styles.topPadding12,
@@ -73,6 +57,26 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildButton(GetFreeRoomNowState state) {
+    return ElevatedButton(
+      onPressed: state is GetFreeRoomNowWeekendState
+          ? null
+          : () => _bloc.add(const GetFreeRoomNowSearchEvent()),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: Styles.leftPadding12,
+            child: Text(_getButtonText(state)),
+          ),
+          ButtonLoadingWidget(
+            showLoading: state is GetFreeRoomNowBusyState,
+          ),
+        ],
+      ),
     );
   }
 

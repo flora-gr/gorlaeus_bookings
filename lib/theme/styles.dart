@@ -83,9 +83,14 @@ class Styles {
       EdgeInsets.symmetric(horizontal: 16, vertical: 20);
   static const EdgeInsetsGeometry padding16 = EdgeInsets.all(16);
   static const EdgeInsetsGeometry padding8 = EdgeInsets.all(8);
+  static const EdgeInsetsGeometry padding2 = EdgeInsets.all(2);
+  static const EdgeInsetsGeometry horizontalPadding8 =
+      EdgeInsets.symmetric(horizontal: 8);
   static const EdgeInsetsGeometry verticalPadding8 =
       EdgeInsets.symmetric(vertical: 8);
+  static const EdgeInsetsGeometry topPadding16 = EdgeInsets.only(top: 16);
   static const EdgeInsetsGeometry topPadding12 = EdgeInsets.only(top: 12);
+  static const EdgeInsetsGeometry topPadding4 = EdgeInsets.only(top: 4);
   static const EdgeInsetsGeometry leftPadding12 = EdgeInsets.only(left: 12);
 
   // Other

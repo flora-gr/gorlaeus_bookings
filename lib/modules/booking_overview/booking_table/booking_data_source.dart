@@ -39,7 +39,7 @@ class BookingDataSource extends DataGridSource {
       onEmailButtonTapped;
   final BuildContext context;
 
-  List<DataGridRow> _bookingData = <DataGridRow>[];
+  late List<DataGridRow> _bookingData;
 
   @override
   List<DataGridRow> get rows => _bookingData;

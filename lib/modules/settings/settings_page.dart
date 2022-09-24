@@ -7,7 +7,7 @@ import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
-import 'package:gorlaeus_bookings/widgets/loading_widget.dart';
+import 'package:gorlaeus_bookings/widgets/loading_widgets.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage(
