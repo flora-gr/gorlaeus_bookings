@@ -51,7 +51,9 @@ class Strings {
 
   static String bookingsOn(String date) => 'Bookings on $date';
   static const String notLectureRoom = '\n*Not a lecture room';
+  static const String retryButton = 'Try again';
 
+  // Book room email
   static String bookRoomEmailSubject(String room) => 'Book $room';
   static const String today = 'today';
 

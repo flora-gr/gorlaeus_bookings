@@ -101,11 +101,25 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
   Widget _buildEmptyOrErrorBody(BookingOverviewState state) {
     return Padding(
       padding: Styles.padding16,
-      child: Text(
-        state is BookingOverviewEmptyState
-            ? Strings.noBookingsFound
-            : Strings.fetchingBookingsFailed,
-        textAlign: TextAlign.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            state is BookingOverviewEmptyState
+                ? Strings.noBookingsFound
+                : Strings.fetchingBookingsFailed,
+            textAlign: TextAlign.center,
+          ),
+          if (state is BookingOverviewErrorState)
+            Padding(
+              padding: Styles.verticalPadding8,
+              child: ElevatedButton(
+                onPressed: () =>
+                    _bloc.add(BookingOverviewInitEvent(widget._date)),
+                child: const Text(Strings.retryButton),
+              ),
+            ),
+        ],
       ),
     );
   }
