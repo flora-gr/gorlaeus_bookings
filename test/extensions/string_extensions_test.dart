@@ -73,7 +73,7 @@ void main() {
           'the Entrance Hall of the Gorlaeus Schotel');
       expect(Rooms.room16.toLongRoomName(), 'the Havingazaal of the Gorlaeus');
       expect(Rooms.room20.toLongRoomName(), 'room C4/5 of the Gorlaeus');
-      expect(Rooms.room15.toLongRoomName(), 'room 04.28 LMUY of the Gorlaeus');
+      expect(Rooms.room15.toLongRoomName(), 'room 04.24 AQUA of the Gorlaeus');
       expect(Rooms.room22.toLongRoomName(),
           'the Sitterzaal in the Huygens building');
       expect(Rooms.room23.toLongRoomName(), 'Huygens room 106-109');
