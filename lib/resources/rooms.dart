@@ -18,7 +18,7 @@ class Rooms {
 
   // Gorlaeus Schotel
   static const String room14 = 'BS.1.17';
-  static const String room15 = '04.28 LMUY';
+  static const String room15 = '04.24 AQUA';
   static const String room16 = 'HAVZ';
   static const String room17 = '01'; // Default hidden
   static const String room18 = '02'; // Default hidden
