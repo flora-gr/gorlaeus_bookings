@@ -7,11 +7,7 @@ import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
-import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
-import 'package:gorlaeus_bookings/resources/connection_urls.dart';
-import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
-import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 
 class BookingOverviewBloc
     extends Bloc<BookingOverviewEvent, BookingOverviewState> {
@@ -21,9 +17,6 @@ class BookingOverviewBloc
         (BookingOverviewInitEvent event, Emitter<BookingOverviewState> emit) =>
             emit.forEach(_handleInitEvent(event.date),
                 onData: (BookingOverviewState state) => state));
-    on<BookingOverviewBookRoomEvent>((BookingOverviewBookRoomEvent event,
-            Emitter<BookingOverviewState> emit) =>
-        _handleBookRoomEvent(event));
   }
 
   late DateTimeRepository _dateTimeRepository;
@@ -58,22 +51,5 @@ class BookingOverviewBloc
     } on Exception {
       yield const BookingOverviewErrorState();
     }
-  }
-
-  Future<void> _handleBookRoomEvent(BookingOverviewBookRoomEvent event) async {
-    final String dateString =
-        event.date.isOnSameDateAs(_dateTimeRepository.getCurrentDateTime())
-            ? Strings.today
-            : Strings.onDay(event.date.formatted);
-
-    final String? emailName =
-        await getIt.get<SharedPreferencesRepository>().getEmailName();
-
-    await getIt.get<UrlLauncherWrapper>().launchEmail(
-          ConnectionUrls.serviceDeskEmail,
-          subject: Strings.bookRoomEmailSubject(event.room),
-          body: Strings.bookRoomEmailBody(
-              event.room, dateString, event.time, emailName),
-        );
   }
 }

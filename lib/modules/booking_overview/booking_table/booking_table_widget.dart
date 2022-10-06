@@ -11,14 +11,11 @@ class BookingTable extends StatelessWidget {
   const BookingTable(
     this._bookingsPerRoom,
     this._timeIfToday, {
-    required this.onEmailButtonTapped,
     super.key,
   });
 
   final Map<String, Iterable<BookingEntry?>> _bookingsPerRoom;
   final TimeOfDay? _timeIfToday;
-  final void Function({required String time, required String room})
-      onEmailButtonTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,6 @@ class BookingTable extends StatelessWidget {
       source: BookingDataSource(
         _bookingsPerRoom,
         _timeIfToday,
-        onEmailButtonTapped: onEmailButtonTapped,
         context: context,
       ),
     );

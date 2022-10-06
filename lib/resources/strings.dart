@@ -53,26 +53,11 @@ class Strings {
   static const String notLectureRoom = '\n*Not a lecture room';
   static const String retryButton = 'Try again';
 
-  // Book room email
-  static String bookRoomEmailSubject(String room) => 'Book $room';
-  static const String today = 'today';
-
-  static String onDay(String day) => 'on $day';
-
-  static String bookRoomEmailBody(
-          String room, String dateString, String time, String? emailName) =>
-      'Hello,\n\n'
-      'I would like to book $room $dateString from $time to ...\n\n'
-      'Thanks in advance'
-      '${emailName != null && emailName.trim().isNotEmpty ? ',\n$emailName' : '\n'}';
-
   // Booking dialog
-  static const String roomFreeDialogTitle = 'This room is available';
+  static const String roomFreeDialogTitle = 'Available';
 
   static String roomFreeDialogText(String room, String time) =>
-      'Do you want to book $room at $time?';
-  static const String yesBookRoomButton = 'Yes, send email';
-  static const String cancelButton = 'Cancel';
+      '$room is available $time.';
   static const String roomFreeInPastDialogTitle = 'This was earlier today';
   static const String roomFreeInPastDialogText =
       'Please select a different time.';
@@ -121,9 +106,6 @@ class Strings {
   static const String selectRoomsInfoI =
       'Selected rooms will be shown in the \'Booking overview\' '
       'and will be suggested in \'Find an available room now\'.';
-  static const String setEmailNameTitle = 'Email signature';
-  static const String setEmailNameInfoI =
-      'Enter the name you want to use when booking a room on the \'Booking overview\'.';
   static const String saveButton = 'Save changes';
 
   // Shared

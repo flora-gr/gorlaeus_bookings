@@ -11,29 +11,11 @@ class UrlLauncherWrapper {
     );
   }
 
-  Future<void> launchEmail(
-    String emailAddress, {
-    String? subject,
-    String? body,
-  }) async {
+  Future<void> launchEmail(String emailAddress) async {
     await url_launcher.launchUrl(
       Uri(
         scheme: 'mailto',
         path: emailAddress,
-        query: subject != null || body != null
-            ? <String, String>{
-                if (subject != null) 'subject': subject,
-                if (body != null) 'body': body,
-              }
-                .entries
-                .map(
-                  (MapEntry<String, dynamic> entry) =>
-                      '${Uri.encodeComponent(entry.key)}'
-                      '='
-                      '${Uri.encodeComponent(entry.value.toString())}',
-                )
-                .join('&')
-            : null,
       ),
     );
   }

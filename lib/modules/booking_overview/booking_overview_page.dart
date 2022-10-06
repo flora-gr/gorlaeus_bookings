@@ -82,17 +82,6 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
         child: BookingTable(
           state.bookingsPerRoom,
           state.timeIfToday,
-          onEmailButtonTapped: ({
-            required String time,
-            required String room,
-          }) =>
-              _bloc.add(
-            BookingOverviewBookRoomEvent(
-              date: widget._date,
-              time: time,
-              room: room,
-            ),
-          ),
         ),
       ),
     ];

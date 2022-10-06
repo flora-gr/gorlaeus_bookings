@@ -11,7 +11,6 @@ class SharedPreferencesRepository {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   static const String hiddenRoomsKey = 'hiddenRooms';
-  static const String emailNameKey = 'emailName';
   static const String themeModeKey = 'themeMode';
 
   Future<bool> setHiddenRooms(List<String> rooms) async {
@@ -26,14 +25,6 @@ class SharedPreferencesRepository {
           Rooms.room21,
           ...Rooms.building3,
         ];
-  }
-
-  Future<bool> setEmailName(String name) async {
-    return (await _prefs).setString(emailNameKey, name);
-  }
-
-  Future<String?> getEmailName() async {
-    return (await _prefs).getString(emailNameKey);
   }
 
   Future<bool> setThemeMode(ThemeMode themeMode) async {

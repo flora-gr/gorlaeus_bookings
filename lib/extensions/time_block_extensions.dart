@@ -3,13 +3,15 @@ import 'package:gorlaeus_bookings/models/time_block.dart';
 
 extension TimeBlockExtensions on TimeBlock {
   String asString() {
-    return '${startTimeString()}'
-        ' - '
-        '${_makePaddedString(endTime.hour)}:${_makePaddedString(endTime.minute)}';
+    return '${startTimeString()} - ${endTimeString()}';
   }
 
   String startTimeString() {
     return '${_makePaddedString(startTime.hour)}:${_makePaddedString(startTime.minute)}';
+  }
+
+  String endTimeString() {
+    return '${_makePaddedString(endTime.hour)}:${_makePaddedString(endTime.minute)}';
   }
 
   String _makePaddedString(int i) {
