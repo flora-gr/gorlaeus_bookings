@@ -15,7 +15,6 @@ class BookingDataSource extends DataGridSource {
   BookingDataSource(
     this.bookingsPerRoom,
     this.timeIfToday, {
-    required this.onEmailButtonTapped,
     required this.context,
   }) {
     _bookingData = bookingsPerRoom.keys
@@ -36,8 +35,6 @@ class BookingDataSource extends DataGridSource {
 
   final Map<String, Iterable<BookingEntry?>> bookingsPerRoom;
   final TimeOfDay? timeIfToday;
-  final void Function({required String time, required String room})
-      onEmailButtonTapped;
   final BuildContext context;
 
   late List<DataGridRow> _bookingData;
@@ -51,17 +48,19 @@ class BookingDataSource extends DataGridSource {
       cells: row.getCells().map<Widget>(
         (DataGridCell cell) {
           final String room = cell.room();
-          final TimeBlock bookingTime = cell.bookingTime();
           final Iterable<BookingEntry?> bookings = bookingsPerRoom[room]!.where(
               (BookingEntry? booking) =>
-                  booking?.time?.overlapsWith(bookingTime) == true);
+                  booking?.time?.overlapsWith(cell.bookingTime()) == true);
           final bool isFree = bookings.isEmpty;
+          final String? freeTime =
+              isFree ? cell.freeTime(bookingsPerRoom) : null;
           final bool isPast = cell.isPast(timeIfToday);
           return InkWell(
             onTap: () => _showBookingDialog(
               bookings: bookings,
               room: room.toLongRoomName(),
               time: cell.columnName,
+              freeTime: freeTime,
               isFree: isFree,
               isPast: isPast,
             ),
@@ -95,6 +94,7 @@ class BookingDataSource extends DataGridSource {
     required Iterable<BookingEntry?> bookings,
     required String room,
     required String time,
+    required String? freeTime,
     required bool isFree,
     required bool isPast,
   }) {
@@ -111,7 +111,7 @@ class BookingDataSource extends DataGridSource {
           isFree
               ? isPast
                   ? Strings.roomFreeInPastDialogText
-                  : Strings.roomFreeDialogText(room, time)
+                  : Strings.roomFreeDialogText(room, freeTime!)
               : _getRoomBookedText(
                   room: room,
                   isPast: isPast,
@@ -121,15 +121,10 @@ class BookingDataSource extends DataGridSource {
         actions: <Widget>[
           if (!isPast && isFree) ...<Widget>[
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text(Strings.cancelButton),
-            ),
-            TextButton(
               onPressed: () {
-                onEmailButtonTapped(time: time, room: room);
                 Navigator.of(context).pop();
               },
-              child: const Text(Strings.yesBookRoomButton),
+              child: const Text(Strings.okButton),
             ),
           ] else
             TextButton(

@@ -72,16 +72,13 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: Styles.defaultPagePadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ..._buildRoomSelectionSection(state),
-            ..._buildEmailNameSection(state),
-          ],
+          children: _buildRoomSelectionSection(state),
         ),
       ),
     );
   }
 
-  Iterable<Widget> _buildRoomSelectionSection(SettingsReadyState state) {
+  List<Widget> _buildRoomSelectionSection(SettingsReadyState state) {
     final int halfRoomCount = (Rooms.all.length / 2).floor() + 1;
     final Iterable<String> firstHalfOfRooms = Rooms.all.take(halfRoomCount);
     final Iterable<String> secondHalfOfRooms =
@@ -140,33 +137,6 @@ class _SettingsPageState extends State<SettingsPage> {
             .toList(),
       ),
     );
-  }
-
-  Iterable<Widget> _buildEmailNameSection(SettingsReadyState state) {
-    return <Widget>[
-      Padding(
-        padding: Styles.topPadding12,
-        child: _buildHeaderWithInfoI(
-          title: Strings.setEmailNameTitle,
-          dialogText: Strings.setEmailNameInfoI,
-        ),
-      ),
-      ConstrainedBox(
-        constraints: Styles.defaultWidthConstraint,
-        child: Padding(
-          padding: Styles.verticalPadding8,
-          child: TextFormField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-            ),
-            initialValue: state.emailName ?? '',
-            onChanged: (String value) => _bloc.add(
-              SettingsEmailNameChangedEvent(emailName: value),
-            ),
-          ),
-        ),
-      ),
-    ];
   }
 
   Widget _buildHeaderWithInfoI({

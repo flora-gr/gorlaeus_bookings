@@ -24,17 +24,6 @@ class SettingsRoomSelectionChangedEvent extends SettingsEvent {
   List<Object?> get props => <Object?>[room, isSelected];
 }
 
-class SettingsEmailNameChangedEvent extends SettingsEvent {
-  const SettingsEmailNameChangedEvent({
-    required this.emailName,
-  });
-
-  final String emailName;
-
-  @override
-  List<Object?> get props => <Object?>[emailName];
-}
-
 class SettingsSaveEvent extends SettingsEvent {
   const SettingsSaveEvent();
 

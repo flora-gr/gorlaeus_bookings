@@ -17,7 +17,6 @@ void main() {
 
   final List<String> hiddenRooms =
       Rooms.all.where((String room) => room != Rooms.room1).toList();
-  const String emailName = 'name';
 
   setUpAll(() {
     GetIt getIt = GetIt.instance;
@@ -29,11 +28,7 @@ void main() {
   setUp(() {
     when(() => sharedPreferencesRepository.getHiddenRooms())
         .thenAnswer((_) async => hiddenRooms);
-    when(() => sharedPreferencesRepository.getEmailName())
-        .thenAnswer((_) async => emailName);
     when(() => sharedPreferencesRepository.setHiddenRooms(any()))
-        .thenAnswer((_) async => true);
-    when(() => sharedPreferencesRepository.setEmailName(any()))
         .thenAnswer((_) async => true);
     sut = SettingsBloc();
   });
@@ -90,41 +85,12 @@ void main() {
   );
 
   blocTest<SettingsBloc, SettingsState>(
-    'Changing the email name emits ready state with updated email name',
-    build: () => sut,
-    seed: () => seedState,
-    act: (SettingsBloc bloc) => bloc.add(
-      const SettingsEmailNameChangedEvent(emailName: 'newName'),
-    ),
-    expect: () => <dynamic>[
-      predicate((SettingsReadyState state) => state.emailName == 'newName'),
-    ],
-  );
-
-  blocTest<SettingsBloc, SettingsState>(
-    'Saving settings saves rooms to shared preferences but does not save email name if not present',
+    'Saving settings saves rooms to shared preferences',
     build: () => sut,
     seed: () => seedState,
     act: (SettingsBloc bloc) => bloc.add(const SettingsSaveEvent()),
     verify: (_) {
       verify(() => sharedPreferencesRepository.setHiddenRooms(hiddenRooms))
-          .called(1);
-      verifyNever(() => sharedPreferencesRepository.setEmailName(any()));
-    },
-  );
-
-  final SettingsReadyState seedStateWithEmail =
-      seedState.copyWith(emailName: emailName);
-
-  blocTest<SettingsBloc, SettingsState>(
-    'Saving settings saves rooms to shared preferences and saves email name if present',
-    build: () => sut,
-    seed: () => seedStateWithEmail,
-    act: (SettingsBloc bloc) => bloc.add(const SettingsSaveEvent()),
-    verify: (_) {
-      verify(() => sharedPreferencesRepository.setHiddenRooms(hiddenRooms))
-          .called(1);
-      verify(() => sharedPreferencesRepository.setEmailName(emailName))
           .called(1);
     },
   );

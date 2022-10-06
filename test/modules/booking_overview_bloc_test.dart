@@ -72,9 +72,6 @@ void main() {
   setUp(() {
     when(() => dateTimeRepository.getCurrentDateTime())
         .thenAnswer((_) => today);
-    when(() => urlLauncherWrapper.launchEmail(any(),
-        subject: any(named: 'subject'),
-        body: any(named: 'body'))).thenAnswer((_) async => <dynamic>{});
     sut = BookingOverviewBloc();
   });
 
@@ -146,34 +143,5 @@ void main() {
       const BookingOverviewBusyState(),
       const BookingOverviewEmptyState(),
     ],
-  );
-
-  blocTest<BookingOverviewBloc, BookingOverviewState>(
-    'BookRoomEvent launches email',
-    setUp: () {
-      when(() => sharedPreferencesRepository.getEmailName())
-          .thenAnswer((_) async => 'name');
-    },
-    build: () => sut,
-    seed: () => BookingOverviewReadyState(
-      timeIfToday: null,
-      bookingsPerRoom: bookingsPerRoom,
-    ),
-    act: (BookingOverviewBloc bloc) => bloc.add(
-      BookingOverviewBookRoomEvent(
-        date: today,
-        time: '8:00',
-        room: 'room',
-      ),
-    ),
-    verify: (_) {
-      verify(
-        () => urlLauncherWrapper.launchEmail(
-          any(),
-          subject: any(named: 'subject'),
-          body: any(named: 'body'),
-        ),
-      ).called(1);
-    },
   );
 }
