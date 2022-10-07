@@ -48,9 +48,8 @@ class BookingDataSource extends DataGridSource {
       cells: row.getCells().map<Widget>(
         (DataGridCell cell) {
           final String room = cell.room();
-          final Iterable<BookingEntry?> bookings = bookingsPerRoom[room]!.where(
-              (BookingEntry? booking) =>
-                  booking?.time?.overlapsWith(cell.bookingTime()) == true);
+          final Iterable<BookingEntry?> bookings =
+              cell.bookings(bookingsPerRoom);
           final bool isFree = bookings.isEmpty;
           final String? freeTime =
               isFree ? cell.freeTime(bookingsPerRoom) : null;
