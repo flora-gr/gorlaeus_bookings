@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
@@ -11,6 +12,7 @@ class SharedPreferencesRepository {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   static const String hiddenRoomsKey = 'hiddenRooms';
+  static const String favouriteRoomsKey = 'favouriteRooms';
   static const String themeModeKey = 'themeMode';
 
   Future<bool> setHiddenRooms(List<String> rooms) async {
@@ -25,6 +27,20 @@ class SharedPreferencesRepository {
           Rooms.room21,
           ...Rooms.building3,
         ];
+  }
+
+  // Stored in array to prepare for potential future implementation of multiple favorite rooms
+  Future<bool> setFavouriteRoom(String? room) async {
+    return (await _prefs).setStringList(
+      favouriteRoomsKey,
+      room != null ? <String>[room] : <String>[],
+    );
+  }
+
+  Future<String?> getFavouriteRoom() async {
+    final List<String>? favouriteRooms =
+        (await _prefs).getStringList(favouriteRoomsKey);
+    return favouriteRooms?.firstOrNull;
   }
 
   Future<bool> setThemeMode(ThemeMode themeMode) async {

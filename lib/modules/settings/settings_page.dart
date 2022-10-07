@@ -72,13 +72,16 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: Styles.defaultPagePadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _buildRoomSelectionSection(state),
+          children: <Widget>[
+            ..._buildRoomSelectionSection(state),
+            ..._buildFavouriteRoomSection(state)
+          ],
         ),
       ),
     );
   }
 
-  List<Widget> _buildRoomSelectionSection(SettingsReadyState state) {
+  Iterable<Widget> _buildRoomSelectionSection(SettingsReadyState state) {
     final int halfRoomCount = (Rooms.all.length / 2).floor() + 1;
     final Iterable<String> firstHalfOfRooms = Rooms.all.take(halfRoomCount);
     final Iterable<String> secondHalfOfRooms =
@@ -137,6 +140,62 @@ class _SettingsPageState extends State<SettingsPage> {
             .toList(),
       ),
     );
+  }
+
+  Iterable<Widget> _buildFavouriteRoomSection(SettingsReadyState state) {
+    final Map<String, String?> items = <String, String?>{
+      Strings.favouriteRoomNone: null
+    };
+    for (String room in Rooms.all) {
+      items[room] = room.toRoomName();
+    }
+    return <Widget>[
+      Padding(
+        padding: Styles.topPadding12,
+        child: _buildHeaderWithInfoI(
+          title: Strings.favouriteRoomTitle,
+          dialogText: Strings.favouriteRoomInfoI,
+        ),
+      ),
+      Padding(
+        padding: Styles.padding8,
+        child: ConstrainedBox(
+          constraints: Styles.smallerWidthConstraint,
+          child: InputDecorator(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String?>(
+                isDense: true,
+                items: items.keys
+                    .map(
+                      (String itemName) => DropdownMenuItem<String?>(
+                        value: items[itemName],
+                        child: Text(itemName),
+                      ),
+                    )
+                    .toList(),
+                selectedItemBuilder: (BuildContext context) => items.keys
+                    .map(
+                      (String itemName) => Padding(
+                        padding: Styles.leftPadding12,
+                        child: Text(itemName),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (String? value) {
+                  _bloc.add(
+                    SettingsFavouriteSelectionChangedEvent(room: value),
+                  );
+                },
+                value: state.favouriteRoom,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ];
   }
 
   Widget _buildHeaderWithInfoI({

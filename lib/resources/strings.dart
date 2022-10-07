@@ -106,6 +106,11 @@ class Strings {
   static const String selectRoomsInfoI =
       'Selected rooms will be shown in the \'Booking overview\' '
       'and will be suggested in \'Find an available room now\'.';
+  static const String favouriteRoomTitle = 'Favourite room';
+  static const String favouriteRoomInfoI =
+      'Your favorite room will be placed at the top of the Booking overview table '
+      'and its availability will always be shown when using \'Find an available room now\'.';
+  static const String favouriteRoomNone = 'None';
   static const String saveButton = 'Save changes';
 
   // Shared
