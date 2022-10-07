@@ -99,6 +99,7 @@ class BookingDataSource extends DataGridSource {
   }) {
     showDialog(
       builder: (_) => AlertDialog(
+        scrollable: true,
         title: Text(
           isFree
               ? isPast

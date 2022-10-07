@@ -156,6 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           onPressed: () => showDialog(
             builder: (_) => AlertDialog(
+              scrollable: true,
               title: Text(title),
               content: Text(dialogText),
               actions: <Widget>[
