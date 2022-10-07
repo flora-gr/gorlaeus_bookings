@@ -23,7 +23,7 @@ class Strings {
       'Feedback such as bug reports and feature requests can be ';
   static const String disclaimerDialogText4 = 'e-mailed';
   static const String disclaimerDialogText5 = ' or posted as an issue at our ';
-  static const String disclaimerDialogText6 = 'Github repository';
+  static const String disclaimerDialogText6 = 'GitHub repository';
   static const String disclaimerDialogText7 =
       '.\n\nThanks for using Gorlaeus Bookings!';
 
