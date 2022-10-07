@@ -111,7 +111,7 @@ class BookingDataSource extends DataGridSource {
           isFree
               ? isPast
                   ? Strings.roomFreeInPastDialogText
-                  : Strings.roomFreeDialogText(room, freeTime!)
+                  : Strings.roomFreeDialogText(room.capitalize(), freeTime!)
               : _getRoomBookedText(
                   room: room,
                   isPast: isPast,

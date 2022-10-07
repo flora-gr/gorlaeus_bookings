@@ -27,7 +27,7 @@ class Strings {
   static const String disclaimerDialogText7 =
       '.\n\nThanks for using Gorlaeus Bookings!';
 
-  // Get free room item
+  // Get free room now widget
   static const String getFreeRoomItemTitle = 'Find an available room now';
   static const String searchButton = 'Search';
   static const String searchAgainButton = 'Search again';
