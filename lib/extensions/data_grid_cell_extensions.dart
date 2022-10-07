@@ -40,7 +40,7 @@ extension DataGridCellExtensions on DataGridCell {
       } else if (nextBooking == null) {
         return 'from ${previousBooking.endTimeString()}';
       } else {
-        return 'from ${previousBooking.endTimeString()}-${nextBooking.startTimeString()}';
+        return 'from ${previousBooking.endTimeString()} - ${nextBooking.startTimeString()}';
       }
     }
   }

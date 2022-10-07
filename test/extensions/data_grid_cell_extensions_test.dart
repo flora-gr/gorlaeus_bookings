@@ -202,7 +202,7 @@ void main() {
 
       expect(
         cell.freeTime(bookingsPerRoomWithFreeSlotBetweenBookings),
-        'from 08:30-12:00',
+        'from 08:30 - 12:00',
         reason: 'Should return String indicating free time slot',
       );
 
