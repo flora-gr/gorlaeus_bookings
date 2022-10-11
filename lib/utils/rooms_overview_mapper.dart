@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
@@ -35,8 +36,18 @@ class RoomsOverviewMapper {
   }
 
   Future<Iterable<String>> _getRoomsToShow() async {
+    final SharedPreferencesRepository sharedPreferencesRepository =
+        getIt.get<SharedPreferencesRepository>();
     final List<String> hiddenRooms =
-        await getIt.get<SharedPreferencesRepository>().getHiddenRooms();
-    return Rooms.all.where((String room) => !hiddenRooms.contains(room));
+        await sharedPreferencesRepository.getHiddenRooms();
+    final String? favoriteRoom =
+        await sharedPreferencesRepository.getFavouriteRoom();
+    return Rooms.all
+        .where((String room) => !hiddenRooms.contains(room))
+        .sorted((String a, String b) => a == favoriteRoom
+            ? -1
+            : b == favoriteRoom
+                ? 1
+                : 0);
   }
 }
