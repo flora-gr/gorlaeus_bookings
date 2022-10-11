@@ -98,8 +98,8 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _buildCheckBoxColumn(firstHalfOfRooms, state.selectedRooms),
-                _buildCheckBoxColumn(secondHalfOfRooms, state.selectedRooms),
+                _buildCheckBoxColumn(firstHalfOfRooms, state),
+                _buildCheckBoxColumn(secondHalfOfRooms, state),
               ],
             ),
             const Padding(
@@ -115,7 +115,13 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildCheckBoxColumn(
-      Iterable<String> rooms, Iterable<String> selectedRooms) {
+      Iterable<String> rooms, SettingsReadyState state) {
+    final TextStyle favoriteRoomTextStyle = Theme.of(context)
+        .textTheme
+        .subtitle1!
+        .copyWith(
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.w600);
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -124,17 +130,25 @@ class _SettingsPageState extends State<SettingsPage> {
         children: rooms
             .map(
               (String room) => CheckboxListTile(
-                title: Text(room.toRoomName()),
+                title: Text(
+                  room.toRoomName(),
+                  style: state.favouriteRoom == room
+                      ? favoriteRoomTextStyle
+                      : null,
+                ),
                 controlAffinity: ListTileControlAffinity.leading,
                 visualDensity: VisualDensity.compact,
                 activeColor: Theme.of(context).colorScheme.secondary,
-                value: selectedRooms.contains(room),
-                onChanged: (bool? value) => _bloc.add(
-                  SettingsRoomSelectionChangedEvent(
-                    room: room,
-                    isSelected: value!,
-                  ),
-                ),
+                value: state.selectedRooms.contains(room) ||
+                    state.favouriteRoom == room,
+                onChanged: state.favouriteRoom == room
+                    ? (bool? value) => _showCannotDeselectDialog()
+                    : (bool? value) => _bloc.add(
+                          SettingsRoomSelectionChangedEvent(
+                            room: room,
+                            isSelected: value!,
+                          ),
+                        ),
               ),
             )
             .toList(),
@@ -147,7 +161,7 @@ class _SettingsPageState extends State<SettingsPage> {
       Strings.favouriteRoomNone: null
     };
     for (String room in Rooms.all) {
-      items[room] = room.toRoomName();
+      items[room.toRoomName()] = room;
     }
     return <Widget>[
       Padding(
@@ -196,6 +210,23 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     ];
+  }
+
+  void _showCannotDeselectDialog() {
+    showDialog(
+      builder: (_) => AlertDialog(
+        scrollable: true,
+        title: const Text(Strings.favouriteRoomTitle),
+        content: const Text(Strings.favouriteRoomCannotDeselect),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text(Strings.okButton),
+          ),
+        ],
+      ),
+      context: context,
+    );
   }
 
   Widget _buildHeaderWithInfoI({

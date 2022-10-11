@@ -65,8 +65,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   void _handleSettingsSaveEvent() {
     final SettingsReadyState currentState = (state as SettingsReadyState);
-    final Iterable<String> hiddenRooms = Rooms.all
-        .whereNot((String room) => currentState.selectedRooms.contains(room));
+    final Iterable<String> hiddenRooms = Rooms.all.whereNot((String room) =>
+        currentState.selectedRooms.contains(room) ||
+        currentState.favouriteRoom == room);
     _sharedPreferencesRepository.setHiddenRooms(hiddenRooms.toList());
     _sharedPreferencesRepository.setFavouriteRoom(currentState.favouriteRoom);
   }

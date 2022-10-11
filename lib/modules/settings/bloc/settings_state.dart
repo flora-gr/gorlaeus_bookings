@@ -25,6 +25,7 @@ class SettingsReadyState extends SettingsState {
   }) {
     return SettingsReadyState(
       selectedRooms: selectedRooms ?? this.selectedRooms,
+      favouriteRoom: favouriteRoom,
     );
   }
 
