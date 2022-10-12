@@ -40,13 +40,13 @@ class RoomsOverviewMapper {
         getIt.get<SharedPreferencesRepository>();
     final List<String> hiddenRooms =
         await sharedPreferencesRepository.getHiddenRooms();
-    final String? favoriteRoom =
+    final String? favouriteRoom =
         await sharedPreferencesRepository.getFavouriteRoom();
     return Rooms.all
         .where((String room) => !hiddenRooms.contains(room))
-        .sorted((String a, String b) => a == favoriteRoom
+        .sorted((String a, String b) => a == favouriteRoom
             ? -1
-            : b == favoriteRoom
+            : b == favouriteRoom
                 ? 1
                 : 0);
   }

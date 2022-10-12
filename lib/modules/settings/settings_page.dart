@@ -116,7 +116,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildCheckBoxColumn(
       Iterable<String> rooms, SettingsReadyState state) {
-    final TextStyle favoriteRoomTextStyle = Theme.of(context)
+    final TextStyle favouriteRoomTextStyle = Theme.of(context)
         .textTheme
         .subtitle1!
         .copyWith(
@@ -133,7 +133,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text(
                   room.toRoomName(),
                   style: state.favouriteRoom == room
-                      ? favoriteRoomTextStyle
+                      ? favouriteRoomTextStyle
                       : null,
                 ),
                 controlAffinity: ListTileControlAffinity.leading,
@@ -186,16 +186,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     .map(
                       (String itemName) => DropdownMenuItem<String?>(
                         value: items[itemName],
-                        child: Text(itemName),
+                        child: _buildDropdownItem(itemName),
                       ),
                     )
                     .toList(),
                 selectedItemBuilder: (BuildContext context) => items.keys
                     .map(
-                      (String itemName) => Padding(
-                        padding: Styles.leftPadding12,
-                        child: Text(itemName),
-                      ),
+                      (String itemName) => _buildDropdownItem(itemName),
                     )
                     .toList(),
                 onChanged: (String? value) {
@@ -210,6 +207,21 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     ];
+  }
+
+  Widget _buildDropdownItem(String itemName) {
+    return Padding(
+      padding: Styles.leftPadding12,
+      child: Text(
+        itemName,
+        style: itemName == Strings.favouriteRoomNone
+            ? Theme.of(context)
+                .textTheme
+                .subtitle1!
+                .copyWith(fontStyle: FontStyle.italic)
+            : null,
+      ),
+    );
   }
 
   void _showCannotDeselectDialog() {

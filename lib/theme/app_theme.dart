@@ -33,6 +33,7 @@ class AppTheme {
       color: Styles.appBarColorDark,
       foregroundColor: Styles.textColorDark,
     ),
+    canvasColor: Styles.canvasColorDark,
     checkboxTheme: CheckboxThemeData(
       checkColor: MaterialStateProperty.resolveWith(
           (Set<MaterialState> states) => Styles.appBarColorDark),

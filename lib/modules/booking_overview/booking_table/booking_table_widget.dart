@@ -20,6 +20,7 @@ class BookingTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfDataGrid(
+      headerGridLinesVisibility: GridLinesVisibility.none,
       columns: BookingTimes.all
           .map(
             (TimeBlock bookingTime) => GridColumn(

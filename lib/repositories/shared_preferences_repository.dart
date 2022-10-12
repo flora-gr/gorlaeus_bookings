@@ -29,7 +29,7 @@ class SharedPreferencesRepository {
         ];
   }
 
-  // Stored in array to prepare for potential future implementation of multiple favorite rooms
+  // Stored in array to prepare for potential future implementation of multiple favourite rooms
   Future<bool> setFavouriteRoom(String? room) async {
     return (await _prefs).setStringList(
       favouriteRoomsKey,

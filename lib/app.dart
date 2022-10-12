@@ -71,8 +71,8 @@ class App extends StatelessWidget {
           SettingsPage(
             SettingsBloc(),
           ),
-          settings,
           fullscreenDialog: true,
+          settings,
         );
       case Routes.homePage:
       default:
@@ -93,8 +93,8 @@ class App extends StatelessWidget {
   }) {
     return MaterialPageRoute<T>(
       builder: (_) => page,
-      settings: settings,
       fullscreenDialog: fullscreenDialog,
+      settings: settings,
     );
   }
 }
