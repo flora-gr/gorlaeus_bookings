@@ -25,6 +25,8 @@ void main() {
   setUp(() {
     when(() => sharedPreferencesRepository.getHiddenRooms())
         .thenAnswer((_) async => <String>[Rooms.room3]);
+    when(() => sharedPreferencesRepository.getFavouriteRoom())
+        .thenAnswer((_) async => Rooms.room2);
     sut = RoomsOverviewMapper();
   });
 
@@ -69,6 +71,11 @@ void main() {
         true,
         reason: 'Room should be hidden',
       );
+      expect(
+        result.keys.first == Rooms.room2,
+        true,
+        reason: 'Favourite room should be returned first',
+      );
     },
   );
 
@@ -98,6 +105,11 @@ void main() {
         result[Rooms.room3] == null,
         true,
         reason: 'Room should be hidden',
+      );
+      expect(
+        result.keys.first == Rooms.room2,
+        true,
+        reason: 'Favourite room should be returned first',
       );
     },
   );
