@@ -93,6 +93,7 @@ class Styles {
   static const EdgeInsetsGeometry topPadding12 = EdgeInsets.only(top: 12);
   static const EdgeInsetsGeometry topPadding4 = EdgeInsets.only(top: 4);
   static const EdgeInsetsGeometry leftPadding12 = EdgeInsets.only(left: 12);
+  static const EdgeInsetsGeometry rightPadding4 = EdgeInsets.only(right: 4);
 
   // Other
   static BorderRadius borderRadius = BorderRadius.circular(6);

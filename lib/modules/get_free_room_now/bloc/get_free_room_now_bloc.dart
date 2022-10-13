@@ -13,6 +13,7 @@ import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_n
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 
@@ -20,50 +21,55 @@ class GetFreeRoomNowBloc
     extends Bloc<GetFreeRoomNowEvent, GetFreeRoomNowState> {
   GetFreeRoomNowBloc() : super(const GetFreeRoomNowReadyState()) {
     _dateTimeRepository = getIt.get<DateTimeRepository>();
-    on<GetFreeRoomNowInitEvent>(
-        (GetFreeRoomNowInitEvent event, Emitter<GetFreeRoomNowState> emit) =>
-            emit(_handleInitEvent()));
+    _sharedPreferencesRepository = getIt.get<SharedPreferencesRepository>();
+    on<GetFreeRoomNowInitEvent>((GetFreeRoomNowInitEvent event,
+            Emitter<GetFreeRoomNowState> emit) async =>
+        emit(await _handleInitEvent()));
     on<GetFreeRoomNowSearchEvent>(
         (GetFreeRoomNowSearchEvent event, Emitter<GetFreeRoomNowState> emit) =>
             emit.forEach(_handleSearchEvent(),
                 onData: (GetFreeRoomNowState state) => state));
+    on<GetFreeRoomNowRadioButtonChangedEvent>(
+        (GetFreeRoomNowRadioButtonChangedEvent event,
+                Emitter<GetFreeRoomNowState> emit) =>
+            emit((state as GetFreeRoomNowReadyState).copyWith(
+                favouriteRoomSearchSelected:
+                    event.favoriteRoomSearchSelected)));
     on<GetFreeRoomNowSharedPreferencesChangedEvent>(
         (GetFreeRoomNowSharedPreferencesChangedEvent event,
-                Emitter<GetFreeRoomNowState> emit) =>
-            emit(_handleSharedPreferencesChangedEvent()));
+                Emitter<GetFreeRoomNowState> emit) async =>
+            emit(await _handleSharedPreferencesChangedEvent()));
   }
 
   late DateTimeRepository _dateTimeRepository;
+  late SharedPreferencesRepository _sharedPreferencesRepository;
 
   final Random _random = Random();
 
-  GetFreeRoomNowState _handleInitEvent() {
+  Future<GetFreeRoomNowState> _handleInitEvent() async {
     if (_dateTimeRepository.getCurrentDateTime().isWeekendDay()) {
       return const GetFreeRoomNowWeekendState();
     } else {
-      return const GetFreeRoomNowReadyState();
+      final String? favouriteRoom =
+          await _sharedPreferencesRepository.getFavouriteRoom();
+      return GetFreeRoomNowReadyState(favouriteRoom: favouriteRoom);
     }
   }
 
   Stream<GetFreeRoomNowState> _handleSearchEvent() async* {
-    Map<String, Iterable<TimeBlock?>>? timeBlocksPerRoom;
-    String? currentFreeRoom;
-    TimeBlock? currentNextBooking;
-    bool? currentIsOnlyRoom;
+    final GetFreeRoomNowReadyState currentState =
+        state as GetFreeRoomNowReadyState;
 
-    if (state is GetFreeRoomNowReadyState) {
-      final GetFreeRoomNowReadyState currentState =
-          state as GetFreeRoomNowReadyState;
-      timeBlocksPerRoom = currentState.timeBlocksPerRoom;
-      currentFreeRoom = currentState.freeRoom;
-      currentNextBooking = currentState.nextBooking;
-      currentIsOnlyRoom = currentState.isOnlyRoom;
-    }
+    Map<String, Iterable<TimeBlock?>>? timeBlocksPerRoom =
+        currentState.timeBlocksPerRoom;
+    String? favouriteRoom = currentState.favouriteRoom;
 
     yield GetFreeRoomNowBusyState(
-      freeRoom: currentFreeRoom,
-      nextBooking: currentNextBooking,
-      isOnlyRoom: currentIsOnlyRoom,
+      favouriteRoom: favouriteRoom,
+      favouriteRoomSearchSelected: currentState.favouriteRoomSearchSelected,
+      freeRoom: currentState.freeRoom,
+      nextBooking: currentState.nextBooking,
+      isOnlyRoom: currentState.isOnlyRoom,
     );
 
     try {
@@ -75,6 +81,7 @@ class GetFreeRoomNowBloc
         timeBlocksPerRoom = await getIt
             .get<RoomsOverviewMapper>()
             .mapTimeBlocks(bookingsResponse);
+        favouriteRoom = await _sharedPreferencesRepository.getFavouriteRoom();
       }
 
       if (timeBlocksPerRoom != null) {
@@ -95,18 +102,31 @@ class GetFreeRoomNowBloc
 
           yield GetFreeRoomNowReadyState(
             timeBlocksPerRoom: timeBlocksPerRoom,
+            favouriteRoom: favouriteRoom,
+            favouriteRoomSearchSelected:
+                currentState.favouriteRoomSearchSelected,
             freeRoom: freeRoom,
             nextBooking: nextBooking,
             isOnlyRoom: freeRooms.length == 1,
           );
         } else {
-          yield const GetFreeRoomNowEmptyState();
+          yield GetFreeRoomNowEmptyState(
+            favouriteRoom: favouriteRoom,
+            favouriteRoomSearchSelected:
+                currentState.favouriteRoomSearchSelected,
+          );
         }
       } else {
-        yield const GetFreeRoomNowErrorState();
+        yield GetFreeRoomNowErrorState(
+          favouriteRoom: favouriteRoom,
+          favouriteRoomSearchSelected: currentState.favouriteRoomSearchSelected,
+        );
       }
     } on Exception {
-      yield const GetFreeRoomNowErrorState();
+      yield GetFreeRoomNowErrorState(
+        favouriteRoom: favouriteRoom,
+        favouriteRoomSearchSelected: currentState.favouriteRoomSearchSelected,
+      );
     }
   }
 
@@ -127,17 +147,21 @@ class GetFreeRoomNowBloc
     );
   }
 
-  GetFreeRoomNowState _handleSharedPreferencesChangedEvent() {
+  Future<GetFreeRoomNowState> _handleSharedPreferencesChangedEvent() async {
+    final String? favouriteRoom =
+        await _sharedPreferencesRepository.getFavouriteRoom();
+
     if (state is GetFreeRoomNowReadyState) {
       final GetFreeRoomNowReadyState currentState =
           state as GetFreeRoomNowReadyState;
       return GetFreeRoomNowReadyState(
+        favouriteRoom: favouriteRoom,
         freeRoom: currentState.freeRoom,
         nextBooking: currentState.nextBooking,
         isOnlyRoom: false,
       );
     } else if (state is GetFreeRoomNowEmptyState) {
-      return const GetFreeRoomNowReadyState();
+      return GetFreeRoomNowReadyState(favouriteRoom: favouriteRoom);
     }
     return state;
   }

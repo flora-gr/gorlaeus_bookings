@@ -46,7 +46,23 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _buildButton(state),
+                if (state is GetFreeRoomNowReadyState &&
+                    state.favouriteRoom != null)
+                  Row(
+                    children: <Widget>[
+                      _buildSearchFavouriteRadioButton(
+                        state,
+                        Strings.favouriteRoomRadioButton,
+                        selectedValue: true,
+                      ),
+                      _buildSearchFavouriteRadioButton(
+                        state,
+                        Strings.anyRoomRadioButton,
+                        selectedValue: false,
+                      ),
+                    ],
+                  ),
+                _buildSearchButton(state),
                 if (dataFetchedText != null)
                   Padding(
                     padding: Styles.topPadding12,
@@ -60,7 +76,31 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
     );
   }
 
-  Widget _buildButton(GetFreeRoomNowState state) {
+  Widget _buildSearchFavouriteRadioButton(
+    GetFreeRoomNowReadyState state,
+    String title, {
+    required bool selectedValue,
+  }) {
+    return Expanded(
+      child: RadioListTile<bool>(
+        activeColor: Theme.of(context).colorScheme.secondary,
+        contentPadding: Styles.rightPadding4,
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.subtitle2,
+        ),
+        value: selectedValue,
+        groupValue: state.favouriteRoomSearchSelected,
+        onChanged: (bool? value) => _bloc.add(
+          GetFreeRoomNowRadioButtonChangedEvent(
+            favoriteRoomSearchSelected: value!,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchButton(GetFreeRoomNowState state) {
     return ElevatedButton(
       onPressed: state is GetFreeRoomNowWeekendState
           ? null

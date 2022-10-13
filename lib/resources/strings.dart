@@ -29,9 +29,13 @@ class Strings {
 
   // Get free room now widget
   static const String getFreeRoomItemTitle = 'Find an available room now';
+  static const String favouriteRoomRadioButton = favouriteRoomTitle;
+  static const String anyRoomRadioButton = 'Any room';
   static const String searchButton = 'Search';
   static const String searchAgainButton = 'Search again';
   static const String notAvailableInWeekendButton = 'Not available on weekends';
+  static const String favouriteRoomMayBeFree1 = 'Your favourite room ';
+  static const String favouriteRoomNotFree = ' is not available at the moment.';
   static const String roomIsFree1 = 'Room ';
 
   static String roomIsFree2(String? endTime, {required bool isOnlyRoom}) =>
@@ -111,7 +115,7 @@ class Strings {
       'You can\'t deselect your favourite room.';
   static const String favouriteRoomInfoI =
       'Your favourite room will be placed at the top of the Booking overview table '
-      'and its availability will always be shown when using \'Find an available room now\'.';
+      'and its availability can be checked directly in \'Find an available room now\'.';
   static const String favouriteRoomNone = '- None -';
   static const String saveButton = 'Save changes';
 

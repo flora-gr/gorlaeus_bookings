@@ -18,6 +18,17 @@ class GetFreeRoomNowSearchEvent extends GetFreeRoomNowEvent {
   List<Object?> get props => <Object?>[];
 }
 
+class GetFreeRoomNowRadioButtonChangedEvent extends GetFreeRoomNowEvent {
+  const GetFreeRoomNowRadioButtonChangedEvent({
+    required this.favoriteRoomSearchSelected,
+  });
+
+  final bool favoriteRoomSearchSelected;
+
+  @override
+  List<Object?> get props => <Object?>[favoriteRoomSearchSelected];
+}
+
 class GetFreeRoomNowSharedPreferencesChangedEvent extends GetFreeRoomNowEvent {
   const GetFreeRoomNowSharedPreferencesChangedEvent();
 
