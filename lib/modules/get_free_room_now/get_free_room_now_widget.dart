@@ -62,7 +62,10 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
                       ),
                     ],
                   ),
-                _buildSearchButton(state),
+                _buildSearchButton(
+                  state,
+                  hasDataFetchedText: dataFetchedText != null,
+                ),
                 if (dataFetchedText != null)
                   Padding(
                     padding: Styles.topPadding12,
@@ -100,7 +103,10 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
     );
   }
 
-  Widget _buildSearchButton(GetFreeRoomNowState state) {
+  Widget _buildSearchButton(
+    GetFreeRoomNowState state, {
+    required bool hasDataFetchedText,
+  }) {
     return ElevatedButton(
       onPressed: state is GetFreeRoomNowWeekendState
           ? null
@@ -111,7 +117,12 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
           Flexible(
             child: Padding(
               padding: Styles.leftPadding12,
-              child: Text(_getButtonText(state)),
+              child: Text(
+                _getButtonText(
+                  state,
+                  hasDataFetchedText: hasDataFetchedText,
+                ),
+              ),
             ),
           ),
           ButtonLoadingWidget(
@@ -122,11 +133,13 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
     );
   }
 
-  String _getButtonText(GetFreeRoomNowState state) {
+  String _getButtonText(
+    GetFreeRoomNowState state, {
+    required bool hasDataFetchedText,
+  }) {
     return state is GetFreeRoomNowWeekendState
         ? Strings.notAvailableInWeekendButton
-        : state is GetFreeRoomNowErrorState ||
-                state is GetFreeRoomNowReadyState && state.freeRoom != null
+        : hasDataFetchedText
             ? Strings.searchAgainButton
             : Strings.searchButton;
   }
