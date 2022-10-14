@@ -133,72 +133,74 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
 
   Widget? _getDataFetchedText(GetFreeRoomNowState state) {
     final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
-    if (state is GetFreeRoomNowFavouriteRoomState) {
-      return Text.rich(
-        TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-              text: Strings.favouriteRoomMayBeFree1,
-              style: defaultTextStyle,
-            ),
-            TextSpan(
-              text: state.favouriteRoom!.toRoomName(),
-              style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
-            ),
-            if (state.isFree)
+    if (state is GetFreeRoomNowReadyState) {
+      if (state.favouriteRoomIsFree != null) {
+        return Text.rich(
+          TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: Strings.favouriteRoomMayBeFree1,
+                style: defaultTextStyle,
+              ),
+              TextSpan(
+                text: state.favouriteRoom!.toRoomName(),
+                style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
+              ),
+              if (state.favouriteRoomIsFree!)
+                TextSpan(
+                  text: Strings.roomIsFree2(
+                    state.nextBooking?.startTimeString(),
+                    isOnlyRoom: false,
+                  ),
+                  style: defaultTextStyle,
+                )
+              else
+                TextSpan(
+                  text: Strings.favouriteRoomNotFree,
+                  style: defaultTextStyle,
+                ),
+              if (state.favouriteRoom == Rooms.room13 ||
+                  state.favouriteRoom == Rooms.room21)
+                TextSpan(
+                  text: Strings.notLectureRoom,
+                  style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
+                ),
+            ],
+          ),
+        );
+      } else if (state.freeRoom != null) {
+        return Text.rich(
+          TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: Strings.roomIsFree1,
+                style: defaultTextStyle,
+              ),
+              TextSpan(
+                text: state.freeRoom!.toRoomName(),
+                style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
+              ),
               TextSpan(
                 text: Strings.roomIsFree2(
                   state.nextBooking?.startTimeString(),
-                  isOnlyRoom: false,
+                  isOnlyRoom: state.isOnlyRoom!,
                 ),
                 style: defaultTextStyle,
-              )
-            else
-              TextSpan(
-                text: Strings.favouriteRoomNotFree,
-                style: defaultTextStyle,
               ),
-            if (state.favouriteRoom == Rooms.room13 ||
-                state.favouriteRoom == Rooms.room21)
-              TextSpan(
-                text: Strings.notLectureRoom,
-                style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
-              ),
-          ],
-        ),
-      );
-    } else if (state is GetFreeRoomNowReadyState && state.freeRoom != null) {
-      return Text.rich(
-        TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-              text: Strings.roomIsFree1,
-              style: defaultTextStyle,
-            ),
-            TextSpan(
-              text: state.freeRoom!.toRoomName(),
-              style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(
-              text: Strings.roomIsFree2(
-                state.nextBooking?.startTimeString(),
-                isOnlyRoom: state.isOnlyRoom!,
-              ),
-              style: defaultTextStyle,
-            ),
-            if (state.freeRoom == Rooms.room13 ||
-                state.freeRoom == Rooms.room21)
-              TextSpan(
-                text: Strings.notLectureRoom,
-                style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
-              ),
-          ],
-        ),
-      );
-    } else if (state is GetFreeRoomNowEmptyState) {
-      return const Text(Strings.noFreeRoomFound);
-    } else if (state is GetFreeRoomNowErrorState) {
-      return const Text(Strings.getFreeRoomFailed);
+              if (state.freeRoom == Rooms.room13 ||
+                  state.freeRoom == Rooms.room21)
+                TextSpan(
+                  text: Strings.notLectureRoom,
+                  style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
+                ),
+            ],
+          ),
+        );
+      } else if (state is GetFreeRoomNowEmptyState) {
+        return const Text(Strings.noFreeRoomFound);
+      } else if (state is GetFreeRoomNowErrorState) {
+        return const Text(Strings.getFreeRoomFailed);
+      }
     }
     return null;
   }

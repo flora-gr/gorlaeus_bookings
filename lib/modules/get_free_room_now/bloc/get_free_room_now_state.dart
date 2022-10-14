@@ -17,6 +17,7 @@ class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
     this.timeBlocksPerRoom,
     this.favouriteRoom,
     this.favouriteRoomSearchSelected = true,
+    this.favouriteRoomIsFree,
     this.freeRoom,
     this.nextBooking,
     this.isOnlyRoom,
@@ -25,6 +26,7 @@ class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
   final Map<String, Iterable<TimeBlock?>>? timeBlocksPerRoom;
   final String? favouriteRoom;
   final bool favouriteRoomSearchSelected;
+  final bool? favouriteRoomIsFree;
   final String? freeRoom;
   final TimeBlock? nextBooking;
   final bool? isOnlyRoom;
@@ -35,6 +37,7 @@ class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
       timeBlocksPerRoom: timeBlocksPerRoom,
       favouriteRoom: favouriteRoom,
       favouriteRoomSearchSelected: favouriteRoomSearchSelected,
+      favouriteRoomIsFree: favouriteRoomIsFree,
       freeRoom: freeRoom,
       nextBooking: nextBooking,
       isOnlyRoom: isOnlyRoom,
@@ -46,6 +49,7 @@ class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
         timeBlocksPerRoom,
         favouriteRoom,
         favouriteRoomSearchSelected,
+        favouriteRoomIsFree,
         freeRoom,
         nextBooking,
         isOnlyRoom,
@@ -56,12 +60,14 @@ class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
   const GetFreeRoomNowBusyState({
     String? favouriteRoom,
     bool favouriteRoomSearchSelected = true,
+    bool? favouriteRoomIsFree,
     String? freeRoom,
     TimeBlock? nextBooking,
     bool? isOnlyRoom,
   }) : super(
           favouriteRoom: favouriteRoom,
           favouriteRoomSearchSelected: favouriteRoomSearchSelected,
+          favouriteRoomIsFree: favouriteRoomIsFree,
           freeRoom: freeRoom,
           nextBooking: nextBooking,
           isOnlyRoom: isOnlyRoom,
@@ -69,26 +75,6 @@ class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
 
   @override
   List<Object?> get props => <Object?>[...super.props];
-}
-
-class GetFreeRoomNowFavouriteRoomState extends GetFreeRoomNowReadyState {
-  const GetFreeRoomNowFavouriteRoomState({
-    Map<String, Iterable<TimeBlock?>>? timeBlocksPerRoom,
-    String? favouriteRoom,
-    bool favouriteRoomSearchSelected = true,
-    TimeBlock? nextBooking,
-    required this.isFree,
-  }) : super(
-          timeBlocksPerRoom: timeBlocksPerRoom,
-          favouriteRoom: favouriteRoom,
-          favouriteRoomSearchSelected: favouriteRoomSearchSelected,
-          nextBooking: nextBooking,
-        );
-
-  final bool isFree;
-
-  @override
-  List<Object?> get props => <Object?>[...super.props, isFree];
 }
 
 class GetFreeRoomNowErrorState extends GetFreeRoomNowReadyState {
