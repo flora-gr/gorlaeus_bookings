@@ -34,7 +34,7 @@ class GetFreeRoomNowBloc
                 Emitter<GetFreeRoomNowState> emit) =>
             emit((state as GetFreeRoomNowReadyState).copyWith(
                 favouriteRoomSearchSelected:
-                    event.favoriteRoomSearchSelected)));
+                    event.favouriteRoomSearchSelected)));
     on<GetFreeRoomNowSharedPreferencesChangedEvent>(
         (GetFreeRoomNowSharedPreferencesChangedEvent event,
                 Emitter<GetFreeRoomNowState> emit) async =>
@@ -92,29 +92,54 @@ class GetFreeRoomNowBloc
                     timeBlock?.overlapsWith(timeBlockToCheck) == true))
             .toList();
 
-        if (freeRooms.isNotEmpty) {
-          final String freeRoom = freeRooms[_random.nextInt(freeRooms.length)];
-          final List<TimeBlock?> bookingsForFreeRoom =
-              timeBlocksPerRoom[freeRoom]!.sort();
-          final TimeBlock? nextBooking = bookingsForFreeRoom.firstWhereOrNull(
-              ((TimeBlock? bookingTime) =>
-                  bookingTime!.isAfter(timeBlockToCheck)));
-
-          yield GetFreeRoomNowReadyState(
-            timeBlocksPerRoom: timeBlocksPerRoom,
-            favouriteRoom: favouriteRoom,
-            favouriteRoomSearchSelected:
-                currentState.favouriteRoomSearchSelected,
-            freeRoom: freeRoom,
-            nextBooking: nextBooking,
-            isOnlyRoom: freeRooms.length == 1,
-          );
+        if (currentState.favouriteRoomSearchSelected && favouriteRoom != null) {
+          if (freeRooms.contains(favouriteRoom)) {
+            final List<TimeBlock?> bookingsForFavouriteRoom =
+                timeBlocksPerRoom[favouriteRoom]!.sort();
+            final TimeBlock? nextBooking = bookingsForFavouriteRoom
+                .firstWhereOrNull(((TimeBlock? bookingTime) =>
+                    bookingTime!.isAfter(timeBlockToCheck)));
+            yield GetFreeRoomNowFavouriteRoomState(
+              timeBlocksPerRoom: timeBlocksPerRoom,
+              favouriteRoom: favouriteRoom,
+              favouriteRoomSearchSelected: true,
+              isFree: true,
+              nextBooking: nextBooking,
+            );
+          } else {
+            yield GetFreeRoomNowFavouriteRoomState(
+              timeBlocksPerRoom: timeBlocksPerRoom,
+              favouriteRoom: favouriteRoom,
+              favouriteRoomSearchSelected: true,
+              isFree: false,
+            );
+          }
         } else {
-          yield GetFreeRoomNowEmptyState(
-            favouriteRoom: favouriteRoom,
-            favouriteRoomSearchSelected:
-                currentState.favouriteRoomSearchSelected,
-          );
+          if (freeRooms.isNotEmpty) {
+            final String freeRoom =
+                freeRooms[_random.nextInt(freeRooms.length)];
+            final List<TimeBlock?> bookingsForFreeRoom =
+                timeBlocksPerRoom[freeRoom]!.sort();
+            final TimeBlock? nextBooking = bookingsForFreeRoom.firstWhereOrNull(
+                ((TimeBlock? bookingTime) =>
+                    bookingTime!.isAfter(timeBlockToCheck)));
+
+            yield GetFreeRoomNowReadyState(
+              timeBlocksPerRoom: timeBlocksPerRoom,
+              favouriteRoom: favouriteRoom,
+              favouriteRoomSearchSelected:
+                  currentState.favouriteRoomSearchSelected,
+              freeRoom: freeRoom,
+              nextBooking: nextBooking,
+              isOnlyRoom: freeRooms.length == 1,
+            );
+          } else {
+            yield GetFreeRoomNowEmptyState(
+              favouriteRoom: favouriteRoom,
+              favouriteRoomSearchSelected:
+                  currentState.favouriteRoomSearchSelected,
+            );
+          }
         }
       } else {
         yield GetFreeRoomNowErrorState(
@@ -150,17 +175,7 @@ class GetFreeRoomNowBloc
   Future<GetFreeRoomNowState> _handleSharedPreferencesChangedEvent() async {
     final String? favouriteRoom =
         await _sharedPreferencesRepository.getFavouriteRoom();
-
     if (state is GetFreeRoomNowReadyState) {
-      final GetFreeRoomNowReadyState currentState =
-          state as GetFreeRoomNowReadyState;
-      return GetFreeRoomNowReadyState(
-        favouriteRoom: favouriteRoom,
-        freeRoom: currentState.freeRoom,
-        nextBooking: currentState.nextBooking,
-        isOnlyRoom: false,
-      );
-    } else if (state is GetFreeRoomNowEmptyState) {
       return GetFreeRoomNowReadyState(favouriteRoom: favouriteRoom);
     }
     return state;

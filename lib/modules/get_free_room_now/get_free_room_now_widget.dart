@@ -93,7 +93,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
         groupValue: state.favouriteRoomSearchSelected,
         onChanged: (bool? value) => _bloc.add(
           GetFreeRoomNowRadioButtonChangedEvent(
-            favoriteRoomSearchSelected: value!,
+            favouriteRoomSearchSelected: value!,
           ),
         ),
       ),
@@ -132,8 +132,42 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
   }
 
   Widget? _getDataFetchedText(GetFreeRoomNowState state) {
-    if (state is GetFreeRoomNowReadyState && state.freeRoom != null) {
-      final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
+    final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
+    if (state is GetFreeRoomNowFavouriteRoomState) {
+      return Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: Strings.favouriteRoomMayBeFree1,
+              style: defaultTextStyle,
+            ),
+            TextSpan(
+              text: state.favouriteRoom!.toRoomName(),
+              style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
+            ),
+            if (state.isFree)
+              TextSpan(
+                text: Strings.roomIsFree2(
+                  state.nextBooking?.startTimeString(),
+                  isOnlyRoom: false,
+                ),
+                style: defaultTextStyle,
+              )
+            else
+              TextSpan(
+                text: Strings.favouriteRoomNotFree,
+                style: defaultTextStyle,
+              ),
+            if (state.favouriteRoom == Rooms.room13 ||
+                state.favouriteRoom == Rooms.room21)
+              TextSpan(
+                text: Strings.notLectureRoom,
+                style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
+              ),
+          ],
+        ),
+      );
+    } else if (state is GetFreeRoomNowReadyState && state.freeRoom != null) {
       return Text.rich(
         TextSpan(
           children: <TextSpan>[
