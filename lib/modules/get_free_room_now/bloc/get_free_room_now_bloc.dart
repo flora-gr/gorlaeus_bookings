@@ -138,7 +138,6 @@ class GetFreeRoomNowBloc
           } else {
             yield GetFreeRoomNowEmptyState(
               favouriteRoom: favouriteRoom,
-              favouriteRoomSearchSelected: false,
             );
           }
         }
@@ -200,10 +199,9 @@ class GetFreeRoomNowBloc
         favouriteRoomIsFree: currentState.favouriteRoom == newFavouriteRoom
             ? currentState.favouriteRoomIsFree
             : null,
-        freeRoom: currentState.freeRoom ??
-            (currentState.favouriteRoomIsFree == true
-                ? currentState.favouriteRoom
-                : null),
+        freeRoom: currentState.favouriteRoomIsFree == true
+            ? currentState.favouriteRoom
+            : currentState.freeRoom,
         nextBooking: currentState.nextBooking,
         isOnlyRoom: false,
       );

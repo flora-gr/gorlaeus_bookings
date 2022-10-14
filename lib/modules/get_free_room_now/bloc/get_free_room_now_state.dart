@@ -59,7 +59,7 @@ class GetFreeRoomNowReadyState extends GetFreeRoomNowState {
 class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
   const GetFreeRoomNowBusyState({
     String? favouriteRoom,
-    bool favouriteRoomSearchSelected = true,
+    required bool favouriteRoomSearchSelected,
     bool? favouriteRoomIsFree,
     String? freeRoom,
     TimeBlock? nextBooking,
@@ -80,7 +80,7 @@ class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
 class GetFreeRoomNowErrorState extends GetFreeRoomNowReadyState {
   const GetFreeRoomNowErrorState({
     String? favouriteRoom,
-    bool favouriteRoomSearchSelected = true,
+    required bool favouriteRoomSearchSelected,
   }) : super(
           favouriteRoom: favouriteRoom,
           favouriteRoomSearchSelected: favouriteRoomSearchSelected,
@@ -93,11 +93,7 @@ class GetFreeRoomNowErrorState extends GetFreeRoomNowReadyState {
 class GetFreeRoomNowEmptyState extends GetFreeRoomNowReadyState {
   const GetFreeRoomNowEmptyState({
     String? favouriteRoom,
-    bool favouriteRoomSearchSelected = true,
-  }) : super(
-          favouriteRoom: favouriteRoom,
-          favouriteRoomSearchSelected: favouriteRoomSearchSelected,
-        );
+  }) : super(favouriteRoom: favouriteRoom);
 
   @override
   List<Object?> get props => <Object?>[...super.props];

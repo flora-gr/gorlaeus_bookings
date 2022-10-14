@@ -9,6 +9,7 @@ import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_n
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/repositories/booking_repository.dart';
 import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
+import 'package:gorlaeus_bookings/repositories/shared_preferences_repository.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 import 'package:gorlaeus_bookings/utils/rooms_overview_mapper.dart';
 import 'package:mocktail/mocktail.dart';
@@ -19,10 +20,14 @@ class MockDateTimeRepository extends Mock implements DateTimeRepository {}
 
 class MockRoomsOverviewMapper extends Mock implements RoomsOverviewMapper {}
 
+class MockSharedPreferencesRepository extends Mock
+    implements SharedPreferencesRepository {}
+
 void main() {
   late DateTimeRepository dateTimeRepository;
   late BookingRepository bookingRepository;
   late RoomsOverviewMapper mapper;
+  late SharedPreferencesRepository sharedPreferencesRepository;
   late GetFreeRoomNowBloc sut;
 
   final DateTime todayAtTwo = DateTime(2020, 1, 1, 14);
@@ -74,9 +79,12 @@ void main() {
     bookingRepository = MockBookingRepository();
     dateTimeRepository = MockDateTimeRepository();
     mapper = MockRoomsOverviewMapper();
+    sharedPreferencesRepository = MockSharedPreferencesRepository();
     getIt.registerSingleton<BookingRepository>(bookingRepository);
     getIt.registerSingleton<DateTimeRepository>(dateTimeRepository);
     getIt.registerSingleton<RoomsOverviewMapper>(mapper);
+    getIt.registerSingleton<SharedPreferencesRepository>(
+        sharedPreferencesRepository);
   });
 
   setUp(() {
@@ -86,16 +94,19 @@ void main() {
         .thenAnswer((_) => todayAtTwo);
     when(() => mapper.mapTimeBlocks(any()))
         .thenAnswer((_) async => timeBlocksPerRoom);
+    when(() => sharedPreferencesRepository.getFavouriteRoom())
+        .thenAnswer((_) async => null);
     sut = GetFreeRoomNowBloc();
   });
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
     'GetFreeRoomNowSearchEvent fetches data and emits ready state with timeBlocksPerRoom and freeRoom',
     build: () => sut,
+    seed: () => const GetFreeRoomNowReadyState(),
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      const GetFreeRoomNowBusyState(),
+      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: true),
       predicate((GetFreeRoomNowReadyState state) =>
           state.timeBlocksPerRoom != null && state.freeRoom != null),
     ],
@@ -119,6 +130,7 @@ void main() {
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
       GetFreeRoomNowBusyState(
+        favouriteRoomSearchSelected: true,
         freeRoom: seedState.freeRoom,
         nextBooking: seedState.nextBooking,
         isOnlyRoom: seedState.isOnlyRoom,
@@ -143,10 +155,11 @@ void main() {
           .thenAnswer((_) async => timeBlocksWithOnlyRoom1StartingAfterNine);
     },
     build: () => sut,
+    seed: () => const GetFreeRoomNowReadyState(),
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      const GetFreeRoomNowBusyState(),
+      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: true),
       predicate(
         (GetFreeRoomNowReadyState state) => state.freeRoom == Rooms.room1,
       ),
@@ -158,11 +171,12 @@ void main() {
     setUp: () =>
         when(() => mapper.mapTimeBlocks(any())).thenAnswer((_) async => null),
     build: () => sut,
+    seed: () => const GetFreeRoomNowReadyState(),
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      const GetFreeRoomNowBusyState(),
-      const GetFreeRoomNowErrorState(),
+      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: true),
+      const GetFreeRoomNowErrorState(favouriteRoomSearchSelected: true),
     ],
   );
 
@@ -171,23 +185,25 @@ void main() {
     setUp: () => when(() => mapper.mapTimeBlocks(any()))
         .thenAnswer((_) async => fullyBookedTimeBlocksPerRoom()),
     build: () => sut,
+    seed: () => const GetFreeRoomNowReadyState(),
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      const GetFreeRoomNowBusyState(),
+      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: true),
       const GetFreeRoomNowEmptyState(),
     ],
   );
 
   GetFreeRoomNowReadyState seedStateWithSingleFreeRoom =
       GetFreeRoomNowReadyState(
+    favouriteRoom: Rooms.room1,
     timeBlocksPerRoom: timeBlocksPerRoom,
     freeRoom: Rooms.room1,
     isOnlyRoom: true,
   );
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-    'SharedPreferencesChangedEvent resets timeBlocksPerRoom in ready state to null and isOnlyRoom to false',
+    'SharedPreferencesChangedEvent resets timeBlocksPerRoom in ready state to null and isOnlyRoom to false and updates favourite room',
     build: () => sut,
     seed: () => seedStateWithSingleFreeRoom,
     act: (GetFreeRoomNowBloc bloc) =>
@@ -195,6 +211,7 @@ void main() {
     expect: () => <dynamic>[
       predicate(
         (GetFreeRoomNowReadyState state) =>
+            state.favouriteRoom == null &&
             state.timeBlocksPerRoom == null &&
             state.freeRoom == seedStateWithSingleFreeRoom.freeRoom &&
             state.nextBooking == seedStateWithSingleFreeRoom.nextBooking &&
@@ -204,9 +221,9 @@ void main() {
   );
 
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-    'SharedPreferencesChangedEvent when in empty state emits empty ready state',
+    'SharedPreferencesChangedEvent when in empty state emits empty ready state but updates favourite room',
     build: () => sut,
-    seed: () => const GetFreeRoomNowEmptyState(),
+    seed: () => const GetFreeRoomNowEmptyState(favouriteRoom: Rooms.room1),
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSharedPreferencesChangedEvent()),
     expect: () => <GetFreeRoomNowState>[const GetFreeRoomNowReadyState()],
