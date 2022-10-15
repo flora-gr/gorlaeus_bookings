@@ -161,7 +161,7 @@ class GetFreeRoomNowBloc
       return freeRooms.single;
     } else {
       String? currentFreeRoom = currentState.freeRoom ??
-          (currentState.favouriteRoomIsFree != null
+          (currentState.favouriteRoomIsFree == true
               ? currentState.favouriteRoom
               : null);
       final List<String> freeRoomsWithoutCurrent =
