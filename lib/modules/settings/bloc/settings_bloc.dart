@@ -17,6 +17,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         (SettingsRoomSelectionChangedEvent event,
                 Emitter<SettingsState> emit) =>
             emit(_handleRoomSelectionChangedEvent(event)));
+    on<SettingsFavouriteSelectionChangedEvent>(
+        (SettingsFavouriteSelectionChangedEvent event,
+                Emitter<SettingsState> emit) =>
+            emit(_handleFavouriteSelectionChangedEvent(event)));
     on<SettingsSaveEvent>(
         (SettingsSaveEvent event, Emitter<SettingsState> emit) =>
             _handleSettingsSaveEvent());
@@ -27,10 +31,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Stream<SettingsState> _handleInitEvent() async* {
     final List<String> hiddenRooms =
         await _sharedPreferencesRepository.getHiddenRooms();
+    final String? favouriteRoom =
+        await _sharedPreferencesRepository.getFavouriteRoom();
 
     yield SettingsReadyState(
       selectedRooms:
           Rooms.all.whereNot((String room) => hiddenRooms.contains(room)),
+      favouriteRoom: favouriteRoom,
     );
   }
 
@@ -47,10 +54,21 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     return currentState.copyWith(selectedRooms: newSelectedRooms);
   }
 
+  SettingsState _handleFavouriteSelectionChangedEvent(
+      SettingsFavouriteSelectionChangedEvent event) {
+    final SettingsReadyState currentState = (state as SettingsReadyState);
+    return SettingsReadyState(
+      selectedRooms: currentState.selectedRooms,
+      favouriteRoom: event.room,
+    );
+  }
+
   void _handleSettingsSaveEvent() {
     final SettingsReadyState currentState = (state as SettingsReadyState);
-    final Iterable<String> hiddenRooms = Rooms.all
-        .whereNot((String room) => currentState.selectedRooms.contains(room));
+    final Iterable<String> hiddenRooms = Rooms.all.whereNot((String room) =>
+        currentState.selectedRooms.contains(room) ||
+        currentState.favouriteRoom == room);
     _sharedPreferencesRepository.setHiddenRooms(hiddenRooms.toList());
+    _sharedPreferencesRepository.setFavouriteRoom(currentState.favouriteRoom);
   }
 }

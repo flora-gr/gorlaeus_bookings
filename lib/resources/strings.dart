@@ -23,15 +23,19 @@ class Strings {
       'Feedback such as bug reports and feature requests can be ';
   static const String disclaimerDialogText4 = 'e-mailed';
   static const String disclaimerDialogText5 = ' or posted as an issue at our ';
-  static const String disclaimerDialogText6 = 'Github repository';
+  static const String disclaimerDialogText6 = 'GitHub repository';
   static const String disclaimerDialogText7 =
       '.\n\nThanks for using Gorlaeus Bookings!';
 
-  // Get free room item
+  // Get free room now widget
   static const String getFreeRoomItemTitle = 'Find an available room now';
+  static const String favouriteRoomRadioButton = favouriteRoomTitle;
+  static const String anyRoomRadioButton = 'Any room';
   static const String searchButton = 'Search';
   static const String searchAgainButton = 'Search again';
   static const String notAvailableInWeekendButton = 'Not available on weekends';
+  static const String favouriteRoomText1 = 'Your favourite room ';
+  static const String favouriteRoomNotFree = ' is not available at the moment.';
   static const String roomIsFree1 = 'Room ';
 
   static String roomIsFree2(String? endTime, {required bool isOnlyRoom}) =>
@@ -104,8 +108,15 @@ class Strings {
   static const String settingsPageTitle = 'Settings';
   static const String selectRoomsTitle = 'Select rooms';
   static const String selectRoomsInfoI =
-      'Selected rooms will be shown in the \'Booking overview\' '
+      'Selected rooms will be shown in the \'Booking overview\', '
       'and will be suggested in \'Find an available room now\'.';
+  static const String favouriteRoomTitle = 'Favourite room';
+  static const String favouriteRoomCannotDeselect =
+      'You can\'t deselect your favourite room.';
+  static const String favouriteRoomInfoI =
+      'Your favourite room will be placed at the top of the Booking overview table '
+      'and its availability can be checked directly in \'Find an available room now\'.';
+  static const String favouriteRoomNone = '- None -';
   static const String saveButton = 'Save changes';
 
   // Shared

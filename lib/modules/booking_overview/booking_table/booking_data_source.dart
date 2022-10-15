@@ -48,9 +48,8 @@ class BookingDataSource extends DataGridSource {
       cells: row.getCells().map<Widget>(
         (DataGridCell cell) {
           final String room = cell.room();
-          final Iterable<BookingEntry?> bookings = bookingsPerRoom[room]!.where(
-              (BookingEntry? booking) =>
-                  booking?.time?.overlapsWith(cell.bookingTime()) == true);
+          final Iterable<BookingEntry?> bookings =
+              cell.bookings(bookingsPerRoom);
           final bool isFree = bookings.isEmpty;
           final String? freeTime =
               isFree ? cell.freeTime(bookingsPerRoom) : null;
@@ -100,6 +99,7 @@ class BookingDataSource extends DataGridSource {
   }) {
     showDialog(
       builder: (_) => AlertDialog(
+        scrollable: true,
         title: Text(
           isFree
               ? isPast
@@ -111,7 +111,7 @@ class BookingDataSource extends DataGridSource {
           isFree
               ? isPast
                   ? Strings.roomFreeInPastDialogText
-                  : Strings.roomFreeDialogText(room, freeTime!)
+                  : Strings.roomFreeDialogText(room.capitalize(), freeTime!)
               : _getRoomBookedText(
                   room: room,
                   isPast: isPast,

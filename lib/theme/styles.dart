@@ -74,6 +74,7 @@ class Styles {
 
   static const Color backgroundColorDark = Color(0xFF1A2039);
   static const Color dialogBackgroundColorDark = Color(0xFF1A2035);
+  static const Color canvasColorDark = Color(0xFF242D50);
   static const Color appBarColorDark = Color(0xFF000723);
   static Color textColorDark = Colors.grey.shade50;
   static Color outlinedButtonBorderColorDark = primaryColorSwatchDark[900]!;
@@ -92,11 +93,14 @@ class Styles {
   static const EdgeInsetsGeometry topPadding12 = EdgeInsets.only(top: 12);
   static const EdgeInsetsGeometry topPadding4 = EdgeInsets.only(top: 4);
   static const EdgeInsetsGeometry leftPadding12 = EdgeInsets.only(left: 12);
+  static const EdgeInsetsGeometry rightPadding8 = EdgeInsets.only(right: 8);
 
   // Other
   static BorderRadius borderRadius = BorderRadius.circular(6);
   static const BoxConstraints defaultWidthConstraint =
       BoxConstraints(maxWidth: 600);
+  static const BoxConstraints smallerWidthConstraint =
+      BoxConstraints(maxWidth: 350);
   static double defaultFontSize = 14;
   static double defaultFontHeight = 1.3;
 }

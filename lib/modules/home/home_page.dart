@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> {
     );
     showDialog(
       builder: (_) => AlertDialog(
+        scrollable: true,
         title: const Text(
           Strings.disclaimerDialogTitle,
         ),

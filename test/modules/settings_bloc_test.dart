@@ -17,6 +17,7 @@ void main() {
 
   final List<String> hiddenRooms =
       Rooms.all.where((String room) => room != Rooms.room1).toList();
+  const String favouriteRoom = Rooms.room2;
 
   setUpAll(() {
     GetIt getIt = GetIt.instance;
@@ -30,6 +31,10 @@ void main() {
         .thenAnswer((_) async => hiddenRooms);
     when(() => sharedPreferencesRepository.setHiddenRooms(any()))
         .thenAnswer((_) async => true);
+    when(() => sharedPreferencesRepository.getFavouriteRoom())
+        .thenAnswer((_) async => favouriteRoom);
+    when(() => sharedPreferencesRepository.setFavouriteRoom(any()))
+        .thenAnswer((_) async => true);
     sut = SettingsBloc();
   });
 
@@ -41,13 +46,15 @@ void main() {
       predicate(
         (SettingsReadyState state) =>
             state.selectedRooms.length == 1 &&
-            state.selectedRooms.single == Rooms.room1,
+            state.selectedRooms.single == Rooms.room1 &&
+            state.favouriteRoom == favouriteRoom,
       ),
     ],
   );
 
   const SettingsReadyState seedState = SettingsReadyState(
     selectedRooms: <String>[Rooms.room1],
+    favouriteRoom: favouriteRoom,
   );
 
   blocTest<SettingsBloc, SettingsState>(
@@ -64,7 +71,8 @@ void main() {
       predicate(
         (SettingsReadyState state) =>
             state.selectedRooms.length == 2 &&
-            state.selectedRooms.contains(Rooms.room2),
+            state.selectedRooms.contains(Rooms.room2) &&
+            state.favouriteRoom == favouriteRoom,
       ),
     ],
   );
@@ -80,17 +88,41 @@ void main() {
       ),
     ),
     expect: () => <dynamic>[
-      predicate((SettingsReadyState state) => state.selectedRooms.isEmpty),
+      predicate(
+        (SettingsReadyState state) =>
+            state.selectedRooms.isEmpty && state.favouriteRoom == favouriteRoom,
+      ),
     ],
   );
 
   blocTest<SettingsBloc, SettingsState>(
-    'Saving settings saves rooms to shared preferences',
+    'Selecting new favourite room emits ready state with updated favourite room',
+    build: () => sut,
+    seed: () => seedState,
+    act: (SettingsBloc bloc) => bloc.add(
+      const SettingsFavouriteSelectionChangedEvent(
+        room: Rooms.room8,
+      ),
+    ),
+    expect: () => <dynamic>[
+      predicate(
+        (SettingsReadyState state) =>
+            state.selectedRooms == seedState.selectedRooms &&
+            state.favouriteRoom == Rooms.room8,
+      ),
+    ],
+  );
+
+  blocTest<SettingsBloc, SettingsState>(
+    'Saving settings saves rooms to shared preferences and does not hide favourite room',
     build: () => sut,
     seed: () => seedState,
     act: (SettingsBloc bloc) => bloc.add(const SettingsSaveEvent()),
     verify: (_) {
+      hiddenRooms.remove(favouriteRoom);
       verify(() => sharedPreferencesRepository.setHiddenRooms(hiddenRooms))
+          .called(1);
+      verify(() => sharedPreferencesRepository.setFavouriteRoom(favouriteRoom))
           .called(1);
     },
   );

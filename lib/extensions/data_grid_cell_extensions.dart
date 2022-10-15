@@ -17,6 +17,11 @@ extension DataGridCellExtensions on DataGridCell {
         (TimeBlock bookingTime) => bookingTime.startTimeString() == columnName);
   }
 
+  Iterable<BookingEntry?> bookings(
+          Map<String, Iterable<BookingEntry?>> bookingsPerRoom) =>
+      bookingsPerRoom[room()]!.where((BookingEntry? booking) =>
+          booking?.time?.overlapsWith(bookingTime()) == true);
+
   String? freeTime(Map<String, Iterable<BookingEntry?>> bookingsPerRoom) {
     final Iterable<BookingEntry?> bookingsForRoom = bookingsPerRoom[room()]!;
     final List<TimeBlock?> bookingTimeBlocksForRoom =
@@ -35,7 +40,7 @@ extension DataGridCellExtensions on DataGridCell {
       } else if (nextBooking == null) {
         return 'from ${previousBooking.endTimeString()}';
       } else {
-        return 'from ${previousBooking.endTimeString()}-${nextBooking.startTimeString()}';
+        return 'from ${previousBooking.endTimeString()} - ${nextBooking.startTimeString()}';
       }
     }
   }
