@@ -185,12 +185,16 @@ void main() {
     setUp: () => when(() => mapper.mapTimeBlocks(any()))
         .thenAnswer((_) async => fullyBookedTimeBlocksPerRoom()),
     build: () => sut,
-    seed: () => const GetFreeRoomNowReadyState(),
+    seed: () =>
+        const GetFreeRoomNowReadyState(favouriteRoomSearchSelected: false),
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: true),
-      const GetFreeRoomNowEmptyState(),
+      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: false),
+      GetFreeRoomNowEmptyState(
+        timeBlocksPerRoom: fullyBookedTimeBlocksPerRoom(),
+        favouriteRoomSearchSelected: false,
+      ),
     ],
   );
 
@@ -223,7 +227,11 @@ void main() {
   blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
     'SharedPreferencesChangedEvent when in empty state emits empty ready state but updates favourite room',
     build: () => sut,
-    seed: () => const GetFreeRoomNowEmptyState(favouriteRoom: Rooms.room1),
+    seed: () => GetFreeRoomNowEmptyState(
+      timeBlocksPerRoom: timeBlocksPerRoom,
+      favouriteRoom: Rooms.room1,
+      favouriteRoomSearchSelected: true,
+    ),
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSharedPreferencesChangedEvent()),
     expect: () => <GetFreeRoomNowState>[const GetFreeRoomNowReadyState()],
