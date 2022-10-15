@@ -148,7 +148,10 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
 
   Widget? _getDataFetchedText(GetFreeRoomNowState state) {
     if (state is GetFreeRoomNowReadyState) {
-      if (state.favouriteRoomIsFree != null) {
+      if (state is GetFreeRoomNowErrorState ||
+          state is GetFreeRoomNowBusyState && state.fromErrorState) {
+        return const Text(Strings.getFreeRoomFailed);
+      } else if (state.favouriteRoomIsFree != null) {
         return _getRichText(
           room: state.favouriteRoom!,
           favouriteRoomText1: Strings.favouriteRoomText1,
@@ -168,8 +171,6 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
         );
       } else if (state is GetFreeRoomNowEmptyState) {
         return const Text(Strings.noFreeRoomFound);
-      } else if (state is GetFreeRoomNowErrorState) {
-        return const Text(Strings.getFreeRoomFailed);
       }
     }
     return null;

@@ -56,6 +56,7 @@ class GetFreeRoomNowBloc
   }
 
   Stream<GetFreeRoomNowState> _handleSearchEvent() async* {
+    final bool fromErrorState = state is GetFreeRoomNowErrorState;
     final GetFreeRoomNowReadyState currentState =
         state as GetFreeRoomNowReadyState;
 
@@ -66,6 +67,7 @@ class GetFreeRoomNowBloc
         currentState.favouriteRoomSearchSelected;
 
     yield GetFreeRoomNowBusyState(
+      fromErrorState: fromErrorState,
       favouriteRoom: favouriteRoom,
       favouriteRoomSearchSelected: favouriteRoomSearchSelected,
       favouriteRoomIsFree: currentState.favouriteRoomIsFree,

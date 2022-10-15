@@ -64,6 +64,7 @@ class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
     String? freeRoom,
     TimeBlock? nextBooking,
     bool? isOnlyRoom,
+    required this.fromErrorState,
   }) : super(
           favouriteRoom: favouriteRoom,
           favouriteRoomSearchSelected: favouriteRoomSearchSelected,
@@ -73,8 +74,10 @@ class GetFreeRoomNowBusyState extends GetFreeRoomNowReadyState {
           isOnlyRoom: isOnlyRoom,
         );
 
+  final bool fromErrorState;
+
   @override
-  List<Object?> get props => <Object?>[...super.props];
+  List<Object?> get props => <Object?>[...super.props, fromErrorState];
 }
 
 class GetFreeRoomNowErrorState extends GetFreeRoomNowReadyState {
