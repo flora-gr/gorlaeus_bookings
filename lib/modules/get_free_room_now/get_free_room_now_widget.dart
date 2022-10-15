@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
+import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
@@ -145,69 +146,24 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
   }
 
   Widget? _getDataFetchedText(GetFreeRoomNowState state) {
-    final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
     if (state is GetFreeRoomNowReadyState) {
       if (state.favouriteRoomIsFree != null) {
-        return Text.rich(
-          TextSpan(
-            children: <TextSpan>[
-              TextSpan(
-                text: Strings.favouriteRoomMayBeFree1,
-                style: defaultTextStyle,
-              ),
-              TextSpan(
-                text: state.favouriteRoom!.toRoomName(),
-                style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
-              ),
-              if (state.favouriteRoomIsFree!)
-                TextSpan(
-                  text: Strings.roomIsFree2(
-                    state.nextBooking?.startTimeString(),
-                    isOnlyRoom: false,
-                  ),
-                  style: defaultTextStyle,
-                )
-              else
-                TextSpan(
-                  text: Strings.favouriteRoomNotFree,
-                  style: defaultTextStyle,
-                ),
-              if (state.favouriteRoom == Rooms.room13 ||
-                  state.favouriteRoom == Rooms.room21)
-                TextSpan(
-                  text: Strings.notLectureRoom,
-                  style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
-                ),
-            ],
-          ),
+        return _getRichText(
+          room: state.favouriteRoom!,
+          favouriteRoomText1: Strings.favouriteRoomText1,
+          favouriteRoomText2:
+              state.favouriteRoomIsFree! ? null : Strings.favouriteRoomNotFree,
+          nextBooking: state.nextBooking,
+          isOnlyRoom: false,
         );
       } else if (state.freeRoom != null) {
-        return Text.rich(
-          TextSpan(
-            children: <TextSpan>[
-              TextSpan(
-                text: Strings.roomIsFree1,
-                style: defaultTextStyle,
-              ),
-              TextSpan(
-                text: state.freeRoom!.toRoomName(),
-                style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(
-                text: Strings.roomIsFree2(
-                  state.nextBooking?.startTimeString(),
-                  isOnlyRoom: state.isOnlyRoom!,
-                ),
-                style: defaultTextStyle,
-              ),
-              if (state.freeRoom == Rooms.room13 ||
-                  state.freeRoom == Rooms.room21)
-                TextSpan(
-                  text: Strings.notLectureRoom,
-                  style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
-                ),
-            ],
-          ),
+        return _getRichText(
+          favouriteRoomText1: state.freeRoom == state.favouriteRoom
+              ? Strings.favouriteRoomText1
+              : null,
+          room: state.freeRoom!,
+          nextBooking: state.nextBooking,
+          isOnlyRoom: state.isOnlyRoom,
         );
       } else if (state is GetFreeRoomNowEmptyState) {
         return const Text(Strings.noFreeRoomFound);
@@ -216,5 +172,42 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
       }
     }
     return null;
+  }
+
+  Widget _getRichText({
+    required String room,
+    String? favouriteRoomText1,
+    String? favouriteRoomText2,
+    TimeBlock? nextBooking,
+    bool? isOnlyRoom,
+  }) {
+    final TextStyle defaultTextStyle = Theme.of(context).textTheme.bodyText2!;
+    return Text.rich(
+      TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: favouriteRoomText1 ?? Strings.roomIsFree1,
+            style: defaultTextStyle,
+          ),
+          TextSpan(
+            text: room.toRoomName(),
+            style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: favouriteRoomText2 ??
+                Strings.roomIsFree2(
+                  nextBooking?.startTimeString(),
+                  isOnlyRoom: isOnlyRoom!,
+                ),
+            style: defaultTextStyle,
+          ),
+          if (room == Rooms.room13 || room == Rooms.room21)
+            TextSpan(
+              text: Strings.notLectureRoom,
+              style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
+            ),
+        ],
+      ),
+    );
   }
 }

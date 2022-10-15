@@ -34,7 +34,7 @@ class Strings {
   static const String searchButton = 'Search';
   static const String searchAgainButton = 'Search again';
   static const String notAvailableInWeekendButton = 'Not available on weekends';
-  static const String favouriteRoomMayBeFree1 = 'Your favourite room ';
+  static const String favouriteRoomText1 = 'Your favourite room ';
   static const String favouriteRoomNotFree = ' is not available at the moment.';
   static const String roomIsFree1 = 'Room ';
 

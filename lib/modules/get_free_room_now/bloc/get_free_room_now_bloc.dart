@@ -32,9 +32,7 @@ class GetFreeRoomNowBloc
     on<GetFreeRoomNowRadioButtonChangedEvent>(
         (GetFreeRoomNowRadioButtonChangedEvent event,
                 Emitter<GetFreeRoomNowState> emit) =>
-            emit((state as GetFreeRoomNowReadyState).copyWith(
-                favouriteRoomSearchSelected:
-                    event.favouriteRoomSearchSelected)));
+            emit(_handleRadioButtonChangedEvent(event)));
     on<GetFreeRoomNowSharedPreferencesChangedEvent>(
         (GetFreeRoomNowSharedPreferencesChangedEvent event,
                 Emitter<GetFreeRoomNowState> emit) async =>
@@ -85,7 +83,6 @@ class GetFreeRoomNowBloc
         timeBlocksPerRoom = await getIt
             .get<RoomsOverviewMapper>()
             .mapTimeBlocks(bookingsResponse);
-        favouriteRoom = await _sharedPreferencesRepository.getFavouriteRoom();
       }
 
       if (timeBlocksPerRoom != null) {
@@ -137,7 +134,9 @@ class GetFreeRoomNowBloc
             );
           } else {
             yield GetFreeRoomNowEmptyState(
+              timeBlocksPerRoom: timeBlocksPerRoom,
               favouriteRoom: favouriteRoom,
+              favouriteRoomSearchSelected: favouriteRoomSearchSelected,
             );
           }
         }
@@ -183,13 +182,39 @@ class GetFreeRoomNowBloc
     );
   }
 
+  GetFreeRoomNowState _handleRadioButtonChangedEvent(
+      GetFreeRoomNowRadioButtonChangedEvent event) {
+    final GetFreeRoomNowReadyState currentState =
+        state as GetFreeRoomNowReadyState;
+    if (state is GetFreeRoomNowEmptyState) {
+      return GetFreeRoomNowEmptyState(
+        timeBlocksPerRoom: currentState.timeBlocksPerRoom,
+        favouriteRoom: currentState.favouriteRoom,
+        favouriteRoomSearchSelected: event.favouriteRoomSearchSelected,
+      );
+    } else if (state is GetFreeRoomNowErrorState) {
+      return GetFreeRoomNowErrorState(
+        favouriteRoom: currentState.favouriteRoom,
+        favouriteRoomSearchSelected: event.favouriteRoomSearchSelected,
+      );
+    }
+    return currentState.copyWith(
+      favouriteRoomSearchSelected: event.favouriteRoomSearchSelected,
+    );
+  }
+
   Future<GetFreeRoomNowState> _handleSharedPreferencesChangedEvent() async {
     final String? newFavouriteRoom =
         await _sharedPreferencesRepository.getFavouriteRoom();
 
     if (state is GetFreeRoomNowEmptyState) {
-      return GetFreeRoomNowReadyState(favouriteRoom: newFavouriteRoom);
-    } else if (state is GetFreeRoomNowReadyState) {
+      return GetFreeRoomNowReadyState(
+        favouriteRoomSearchSelected:
+            (state as GetFreeRoomNowEmptyState).favouriteRoomSearchSelected,
+        favouriteRoom: newFavouriteRoom,
+      );
+    } else if (state is GetFreeRoomNowReadyState &&
+        state is! GetFreeRoomNowErrorState) {
       final GetFreeRoomNowReadyState currentState =
           state as GetFreeRoomNowReadyState;
 

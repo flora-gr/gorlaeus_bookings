@@ -92,8 +92,14 @@ class GetFreeRoomNowErrorState extends GetFreeRoomNowReadyState {
 
 class GetFreeRoomNowEmptyState extends GetFreeRoomNowReadyState {
   const GetFreeRoomNowEmptyState({
+    required Map<String, Iterable<TimeBlock?>>? timeBlocksPerRoom,
     String? favouriteRoom,
-  }) : super(favouriteRoom: favouriteRoom);
+    required bool favouriteRoomSearchSelected,
+  }) : super(
+          timeBlocksPerRoom: timeBlocksPerRoom,
+          favouriteRoom: favouriteRoom,
+          favouriteRoomSearchSelected: favouriteRoomSearchSelected,
+        );
 
   @override
   List<Object?> get props => <Object?>[...super.props];
