@@ -106,7 +106,10 @@ void main() {
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: true),
+      const GetFreeRoomNowBusyState(
+        fromErrorState: false,
+        favouriteRoomSearchSelected: true,
+      ),
       predicate((GetFreeRoomNowReadyState state) =>
           state.timeBlocksPerRoom != null && state.freeRoom != null),
     ],
@@ -130,6 +133,7 @@ void main() {
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
       GetFreeRoomNowBusyState(
+        fromErrorState: false,
         favouriteRoomSearchSelected: true,
         freeRoom: seedState.freeRoom,
         nextBooking: seedState.nextBooking,
@@ -159,7 +163,10 @@ void main() {
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: true),
+      const GetFreeRoomNowBusyState(
+        fromErrorState: false,
+        favouriteRoomSearchSelected: true,
+      ),
       predicate(
         (GetFreeRoomNowReadyState state) => state.freeRoom == Rooms.room1,
       ),
@@ -176,12 +183,33 @@ void main() {
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
       const GetFreeRoomNowBusyState(
+        fromErrorState: false,
         favouriteRoom: Rooms.room1,
         favouriteRoomSearchSelected: true,
       ),
       const GetFreeRoomNowErrorState(
         favouriteRoom: Rooms.room1,
         favouriteRoomSearchSelected: true,
+      ),
+    ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'Retrying after error state emits busy state with fromErrorState set to true',
+    setUp: () =>
+        when(() => mapper.mapTimeBlocks(any())).thenAnswer((_) async => null),
+    build: () => sut,
+    seed: () =>
+        const GetFreeRoomNowErrorState(favouriteRoomSearchSelected: false),
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSearchEvent()),
+    expect: () => <dynamic>[
+      const GetFreeRoomNowBusyState(
+        fromErrorState: true,
+        favouriteRoomSearchSelected: false,
+      ),
+      const GetFreeRoomNowErrorState(
+        favouriteRoomSearchSelected: false,
       ),
     ],
   );
@@ -196,7 +224,10 @@ void main() {
     act: (GetFreeRoomNowBloc bloc) =>
         bloc.add(const GetFreeRoomNowSearchEvent()),
     expect: () => <dynamic>[
-      const GetFreeRoomNowBusyState(favouriteRoomSearchSelected: false),
+      const GetFreeRoomNowBusyState(
+        fromErrorState: false,
+        favouriteRoomSearchSelected: false,
+      ),
       GetFreeRoomNowEmptyState(
         timeBlocksPerRoom: fullyBookedTimeBlocksPerRoom(),
         favouriteRoomSearchSelected: false,

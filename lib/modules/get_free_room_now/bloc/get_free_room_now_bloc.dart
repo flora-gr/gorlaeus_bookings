@@ -56,6 +56,7 @@ class GetFreeRoomNowBloc
   }
 
   Stream<GetFreeRoomNowState> _handleSearchEvent() async* {
+    final bool fromErrorState = state is GetFreeRoomNowErrorState;
     final GetFreeRoomNowReadyState currentState =
         state as GetFreeRoomNowReadyState;
 
@@ -66,6 +67,7 @@ class GetFreeRoomNowBloc
         currentState.favouriteRoomSearchSelected;
 
     yield GetFreeRoomNowBusyState(
+      fromErrorState: fromErrorState,
       favouriteRoom: favouriteRoom,
       favouriteRoomSearchSelected: favouriteRoomSearchSelected,
       favouriteRoomIsFree: currentState.favouriteRoomIsFree,
@@ -116,8 +118,7 @@ class GetFreeRoomNowBloc
           }
         } else {
           if (freeRooms.isNotEmpty) {
-            final String freeRoom =
-                freeRooms[_random.nextInt(freeRooms.length)];
+            final String freeRoom = _getFreeRoom(currentState, freeRooms);
             final TimeBlock? nextBooking = _getNextBooking(
               timeBlocksPerRoom,
               freeRoom,
@@ -151,6 +152,22 @@ class GetFreeRoomNowBloc
         favouriteRoom: favouriteRoom,
         favouriteRoomSearchSelected: favouriteRoomSearchSelected,
       );
+    }
+  }
+
+  String _getFreeRoom(
+      GetFreeRoomNowReadyState currentState, List<String> freeRooms) {
+    if (freeRooms.length == 1) {
+      return freeRooms.single;
+    } else {
+      String? currentFreeRoom = currentState.freeRoom ??
+          (currentState.favouriteRoomIsFree == true
+              ? currentState.favouriteRoom
+              : null);
+      final List<String> freeRoomsWithoutCurrent =
+          freeRooms.whereNot((String room) => room == currentFreeRoom).toList();
+      return freeRoomsWithoutCurrent[
+          _random.nextInt(freeRoomsWithoutCurrent.length)];
     }
   }
 
