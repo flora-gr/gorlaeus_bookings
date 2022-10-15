@@ -87,8 +87,9 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
   }) {
     return Expanded(
       child: RadioListTile<bool>(
+        visualDensity: VisualDensity.compact,
         activeColor: Theme.of(context).colorScheme.secondary,
-        contentPadding: Styles.rightPadding4,
+        contentPadding: Styles.rightPadding8,
         title: Text(
           title,
           style: Theme.of(context).textTheme.subtitle2,
