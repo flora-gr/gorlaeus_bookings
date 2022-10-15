@@ -204,36 +204,94 @@ void main() {
     ],
   );
 
-  // TODO
-  // blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-  //   'Searching for favourite room emits state',
-  //   build: () => sut,
-  //   act: (GetFreeRoomNowBloc bloc) =>
-  //       bloc.add(const GetFreeRoomNowSearchEvent()),
-  // );
-  //
-  // blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-  //   'Searching for favourite room emits state',
-  //   build: () => sut,
-  //   act: (GetFreeRoomNowBloc bloc) =>
-  //       bloc.add(const GetFreeRoomNowSearchEvent()),
-  // );
-  //
-  // blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-  //   'Changing radio button emits state',
-  //   build: () => sut,
-  //   act: (GetFreeRoomNowBloc bloc) => bloc.add(
-  //       const GetFreeRoomNowRadioButtonChangedEvent(
-  //           favouriteRoomSearchSelected: false)),
-  // );
-  //
-  // blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
-  //   'Changing radio button emits state',
-  //   build: () => sut,
-  //   act: (GetFreeRoomNowBloc bloc) => bloc.add(
-  //       const GetFreeRoomNowRadioButtonChangedEvent(
-  //           favouriteRoomSearchSelected: false)),
-  // );
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'Searching for favourite room emits state with favouriteRoomIsFree set and no free room',
+    build: () => sut,
+    seed: () => const GetFreeRoomNowReadyState(
+      favouriteRoom: Rooms.room1,
+      favouriteRoomSearchSelected: true,
+    ),
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSearchEvent()),
+    skip: 1,
+    expect: () => <dynamic>[
+      predicate(
+        (GetFreeRoomNowReadyState state) =>
+            state.timeBlocksPerRoom != null &&
+            state.favouriteRoom == Rooms.room1 &&
+            state.favouriteRoomSearchSelected &&
+            state.favouriteRoomIsFree != null &&
+            state.freeRoom == null &&
+            state.isOnlyRoom == null,
+      ),
+    ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'Searching for any room resets favouriteRoomIsFree to null',
+    build: () => sut,
+    seed: () => GetFreeRoomNowReadyState(
+        timeBlocksPerRoom: timeBlocksPerRoom,
+        favouriteRoom: Rooms.room1,
+        favouriteRoomSearchSelected: false,
+        favouriteRoomIsFree: false),
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSearchEvent()),
+    skip: 1,
+    expect: () => <dynamic>[
+      predicate((GetFreeRoomNowReadyState state) =>
+          state.timeBlocksPerRoom != null &&
+          state.favouriteRoom == Rooms.room1 &&
+          !state.favouriteRoomSearchSelected &&
+          state.favouriteRoomIsFree == null),
+    ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'Changing radio button emits ready state with updated favouriteRoomSearchSelected',
+    build: () => sut,
+    seed: () => seedState,
+    act: (GetFreeRoomNowBloc bloc) => bloc.add(
+        const GetFreeRoomNowRadioButtonChangedEvent(
+            favouriteRoomSearchSelected: false)),
+    expect: () => <dynamic>[
+      predicate((GetFreeRoomNowReadyState state) =>
+          !state.favouriteRoomSearchSelected),
+    ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'Changing radio button emits empty state with updated favouriteRoomSearchSelected',
+    build: () => sut,
+    seed: () => GetFreeRoomNowEmptyState(
+      timeBlocksPerRoom: timeBlocksPerRoom,
+      favouriteRoom: Rooms.room1,
+      favouriteRoomSearchSelected: true,
+    ),
+    act: (GetFreeRoomNowBloc bloc) => bloc.add(
+        const GetFreeRoomNowRadioButtonChangedEvent(
+            favouriteRoomSearchSelected: false)),
+    expect: () => <dynamic>[
+      predicate((GetFreeRoomNowEmptyState state) =>
+          !state.favouriteRoomSearchSelected),
+    ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'Changing radio button emits error state with updated favouriteRoomSearchSelected',
+    build: () => sut,
+    seed: () => const GetFreeRoomNowErrorState(
+      favouriteRoom: Rooms.room1,
+      favouriteRoomSearchSelected: true,
+    ),
+    act: (GetFreeRoomNowBloc bloc) => bloc.add(
+        const GetFreeRoomNowRadioButtonChangedEvent(
+            favouriteRoomSearchSelected: false)),
+    expect: () => <dynamic>[
+      predicate((GetFreeRoomNowErrorState state) =>
+          !state.favouriteRoomSearchSelected),
+    ],
+  );
 
   GetFreeRoomNowReadyState seedStateWithSingleFreeRoom =
       GetFreeRoomNowReadyState(
@@ -282,5 +340,33 @@ void main() {
         favouriteRoom: Rooms.room10,
       )
     ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'SharedPreferencesChangedEvent when in error state keeps error state but updates favourite room',
+    setUp: () => when(() => sharedPreferencesRepository.getFavouriteRoom())
+        .thenAnswer((_) async => Rooms.room10),
+    build: () => sut,
+    seed: () => const GetFreeRoomNowErrorState(
+      favouriteRoom: Rooms.room1,
+      favouriteRoomSearchSelected: true,
+    ),
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSharedPreferencesChangedEvent()),
+    expect: () => <GetFreeRoomNowState>[
+      const GetFreeRoomNowErrorState(
+        favouriteRoom: Rooms.room10,
+        favouriteRoomSearchSelected: true,
+      ),
+    ],
+  );
+
+  blocTest<GetFreeRoomNowBloc, GetFreeRoomNowState>(
+    'SharedPreferencesChangedEvent when in weekend state keeps weekend state',
+    build: () => sut,
+    seed: () => const GetFreeRoomNowWeekendState(),
+    act: (GetFreeRoomNowBloc bloc) =>
+        bloc.add(const GetFreeRoomNowSharedPreferencesChangedEvent()),
+    expect: () => <GetFreeRoomNowState>[],
   );
 }

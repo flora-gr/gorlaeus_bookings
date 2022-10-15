@@ -204,32 +204,36 @@ class GetFreeRoomNowBloc
   }
 
   Future<GetFreeRoomNowState> _handleSharedPreferencesChangedEvent() async {
-    final String? newFavouriteRoom =
-        await _sharedPreferencesRepository.getFavouriteRoom();
-
-    if (state is GetFreeRoomNowEmptyState) {
-      return GetFreeRoomNowReadyState(
-        favouriteRoomSearchSelected:
-            (state as GetFreeRoomNowEmptyState).favouriteRoomSearchSelected,
-        favouriteRoom: newFavouriteRoom,
-      );
-    } else if (state is GetFreeRoomNowReadyState &&
-        state is! GetFreeRoomNowErrorState) {
+    if (state is GetFreeRoomNowReadyState) {
+      final String? newFavouriteRoom =
+          await _sharedPreferencesRepository.getFavouriteRoom();
       final GetFreeRoomNowReadyState currentState =
           state as GetFreeRoomNowReadyState;
 
-      return GetFreeRoomNowReadyState(
-        favouriteRoom: newFavouriteRoom,
-        favouriteRoomSearchSelected: currentState.favouriteRoomSearchSelected,
-        favouriteRoomIsFree: currentState.favouriteRoom == newFavouriteRoom
-            ? currentState.favouriteRoomIsFree
-            : null,
-        freeRoom: currentState.favouriteRoomIsFree == true
-            ? currentState.favouriteRoom
-            : currentState.freeRoom,
-        nextBooking: currentState.nextBooking,
-        isOnlyRoom: false,
-      );
+      if (state is GetFreeRoomNowEmptyState) {
+        return GetFreeRoomNowReadyState(
+          favouriteRoomSearchSelected: currentState.favouriteRoomSearchSelected,
+          favouriteRoom: newFavouriteRoom,
+        );
+      } else if (state is GetFreeRoomNowErrorState) {
+        return GetFreeRoomNowErrorState(
+          favouriteRoom: newFavouriteRoom,
+          favouriteRoomSearchSelected: currentState.favouriteRoomSearchSelected,
+        );
+      } else {
+        return GetFreeRoomNowReadyState(
+          favouriteRoom: newFavouriteRoom,
+          favouriteRoomSearchSelected: currentState.favouriteRoomSearchSelected,
+          favouriteRoomIsFree: currentState.favouriteRoom == newFavouriteRoom
+              ? currentState.favouriteRoomIsFree
+              : null,
+          freeRoom: currentState.favouriteRoomIsFree == true
+              ? currentState.favouriteRoom
+              : currentState.freeRoom,
+          nextBooking: currentState.nextBooking,
+          isOnlyRoom: false,
+        );
+      }
     }
     return state;
   }
