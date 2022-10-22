@@ -1,6 +1,4 @@
 class Strings {
-  const Strings._();
-
   // Home page
   static const String homePageTitle = 'Gorlaeus Bookings';
   static const String adjustSettingsButton = 'Adjust search settings';

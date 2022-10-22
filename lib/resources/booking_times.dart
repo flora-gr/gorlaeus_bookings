@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 
 class BookingTimes {
-  const BookingTimes._();
-
   static const TimeBlock time1 = TimeBlock(
     startTime: TimeOfDay(hour: 9, minute: 0),
     endTime: TimeOfDay(hour: 10, minute: 0),

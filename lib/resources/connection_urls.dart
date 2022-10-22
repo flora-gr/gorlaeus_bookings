@@ -1,8 +1,6 @@
 import 'dart:core';
 
 class ConnectionUrls {
-  const ConnectionUrls._();
-
   // Data
   static Uri zrsSystemRequestUri =
       Uri.parse('https://zrs.leidenuniv.nl/ul/query.php');
