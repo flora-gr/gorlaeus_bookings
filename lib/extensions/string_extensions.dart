@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
 
@@ -35,34 +36,35 @@ extension StringExtensions on String {
     return null;
   }
 
-  String toRoomName() {
+  String toRoomName(BuildContext context) {
     if (Rooms.cRooms.contains(this)) {
       return replaceAll('0', 'C');
     } else if (this == Rooms.room13) {
-      return 'Atrium*';
+      return AppLocalizations.of(context).room13Name;
     } else if (this == Rooms.room21) {
-      return 'Entrance Hall*';
+      return AppLocalizations.of(context).room21Name;
     } else if (this == Rooms.room22) {
-      return 'Sitter';
+      return AppLocalizations.of(context).room22Name;
     } else if (Rooms.building3.contains(this)) {
-      return 'HUY $this';
+      return AppLocalizations.of(context).roomBuilding3Name(this);
     }
     return this;
   }
 
-  String toLongRoomName() {
+  String toLongRoomName(BuildContext context) {
     if (this == Rooms.room13) {
-      return 'the Atrium of the Gorlaeus building';
-    } else if (this == Rooms.room21) {
-      return 'the Entrance Hall of the Gorlaeus Schotel';
+      return AppLocalizations.of(context).room13LongName;
     } else if (this == Rooms.room16) {
-      return 'the Havingazaal of the Gorlaeus';
+      return AppLocalizations.of(context).room16LongName;
+    } else if (this == Rooms.room21) {
+      return AppLocalizations.of(context).room21LongName;
     } else if (this == Rooms.room22) {
-      return 'the Sitterzaal in the Huygens building';
+      return AppLocalizations.of(context).room22LongName;
     } else if (Rooms.building3.contains(this)) {
-      return 'Huygens room $this';
+      return AppLocalizations.of(context).roomBuilding3LongName(this);
     } else {
-      return 'room ${toRoomName()} of the Gorlaeus';
+      return AppLocalizations.of(context)
+          .otherRoomLongName(toRoomName(context));
     }
   }
 

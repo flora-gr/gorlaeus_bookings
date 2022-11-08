@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_bloc.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_event.dart';
 import 'package:gorlaeus_bookings/modules/settings/bloc/settings_state.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
-import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widgets.dart';
 
@@ -38,7 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
           appBar: AppBar(
-            title: const Text(Strings.settingsPageTitle),
+            title: Text(AppLocalizations.of(context).settingsPageTitle),
           ),
           body: state is SettingsReadyState
               ? _buildReadyBody(state)
@@ -54,7 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       _bloc.add(const SettingsSaveEvent());
                       Navigator.of(context).pop(true);
                     },
-                    child: const Text(Strings.saveButton),
+                    child: Text(AppLocalizations.of(context).saveButton),
                   ),
                 ),
               ],
@@ -88,8 +88,8 @@ class _SettingsPageState extends State<SettingsPage> {
         Rooms.all.toList().getRange(halfRoomCount, Rooms.all.length);
     return <Widget>[
       _buildHeaderWithInfoI(
-        title: Strings.selectRoomsTitle,
-        dialogText: Strings.selectRoomsInfoI,
+        title: AppLocalizations.of(context).selectRoomsTitle,
+        dialogText: AppLocalizations.of(context).selectRoomsInfoI,
       ),
       Padding(
         padding: Styles.topPadding12,
@@ -102,10 +102,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 _buildCheckBoxColumn(secondHalfOfRooms, state),
               ],
             ),
-            const Padding(
+            Padding(
               padding: Styles.padding8,
               child: Text(
-                Strings.notLectureRooms,
+                AppLocalizations.of(context).notLectureRooms,
               ),
             ),
           ],
@@ -131,7 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
             .map(
               (String room) => CheckboxListTile(
                 title: Text(
-                  room.toRoomName(),
+                  room.toRoomName(context),
                   style: state.favouriteRoom == room
                       ? favouriteRoomTextStyle
                       : null,
@@ -158,17 +158,17 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Iterable<Widget> _buildFavouriteRoomSection(SettingsReadyState state) {
     final Map<String, String?> items = <String, String?>{
-      Strings.favouriteRoomNone: null
+      AppLocalizations.of(context).favouriteRoomNone: null
     };
     for (String room in Rooms.all) {
-      items[room.toRoomName()] = room;
+      items[room.toRoomName(context)] = room;
     }
     return <Widget>[
       Padding(
         padding: Styles.topPadding12,
         child: _buildHeaderWithInfoI(
-          title: Strings.favouriteRoomTitle,
-          dialogText: Strings.favouriteRoomInfoI,
+          title: AppLocalizations.of(context).favouriteRoomTitle,
+          dialogText: AppLocalizations.of(context).favouriteRoomInfoI,
         ),
       ),
       Padding(
@@ -214,7 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: Styles.leftPadding12,
       child: Text(
         itemName,
-        style: itemName == Strings.favouriteRoomNone
+        style: itemName == AppLocalizations.of(context).favouriteRoomNone
             ? Theme.of(context)
                 .textTheme
                 .subtitle1!
@@ -228,12 +228,12 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       builder: (_) => AlertDialog(
         scrollable: true,
-        title: const Text(Strings.favouriteRoomTitle),
-        content: const Text(Strings.favouriteRoomCannotDeselect),
+        title: Text(AppLocalizations.of(context).favouriteRoomTitle),
+        content: Text(AppLocalizations.of(context).favouriteRoomCannotDeselect),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text(Strings.okButton),
+            child: Text(AppLocalizations.of(context).okButton),
           ),
         ],
       ),
@@ -264,7 +264,7 @@ class _SettingsPageState extends State<SettingsPage> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text(Strings.okButton),
+                  child: Text(AppLocalizations.of(context).okButton),
                 ),
               ],
             ),

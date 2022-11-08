@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart' as di;
 import 'package:gorlaeus_bookings/di/injection_container.dart';
@@ -18,7 +19,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   di.init();
   final ThemeMode themeMode =
-  await getIt.get<SharedPreferencesRepository>().getThemeMode();
+      await getIt.get<SharedPreferencesRepository>().getThemeMode();
   runApp(App(themeMode));
 }
 
@@ -28,7 +29,7 @@ class App extends StatelessWidget {
   final ThemeMode themeMode;
 
   static final ValueNotifier<ThemeMode> themeNotifier =
-  ValueNotifier<ThemeMode>(ThemeMode.system);
+      ValueNotifier<ThemeMode>(ThemeMode.system);
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +44,11 @@ class App extends StatelessWidget {
           darkTheme: AppTheme.themeDataDark.copyWith(
               extensions: <ThemeExtension<TableColors>>[TableColorsDark()]),
           themeMode: currentMode,
-          localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          supportedLocales: const <Locale>[
-            Locale('nl', 'NL'),
-            Locale('en', 'GB'),
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
           ],
+          supportedLocales: AppLocalizations.supportedLocales,
           initialRoute: Routes.homePage,
           onGenerateRoute: _onGenerateRoute,
         );
@@ -86,10 +87,11 @@ class App extends StatelessWidget {
     }
   }
 
-  MaterialPageRoute<void> _getRoute<T>(Widget page,
-      RouteSettings settings, {
-        bool fullscreenDialog = false,
-      }) {
+  MaterialPageRoute<void> _getRoute<T>(
+    Widget page,
+    RouteSettings settings, {
+    bool fullscreenDialog = false,
+  }) {
     return MaterialPageRoute<T>(
       builder: (_) => page,
       fullscreenDialog: fullscreenDialog,
