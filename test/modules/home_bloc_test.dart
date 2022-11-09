@@ -34,6 +34,8 @@ void main() {
   });
 
   setUp(() {
+    when(() => dateTimeRepository.getCurrentDateTime())
+        .thenAnswer((_) => today);
     when(() => dateTimeRepository.getFirstWeekdayFromToday())
         .thenAnswer((_) => today);
     when(() => sharedPreferencesRepository.setThemeMode(any()))
