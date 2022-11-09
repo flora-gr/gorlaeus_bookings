@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gorlaeus_bookings/app.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
-import 'package:gorlaeus_bookings/main.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 import 'package:gorlaeus_bookings/repositories/date_time_repository.dart';
