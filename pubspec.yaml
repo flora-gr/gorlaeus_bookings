@@ -2,7 +2,7 @@ name: gorlaeus_bookings
 description: An app for booking lecture rooms in the Gorlaeus building of Leiden University.
 publish_to: 'none'
 
-version: 1.4.1+9
+version: 1.5.0+10
 
 environment:
   sdk: ">=2.17.6 <3.0.0"
@@ -31,4 +31,5 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  generate: true
   uses-material-design: true

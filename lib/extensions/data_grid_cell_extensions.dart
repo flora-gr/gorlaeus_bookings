@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
@@ -22,13 +23,16 @@ extension DataGridCellExtensions on DataGridCell {
       bookingsPerRoom[room()]!.where((BookingEntry? booking) =>
           booking?.time?.overlapsWith(bookingTime()) == true);
 
-  String? freeTime(Map<String, Iterable<BookingEntry?>> bookingsPerRoom) {
+  String? freeTime(
+    Map<String, Iterable<BookingEntry?>> bookingsPerRoom,
+    BuildContext context,
+  ) {
     final Iterable<BookingEntry?> bookingsForRoom = bookingsPerRoom[room()]!;
     final List<TimeBlock?> bookingTimeBlocksForRoom =
         bookingsForRoom.map((BookingEntry? entry) => entry?.time).sort();
 
     if (bookingTimeBlocksForRoom.isEmpty) {
-      return 'all day';
+      return AppLocalizations.of(context).allDay;
     } else {
       final TimeBlock? previousBooking =
           bookingTimeBlocksForRoom.lastWhereOrNull(
@@ -36,11 +40,11 @@ extension DataGridCellExtensions on DataGridCell {
       final TimeBlock? nextBooking = bookingTimeBlocksForRoom.firstWhereOrNull(
           ((TimeBlock? timeBlock) => timeBlock!.isAfter(bookingTime())));
       if (previousBooking == null) {
-        return 'until ${nextBooking!.startTimeString()}';
+        return '${AppLocalizations.of(context).until} ${nextBooking!.startTimeString()}';
       } else if (nextBooking == null) {
-        return 'from ${previousBooking.endTimeString()}';
+        return '${AppLocalizations.of(context).from} ${previousBooking.endTimeString()}';
       } else {
-        return 'from ${previousBooking.endTimeString()} - ${nextBooking.startTimeString()}';
+        return '${AppLocalizations.of(context).fromTo} ${previousBooking.endTimeString()} - ${nextBooking.startTimeString()}';
       }
     }
   }

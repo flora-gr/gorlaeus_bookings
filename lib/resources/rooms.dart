@@ -1,6 +1,4 @@
 class Rooms {
-  const Rooms._();
-
   // Gorlaeus Building
   static const String room1 = 'DM009PC';
   static const String room2 = 'DM013';

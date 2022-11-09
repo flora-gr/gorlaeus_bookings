@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gorlaeus_bookings/di/injection_container.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_bloc.dart';
@@ -11,7 +12,6 @@ import 'package:gorlaeus_bookings/modules/home/bloc/home_event.dart';
 import 'package:gorlaeus_bookings/modules/home/bloc/home_state.dart';
 import 'package:gorlaeus_bookings/resources/connection_urls.dart';
 import 'package:gorlaeus_bookings/resources/routes.dart';
-import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/utils/url_launcher_wrapper.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       bloc: _bloc,
       builder: (BuildContext context, HomeState state) => Scaffold(
         appBar: AppBar(
-          title: const Text(Strings.homePageTitle),
+          title: Text(AppLocalizations.of(context).homePageTitle),
           actions: <Widget>[
             IconButton(
               icon: Icon(
@@ -89,8 +89,8 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       builder: (_) => AlertDialog(
         scrollable: true,
-        title: const Text(
-          Strings.disclaimerDialogTitle,
+        title: Text(
+          AppLocalizations.of(context).disclaimerDialogTitle,
         ),
         content: Text.rich(
           TextSpan(
@@ -98,11 +98,11 @@ class _HomePageState extends State<HomePage> {
               TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                    text: Strings.disclaimerDialogText1,
+                    text: AppLocalizations.of(context).disclaimerDialogText1,
                     style: defaultTextStyle,
                   ),
                   TextSpan(
-                    text: Strings.disclaimerDialogText2,
+                    text: AppLocalizations.of(context).disclaimerDialogText2,
                     style: linkTextStyle,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => _urlLauncherWrapper.launchUrl(
@@ -110,11 +110,11 @@ class _HomePageState extends State<HomePage> {
                           ),
                   ),
                   TextSpan(
-                    text: Strings.disclaimerDialogText3,
+                    text: AppLocalizations.of(context).disclaimerDialogText3,
                     style: defaultTextStyle,
                   ),
                   TextSpan(
-                    text: Strings.disclaimerDialogText4,
+                    text: AppLocalizations.of(context).disclaimerDialogText4,
                     style: linkTextStyle,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => _urlLauncherWrapper.launchEmail(
@@ -122,11 +122,11 @@ class _HomePageState extends State<HomePage> {
                           ),
                   ),
                   TextSpan(
-                    text: Strings.disclaimerDialogText5,
+                    text: AppLocalizations.of(context).disclaimerDialogText5,
                     style: defaultTextStyle,
                   ),
                   TextSpan(
-                    text: Strings.disclaimerDialogText6,
+                    text: AppLocalizations.of(context).disclaimerDialogText6,
                     style: linkTextStyle,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => _urlLauncherWrapper.launchUrl(
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                   ),
                   TextSpan(
-                    text: Strings.disclaimerDialogText7,
+                    text: AppLocalizations.of(context).disclaimerDialogText7,
                     style: defaultTextStyle,
                   ),
                 ],
@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text(Strings.okButton),
+            child: Text(AppLocalizations.of(context).okButton),
           ),
         ],
       ),
@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildBookingOverviewItem(HomeReadyState state) {
     return ItemBox(
-      title: Strings.bookingOverviewItemTitle,
+      title: AppLocalizations.of(context).bookingOverviewItemTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -189,9 +189,9 @@ class _HomePageState extends State<HomePage> {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text(Strings.goToBookingsButton),
-                Icon(Icons.arrow_right),
+              children: <Widget>[
+                Text(AppLocalizations.of(context).goToBookingsButton),
+                const Icon(Icons.arrow_right),
               ],
             ),
           ),
@@ -205,7 +205,8 @@ class _HomePageState extends State<HomePage> {
       Padding(
         padding: Styles.topPadding4,
         child: Text(
-          Strings.dateToCheck(state.selectedDate.formatted),
+          AppLocalizations.of(context)
+              .dateToCheck(state.selectedDate.formatted),
           style: Theme.of(context).textTheme.subtitle2,
         ),
       ),
@@ -218,14 +219,14 @@ class _HomePageState extends State<HomePage> {
               initialDate: state.selectedDate,
               firstDate: state.minimumDate,
               lastDate: state.maximumDate,
-              locale: const Locale('en', 'GB'),
+              locale: Locale(AppLocalizations.of(context).localeName),
               selectableDayPredicate: (DateTime date) => !date.isWeekendDay(),
             );
             if (newDate != null) {
               _bloc.add(HomeDateChangedEvent(newDate));
             }
           },
-          child: const Text(Strings.dateSelectionButton),
+          child: Text(AppLocalizations.of(context).dateSelectionButton),
         ),
       ),
     ];
@@ -251,7 +252,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: Styles.horizontalPadding8,
               child: Text(
-                Strings.adjustSettingsButton,
+                AppLocalizations.of(context).adjustSettingsButton,
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(
                       fontWeight: FontWeight.w500,
                       color: Theme.of(context).colorScheme.secondary,

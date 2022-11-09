@@ -37,46 +37,22 @@ void main() {
     },
   );
 
-  test(
+  testWidgets(
     'toRoomName swaps the zero for a C for certain rooms only',
-    () {
-      expect(Rooms.room17.toRoomName(), 'C1');
-      expect(Rooms.room18.toRoomName(), 'C2');
-      expect(Rooms.room19.toRoomName(), 'C3');
-      expect(Rooms.room20.toRoomName(), 'C4/5');
-      expect(Rooms.room15.toRoomName(), Rooms.room15);
-    },
-  );
+    (WidgetTester tester) async {
+      tester.pumpWidget(
+        Builder(
+          builder: (BuildContext context) {
+            expect(Rooms.room17.toRoomName(context), 'C1');
+            expect(Rooms.room18.toRoomName(context), 'C2');
+            expect(Rooms.room19.toRoomName(context), 'C3');
+            expect(Rooms.room20.toRoomName(context), 'C4/5');
+            expect(Rooms.room15.toRoomName(context), Rooms.room15);
 
-  test(
-    'toRoomName returns more clear hall names',
-    () {
-      expect(Rooms.room13.toRoomName(), 'Atrium*');
-      expect(Rooms.room21.toRoomName(), 'Entrance Hall*');
-    },
-  );
-
-  test(
-    'toRoomName returns more clear names for Huygens rooms',
-    () {
-      expect(Rooms.room22.toRoomName(), 'Sitter');
-      expect(Rooms.room23.toRoomName(), 'HUY 106-109');
-    },
-  );
-
-  test(
-    'toLongRoomName returns an explanatory room indication',
-    () {
-      expect(
-          Rooms.room13.toLongRoomName(), 'the Atrium of the Gorlaeus building');
-      expect(Rooms.room21.toLongRoomName(),
-          'the Entrance Hall of the Gorlaeus Schotel');
-      expect(Rooms.room16.toLongRoomName(), 'the Havingazaal of the Gorlaeus');
-      expect(Rooms.room20.toLongRoomName(), 'room C4/5 of the Gorlaeus');
-      expect(Rooms.room15.toLongRoomName(), 'room 04.24 AQUA of the Gorlaeus');
-      expect(Rooms.room22.toLongRoomName(),
-          'the Sitterzaal in the Huygens building');
-      expect(Rooms.room23.toLongRoomName(), 'Huygens room 106-109');
+            return const Placeholder();
+          },
+        ),
+      );
     },
   );
 

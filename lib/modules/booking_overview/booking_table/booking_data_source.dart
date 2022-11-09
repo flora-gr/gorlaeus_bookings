@@ -1,12 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gorlaeus_bookings/extensions/data_grid_cell_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/models/booking_entry.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
 import 'package:gorlaeus_bookings/resources/booking_times.dart';
-import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/theme/table_colors.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -51,13 +51,17 @@ class BookingDataSource extends DataGridSource {
           final Iterable<BookingEntry?> bookings =
               cell.bookings(bookingsPerRoom);
           final bool isFree = bookings.isEmpty;
-          final String? freeTime =
-              isFree ? cell.freeTime(bookingsPerRoom) : null;
+          final String? freeTime = isFree
+              ? cell.freeTime(
+                  bookingsPerRoom,
+                  context,
+                )
+              : null;
           final bool isPast = cell.isPast(timeIfToday);
           return InkWell(
             onTap: () => _showBookingDialog(
               bookings: bookings,
-              room: room.toLongRoomName(),
+              room: room.toLongRoomName(context),
               time: cell.columnName,
               freeTime: freeTime,
               isFree: isFree,
@@ -67,7 +71,7 @@ class BookingDataSource extends DataGridSource {
               color: _getCellColor(isFree: isFree, isPast: isPast),
               alignment: Alignment.centerLeft,
               padding: Styles.padding8,
-              child: Text(room.toRoomName()),
+              child: Text(room.toRoomName(context)),
             ),
           );
         },
@@ -103,15 +107,16 @@ class BookingDataSource extends DataGridSource {
         title: Text(
           isFree
               ? isPast
-                  ? Strings.roomFreeInPastDialogTitle
-                  : Strings.roomFreeDialogTitle
-              : Strings.roomBookedDialogTitle,
+                  ? AppLocalizations.of(context).roomFreeInPastDialogTitle
+                  : AppLocalizations.of(context).roomFreeDialogTitle
+              : AppLocalizations.of(context).roomBookedDialogTitle,
         ),
         content: Text(
           isFree
               ? isPast
-                  ? Strings.roomFreeInPastDialogText
-                  : Strings.roomFreeDialogText(room.capitalize(), freeTime!)
+                  ? AppLocalizations.of(context).roomFreeInPastDialogText
+                  : AppLocalizations.of(context)
+                      .roomFreeDialogText(room.capitalize(), freeTime!)
               : _getRoomBookedText(
                   room: room,
                   isPast: isPast,
@@ -124,12 +129,12 @@ class BookingDataSource extends DataGridSource {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(Strings.okButton),
+              child: Text(AppLocalizations.of(context).okButton),
             ),
           ] else
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text(Strings.okButton),
+              child: Text(AppLocalizations.of(context).okButton),
             ),
         ],
       ),
@@ -143,28 +148,34 @@ class BookingDataSource extends DataGridSource {
     required Iterable<BookingEntry?> bookings,
   }) {
     final List<BookingEntry?> uniqueBookings = bookings.toSet().toList();
-    String? additionalBookings;
+    String additionalBookings = '';
     if (uniqueBookings.length > 1) {
-      additionalBookings = '';
-      uniqueBookings.forEachIndexed((int i, BookingEntry? booking) {
-        if (i != 0) {
-          String additionalBooking = Strings.additionalBookingDialogText(
-            user: booking!.user,
-            activity: booking.activity,
-            timeBlock: booking.time!.asString(),
-          );
-          additionalBookings = additionalBookings! + additionalBooking;
-        }
-      });
+      uniqueBookings.forEachIndexed(
+        (int i, BookingEntry? booking) {
+          if (i != 0) {
+            String additionalBooking =
+                AppLocalizations.of(context).additionalBookingDialogText(
+              _getBookingSpecifications(booking!),
+            );
+            additionalBookings = additionalBookings + additionalBooking;
+          }
+        },
+      );
     }
 
-    return Strings.roomBookedDialogText(
-      room: room.capitalize(),
-      isPast: isPast,
-      user: uniqueBookings.first!.user,
-      activity: uniqueBookings.first!.activity,
-      timeBlock: uniqueBookings.first!.time!.asString(),
-      additionalBookings: additionalBookings,
+    return AppLocalizations.of(context).roomBookedDialogText(
+      room.capitalize(),
+      isPast
+          ? AppLocalizations.of(context).roomBookedDialogVerbPast
+          : AppLocalizations.of(context).roomBookedDialogVerbCurrent,
+      _getBookingSpecifications(uniqueBookings.first!),
+      additionalBookings,
     );
+  }
+
+  String _getBookingSpecifications(BookingEntry booking) {
+    return '${booking.user.isNotEmpty ? AppLocalizations.of(context).userInformation(booking.user) : ''}'
+        '${booking.activity.isNotEmpty ? AppLocalizations.of(context).activityInformation(booking.activity) : ''}'
+        '${AppLocalizations.of(context).timeBlockInformation(booking.time!.asString())}';
   }
 }

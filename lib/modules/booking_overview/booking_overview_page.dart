@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gorlaeus_bookings/extensions/date_time_extensions.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_bloc.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_event.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/bloc/booking_overview_state.dart';
 import 'package:gorlaeus_bookings/modules/booking_overview/booking_table/booking_table_widget.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
-import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widgets.dart';
 
@@ -39,7 +39,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
       bloc: _bloc,
       builder: (BuildContext context, BookingOverviewState state) => Scaffold(
         appBar: AppBar(
-          title: const Text(Strings.bookingOverviewPageTitle),
+          title: Text(AppLocalizations.of(context).bookingOverviewPageTitle),
         ),
         body: Padding(
           padding: Styles.defaultPagePadding,
@@ -49,7 +49,8 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
               Padding(
                 padding: Styles.verticalPadding8,
                 child: Text(
-                  Strings.bookingsOn(widget._date.formatted),
+                  AppLocalizations.of(context)
+                      .bookingsOn(widget._date.formatted),
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ),
@@ -74,9 +75,9 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
     return <Widget>[
       if (state.bookingsPerRoom.keys.contains(Rooms.room13) ||
           state.bookingsPerRoom.keys.contains(Rooms.room21))
-        const Padding(
+        Padding(
           padding: Styles.verticalPadding8,
-          child: Text(Strings.notLectureRooms),
+          child: Text(AppLocalizations.of(context).notLectureRooms),
         ),
       Expanded(
         child: BookingTable(
@@ -95,8 +96,8 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
         children: <Widget>[
           Text(
             state is BookingOverviewEmptyState
-                ? Strings.noBookingsFound
-                : Strings.fetchingBookingsFailed,
+                ? AppLocalizations.of(context).noBookingsFound
+                : AppLocalizations.of(context).fetchingBookingsFailed,
             textAlign: TextAlign.center,
           ),
           if (state is BookingOverviewErrorState)
@@ -105,7 +106,7 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
               child: ElevatedButton(
                 onPressed: () =>
                     _bloc.add(BookingOverviewInitEvent(widget._date)),
-                child: const Text(Strings.retryButton),
+                child: Text(AppLocalizations.of(context).retryButton),
               ),
             ),
         ],

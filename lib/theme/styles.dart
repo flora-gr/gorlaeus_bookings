@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Styles {
-  Styles._();
-
   // Light mode colors
   static const MaterialColor primaryColorSwatch = MaterialColor(
     0xFF001158,

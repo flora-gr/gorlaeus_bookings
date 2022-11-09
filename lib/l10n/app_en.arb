@@ -1,0 +1,174 @@
+{
+  "@@locale": "en",
+
+  "homePageTitle": "Gorlaeus Bookings",
+  "adjustSettingsButton": "Adjust search settings",
+  "bookingOverviewItemTitle": "Booking overview",
+  "dateToCheck": "Date to check: {date}",
+  "dateSelectionButton": "Choose a different date",
+  "goToBookingsButton": "Check bookings",
+  "disclaimerDialogTitle": "Disclaimer",
+  "disclaimerDialogText1": "This app uses the ",
+  "disclaimerDialogText2": "https://zrs.leidenuniv.nl",
+  "disclaimerDialogText3": " website to fetch data but is not officially endorsed by Leiden University. It is a hobby project and although all data is presented in good faith, it may contain errors. Usage of the booking system via this app is at your own risk.\n\nFeedback such as bug reports and feature requests can be ",
+  "disclaimerDialogText4": "e-mailed",
+  "disclaimerDialogText5": " or posted as an issue at our ",
+  "disclaimerDialogText6": "GitHub repository",
+  "disclaimerDialogText7": ".\n\nThanks for using Gorlaeus Bookings!",
+  "getFreeRoomItemTitle": "Find an available room now",
+  "favouriteRoomRadioButton": "Favourite room",
+  "anyRoomRadioButton": "Any room",
+  "searchButton": "Search",
+  "searchAgainButton": "Search again",
+  "notAvailableInWeekendButton": "Not available on weekends",
+  "favouriteRoomText1": "Your favourite room ",
+  "favouriteRoomNotFree": " is not available at the moment.",
+  "roomIsFree1": "Room ",
+  "roomIsFree2": " is available until {endTime}{optionalOnlyRoomNotice}.",
+  "roomFreeNoEndTime": "end of the day",
+  "roomFreeOnlyRoom": " (the only available room within your selection)",
+  "getFreeRoomFailed": "Something went wrong. Please check your internet connection.",
+  "noFreeRoomFound": "No available room found. Consider adjusting your room selection in \"Settings\".",
+  "bookingOverviewPageTitle": "Bookings",
+  "noBookingsFound": "No bookings found. Consider adjusting your room selection in \"Settings\".",
+  "fetchingBookingsFailed": "Failed to fetch bookings. Please check your internet connection.",
+  "bookingsOn": "Bookings on {date}",
+  "notLectureRoom": "\n*Not a lecture room",
+  "retryButton": "Try again",
+  "roomFreeDialogTitle": "Available",
+  "roomFreeDialogText": "{room} is available {time}.",
+  "roomFreeInPastDialogTitle": "This was earlier today",
+  "roomFreeInPastDialogText": "Please select a different time.",
+  "roomBookedDialogTitle": "Booked",
+  "roomBookedDialogText": "{room} {verb} booked{bookingSpecifications}{additionalBookings}.",
+  "roomBookedDialogVerbCurrent": "is",
+  "roomBookedDialogVerbPast": "was",
+  "additionalBookingDialogText": ", and{bookingSpecifications}",
+  "userInformation": " by {user},",
+  "activityInformation": " for \"{activity}\",",
+  "timeBlockInformation": " from {timeBlock}",
+  "settingsPageTitle": "Settings",
+  "selectRoomsTitle": "Select rooms",
+  "selectRoomsInfoI": "Selected rooms will be shown in the \"Booking overview\", and will be suggested in \"Find an available room now\".",
+  "favouriteRoomTitle": "Favourite room",
+  "favouriteRoomCannotDeselect": "You can\"t deselect your favourite room.",
+  "favouriteRoomInfoI": "Your favourite room will be placed at the top of the Booking overview table and its availability can be checked directly in \"Find an available room now\".",
+  "favouriteRoomNone": "- None -",
+  "saveButton": "Save changes",
+  "okButton": "OK",
+  "notLectureRooms": "*Indicated locations are not lecture rooms",
+  "room13Name": "Atrium*",
+  "room21Name": "Entrance Hall*",
+  "room22Name": "Sitter",
+  "roomBuilding3Name": "HUY {number}",
+  "room13LongName": "the Atrium of the Gorlaeus building",
+  "room16LongName": "the Havingazaal of the Gorlaeus",
+  "room21LongName": "the Entrance Hall of the Gorlaeus Schotel",
+  "room22LongName": "the Sitterzaal of the Huygens building",
+  "roomBuilding3LongName": "Huygens room {number}",
+  "otherRoomLongName": "room {name} of the Gorlaeus",
+  "allDay": "all day",
+  "from": "from",
+  "fromTo": "from",
+  "until": "until",
+
+  "@dateToCheck": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@bookingsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@roomIsFree2": {
+    "placeholders": {
+      "endTime": {
+        "type": "String"
+      },
+      "optionalOnlyRoomNotice": {
+        "type": "String"
+      }
+    }
+  },
+  "@roomFreeDialogText": {
+    "placeholders": {
+      "room": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@roomBookedDialogText": {
+    "placeholders": {
+      "room": {
+        "type": "String"
+      },
+      "verb": {
+        "type": "String"
+      },
+      "bookingSpecifications": {
+        "type": "String"
+      },
+      "additionalBookings": {
+        "type": "String"
+      }
+    }
+  },
+  "@additionalBookingDialogText": {
+    "placeholders": {
+      "bookingSpecifications": {
+        "type": "String"
+      }
+    }
+  },
+  "@userInformation": {
+    "placeholders": {
+      "user": {
+        "type": "String"
+      }
+    }
+  },
+  "@activityInformation": {
+    "placeholders": {
+      "activity": {
+        "type": "String"
+      }
+    }
+  },
+  "@timeBlockInformation": {
+    "placeholders": {
+      "timeBlock": {
+        "type": "String"
+      }
+    }
+  },
+ "@roomBuilding3Name": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "@roomBuilding3LongName": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "@otherRoomLongName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
+}

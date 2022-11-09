@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gorlaeus_bookings/extensions/string_extensions.dart';
 import 'package:gorlaeus_bookings/extensions/time_block_extensions.dart';
 import 'package:gorlaeus_bookings/models/time_block.dart';
@@ -7,7 +8,6 @@ import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_n
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_event.dart';
 import 'package:gorlaeus_bookings/modules/get_free_room_now/bloc/get_free_room_now_state.dart';
 import 'package:gorlaeus_bookings/resources/rooms.dart';
-import 'package:gorlaeus_bookings/resources/strings.dart';
 import 'package:gorlaeus_bookings/theme/styles.dart';
 import 'package:gorlaeus_bookings/widgets/item_box.dart';
 import 'package:gorlaeus_bookings/widgets/loading_widgets.dart';
@@ -40,7 +40,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
       builder: (BuildContext context, GetFreeRoomNowState state) {
         final Widget? dataFetchedText = _getDataFetchedText(state);
         return ItemBox(
-          title: Strings.getFreeRoomItemTitle,
+          title: AppLocalizations.of(context).getFreeRoomItemTitle,
           child: AnimatedSize(
             duration: const Duration(milliseconds: 200),
             alignment: Alignment.topCenter,
@@ -53,12 +53,12 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
                     children: <Widget>[
                       _buildSearchFavouriteRadioButton(
                         state,
-                        Strings.favouriteRoomRadioButton,
+                        AppLocalizations.of(context).favouriteRoomRadioButton,
                         selectedValue: true,
                       ),
                       _buildSearchFavouriteRadioButton(
                         state,
-                        Strings.anyRoomRadioButton,
+                        AppLocalizations.of(context).anyRoomRadioButton,
                         selectedValue: false,
                       ),
                     ],
@@ -140,37 +140,38 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
     required bool hasDataFetchedText,
   }) {
     return state is GetFreeRoomNowWeekendState
-        ? Strings.notAvailableInWeekendButton
+        ? AppLocalizations.of(context).notAvailableInWeekendButton
         : hasDataFetchedText
-            ? Strings.searchAgainButton
-            : Strings.searchButton;
+            ? AppLocalizations.of(context).searchAgainButton
+            : AppLocalizations.of(context).searchButton;
   }
 
   Widget? _getDataFetchedText(GetFreeRoomNowState state) {
     if (state is GetFreeRoomNowReadyState) {
       if (state is GetFreeRoomNowErrorState ||
           state is GetFreeRoomNowBusyState && state.fromErrorState) {
-        return const Text(Strings.getFreeRoomFailed);
+        return Text(AppLocalizations.of(context).getFreeRoomFailed);
       } else if (state.favouriteRoomIsFree != null) {
         return _getRichText(
           room: state.favouriteRoom!,
-          favouriteRoomText1: Strings.favouriteRoomText1,
-          favouriteRoomText2:
-              state.favouriteRoomIsFree! ? null : Strings.favouriteRoomNotFree,
+          favouriteRoomText1: AppLocalizations.of(context).favouriteRoomText1,
+          favouriteRoomText2: state.favouriteRoomIsFree!
+              ? null
+              : AppLocalizations.of(context).favouriteRoomNotFree,
           nextBooking: state.nextBooking,
           isOnlyRoom: false,
         );
       } else if (state.freeRoom != null) {
         return _getRichText(
           favouriteRoomText1: state.freeRoom == state.favouriteRoom
-              ? Strings.favouriteRoomText1
+              ? AppLocalizations.of(context).favouriteRoomText1
               : null,
           room: state.freeRoom!,
           nextBooking: state.nextBooking,
           isOnlyRoom: state.isOnlyRoom,
         );
       } else if (state is GetFreeRoomNowEmptyState) {
-        return const Text(Strings.noFreeRoomFound);
+        return Text(AppLocalizations.of(context).noFreeRoomFound);
       }
     }
     return null;
@@ -188,24 +189,28 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
       TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: favouriteRoomText1 ?? Strings.roomIsFree1,
+            text:
+                favouriteRoomText1 ?? AppLocalizations.of(context).roomIsFree1,
             style: defaultTextStyle,
           ),
           TextSpan(
-            text: room.toRoomName(),
+            text: room.toRoomName(context),
             style: defaultTextStyle.copyWith(fontWeight: FontWeight.bold),
           ),
           TextSpan(
             text: favouriteRoomText2 ??
-                Strings.roomIsFree2(
-                  nextBooking?.startTimeString(),
-                  isOnlyRoom: isOnlyRoom!,
+                AppLocalizations.of(context).roomIsFree2(
+                  nextBooking?.startTimeString() ??
+                      AppLocalizations.of(context).roomFreeNoEndTime,
+                  isOnlyRoom!
+                      ? AppLocalizations.of(context).roomFreeOnlyRoom
+                      : '',
                 ),
             style: defaultTextStyle,
           ),
           if (room == Rooms.room13 || room == Rooms.room21)
             TextSpan(
-              text: Strings.notLectureRoom,
+              text: AppLocalizations.of(context).notLectureRoom,
               style: defaultTextStyle.copyWith(fontStyle: FontStyle.italic),
             ),
         ],
