@@ -19,11 +19,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   HomeState _handleInitEvent() {
-    final DateTime initialDate =
-        getIt.get<DateTimeRepository>().getFirstWeekdayFromToday();
+    final DateTimeRepository dateTimeRepository =
+        getIt.get<DateTimeRepository>();
+    final DateTime minimumDate = dateTimeRepository.getCurrentDateTime();
+    final DateTime initialDate = dateTimeRepository.getFirstWeekdayFromToday();
     return HomeReadyState(
-      minimumDate: initialDate,
-      maximumDate: initialDate.add(const Duration(days: 180)),
+      minimumDate: minimumDate,
+      maximumDate: minimumDate.add(const Duration(days: 180)),
       selectedDate: initialDate,
     );
   }
