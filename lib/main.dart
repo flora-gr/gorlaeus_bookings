@@ -47,6 +47,8 @@ class App extends StatelessWidget {
           localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           initialRoute: Routes.homePage,
