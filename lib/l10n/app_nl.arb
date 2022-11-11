@@ -10,7 +10,7 @@
   "disclaimerDialogTitle": "Disclaimer",
   "disclaimerDialogText1": "Deze app gebruikt de website ",
   "disclaimerDialogText2": "https://zrs.leidenuniv.nl",
-  "disclaimerDialogText3": " om reserveringen op te halen maar is niet officieel gelieerd aan Universiteit Leiden. Het is een hobbyproject en hoewel alles naar beste vermogen is gemaakt, kunnen fouten voorkomen. Gebruik van het reserveringssysteem via deze app is voor eigen risico.\n\nSuggesties, bugs of andere feedback kunnen worden ",
+  "disclaimerDialogText3": " om reserveringen op te halen maar is niet officieel gelieerd aan Universiteit Leiden. Het is een hobbyproject en hoewel alles naar beste vermogen is gemaakt, kunnen fouten voorkomen. Gebruik van het reserveringssysteem via deze app is op eigen risico.\n\nSuggesties, bugs of andere feedback kunnen worden ",
   "disclaimerDialogText4": "gemaild",
   "disclaimerDialogText5": " of als 'issue' worden aangekaart bij onze ",
   "disclaimerDialogText6": "GitHub repository",
