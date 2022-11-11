@@ -21,6 +21,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         (SettingsFavouriteSelectionChangedEvent event,
                 Emitter<SettingsState> emit) =>
             emit(_handleFavouriteSelectionChangedEvent(event)));
+    on<SettingsAllRoomsSelectionChangedEvent>(
+        (SettingsAllRoomsSelectionChangedEvent event,
+                Emitter<SettingsState> emit) =>
+            emit(_handleAllRoomsSelectionChangedEvent()));
     on<SettingsSaveEvent>(
         (SettingsSaveEvent event, Emitter<SettingsState> emit) =>
             _handleSettingsSaveEvent());
@@ -61,6 +65,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       selectedRooms: currentState.selectedRooms,
       favouriteRoom: event.room,
     );
+  }
+
+  SettingsState _handleAllRoomsSelectionChangedEvent() {
+    final SettingsReadyState currentState = (state as SettingsReadyState);
+    final Iterable<String> currentSelectedRooms = currentState.selectedRooms;
+    if (currentSelectedRooms.length == Rooms.all.length) {
+      return currentState.copyWith(selectedRooms: <String>[]);
+    } else {
+      return currentState.copyWith(selectedRooms: Rooms.all);
+    }
   }
 
   void _handleSettingsSaveEvent() {

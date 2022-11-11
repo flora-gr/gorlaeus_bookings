@@ -49,6 +49,8 @@
   "timeBlockInformation": " van {timeBlock}",
   "settingsPageTitle": "Instellingen",
   "selectRoomsTitle": "Selecteer zalen",
+  "selectAll": "Alles selecteren",
+  "deselectAll": "Alles deselecteren",
   "selectRoomsInfoI": "Geselecteerde zalen worden getoond in het \"Reserveringsoverzicht\" en kunnen worden gesuggereerd bij \"Zoek nu een beschikbare zaal\".",
   "favouriteRoomTitle": "Favoriete zaal",
   "favouriteRoomCannotDeselect": "Je kan je favoriete zaal niet deselecteren.",

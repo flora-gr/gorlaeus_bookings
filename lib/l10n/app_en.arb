@@ -49,6 +49,8 @@
   "timeBlockInformation": " from {timeBlock}",
   "settingsPageTitle": "Settings",
   "selectRoomsTitle": "Select rooms",
+  "selectAll": "Select all",
+  "deselectAll": "Deselect all",
   "selectRoomsInfoI": "Selected rooms will be shown in the \"Booking overview\", and will be suggested in \"Find an available room now\".",
   "favouriteRoomTitle": "Favourite room",
   "favouriteRoomCannotDeselect": "You can\"t deselect your favourite room.",
