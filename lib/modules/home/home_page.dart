@@ -249,14 +249,16 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Icon(Icons.check_box_outlined),
-            Padding(
-              padding: Styles.horizontalPadding8,
-              child: Text(
-                AppLocalizations.of(context).adjustSettingsButton,
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+            Flexible(
+              child: Padding(
+                padding: Styles.horizontalPadding8,
+                child: Text(
+                  AppLocalizations.of(context).adjustSettingsButton,
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                ),
               ),
             ),
           ],
