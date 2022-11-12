@@ -87,9 +87,24 @@ class _SettingsPageState extends State<SettingsPage> {
     final Iterable<String> secondHalfOfRooms =
         Rooms.all.toList().getRange(halfRoomCount, Rooms.all.length);
     return <Widget>[
-      _buildHeaderWithInfoI(
-        title: AppLocalizations.of(context).selectRoomsTitle,
-        dialogText: AppLocalizations.of(context).selectRoomsInfoI,
+      OverflowBar(
+        alignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          _buildHeaderWithInfoI(
+            title: AppLocalizations.of(context).selectRoomsTitle,
+            dialogText: AppLocalizations.of(context).selectRoomsInfoI,
+          ),
+          OutlinedButton(
+            onPressed: () => _bloc.add(
+              const SettingsAllRoomsSelectionChangedEvent(),
+            ),
+            child: Text(
+              state.selectedRooms.length == Rooms.all.length
+                  ? AppLocalizations.of(context).deselectAll
+                  : AppLocalizations.of(context).selectAll,
+            ),
+          ),
+        ],
       ),
       Padding(
         padding: Styles.topPadding12,
@@ -246,6 +261,7 @@ class _SettingsPageState extends State<SettingsPage> {
     required String dialogText,
   }) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text(
           title,

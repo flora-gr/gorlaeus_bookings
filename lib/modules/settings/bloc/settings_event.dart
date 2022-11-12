@@ -35,6 +35,13 @@ class SettingsFavouriteSelectionChangedEvent extends SettingsEvent {
   List<Object?> get props => <Object?>[room];
 }
 
+class SettingsAllRoomsSelectionChangedEvent extends SettingsEvent {
+  const SettingsAllRoomsSelectionChangedEvent();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
+
 class SettingsSaveEvent extends SettingsEvent {
   const SettingsSaveEvent();
 
