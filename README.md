@@ -1,3 +1,5 @@
+<img align="right" src="resources/app-icon.png" alt="Gorlaeus Bookings" height="80"/>
+
 # Gorlaeus Bookings
 
 An app for viewing lecture rooms availability in the Gorlaeus building of Leiden University.
