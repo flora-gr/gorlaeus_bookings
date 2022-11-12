@@ -1,5 +1,5 @@
 name: gorlaeus_bookings
-description: An app for booking lecture rooms in the Gorlaeus building of Leiden University.
+description: An app for viewing lecture rooms availability in the Gorlaeus building of Leiden University.
 publish_to: 'none'
 
 version: 1.5.0+10
