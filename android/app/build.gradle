@@ -70,6 +70,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'nl.flora_gr.gorlaeus_bookings'
 }
 
 flutter {

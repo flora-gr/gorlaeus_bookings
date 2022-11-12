@@ -124,6 +124,7 @@ class _GetFreeRoomNowWidgetState extends State<GetFreeRoomNowWidget> {
                   state,
                   hasDataFetchedText: hasDataFetchedText,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
