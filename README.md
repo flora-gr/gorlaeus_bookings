@@ -1,4 +1,4 @@
-<img align="right" src="resources/app-icon.png" alt="Gorlaeus Bookings" height="80"/>
+<img align="right" src="resources/app-icon.png" alt="Gorlaeus Bookings" height="65"/>
 
 # Gorlaeus Bookings
 
