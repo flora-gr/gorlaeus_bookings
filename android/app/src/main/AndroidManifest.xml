@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gorlaeus_bookings">
+    package="nl.flora_gr.gorlaeus_bookings">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
