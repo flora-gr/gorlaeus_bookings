@@ -89,11 +89,20 @@ class _BookingOverviewPageState extends State<BookingOverviewPage> {
   }
 
   Widget _buildEmptyOrErrorBody(BookingOverviewState state) {
-    return Padding(
-      padding: Styles.padding16,
+    return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          Padding(
+            padding: Styles.verticalPadding8,
+            child: Image.asset(
+              state is BookingOverviewEmptyState
+                  ? 'assets/images/empty.png'
+                  : 'assets/images/error.png',
+              height: 80,
+              color: Theme.of(context).textTheme.headline6!.color,
+            ),
+          ),
           Text(
             state is BookingOverviewEmptyState
                 ? AppLocalizations.of(context).noBookingsFound
