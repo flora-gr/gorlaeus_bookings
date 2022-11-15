@@ -31,7 +31,7 @@
   "noFreeRoomFound": "Geen beschikbare zaal gevonden. Pas eventueel je zaalselectie aan bij \"Instellingen\".",
   "bookingOverviewPageTitle": "Reserveringen",
   "noBookingsFound": "Geen reserveringen gevonden. Pas eventueel je zaalselectie aan bij \"Instellingen\".",
-  "fetchingBookingsFailed": "Reserveringen konden niet worden opgehaald. Controleer je internetverbinding.",
+  "fetchingBookingsFailed": "Het is niet gelukt om reserveringen op te halen. Controleer je internetverbinding.",
   "bookingsOn": "Reserveringen op {date}",
   "notLectureRoom": "\n*Geen collegezaal",
   "retryButton": "Opnieuw proberen",
