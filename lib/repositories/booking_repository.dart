@@ -14,9 +14,9 @@ import 'package:http/http.dart';
 class BookingRepository {
   const BookingRepository();
 
-  static const String _building1 = 'GORLB+GORLB - Gorlaeus Building';
-  static const String _building2 = 'GORL+GORL - Gorlaeus Lecture Hall';
-  static const String _building3 = 'HUYGENS+HUYGENS - Huygens';
+  static const String building1 = 'GORLB+GORLB - Gorlaeus Building';
+  static const String building2 = 'GORL+GORL - Gorlaeus Lecture Hall';
+  static const String building3 = 'HUYGENS+HUYGENS - Huygens';
 
   Future<List<BookingEntry>?> getBookings(DateTime date) async {
     final List<String> hiddenRooms =
@@ -25,11 +25,11 @@ class BookingRepository {
     final List<Future<List<BookingEntry>?>> bookingTasks =
         <Future<List<BookingEntry>?>>[
       if (Rooms.building1.any((String room) => !hiddenRooms.contains(room)))
-        _getBookings(date, _building1),
+        getBookingsForBuilding(date, building1),
       if (Rooms.building2.any((String room) => !hiddenRooms.contains(room)))
-        _getBookings(date, _building2),
+        getBookingsForBuilding(date, building2),
       if (Rooms.building3.any((String room) => !hiddenRooms.contains(room)))
-        _getBookings(date, _building3)
+        getBookingsForBuilding(date, building3)
     ];
 
     if (bookingTasks.isEmpty) {
@@ -52,7 +52,7 @@ class BookingRepository {
     }
   }
 
-  Future<List<BookingEntry>?> _getBookings(
+  Future<List<BookingEntry>?> getBookingsForBuilding(
     DateTime date,
     String building,
   ) async {
@@ -79,7 +79,7 @@ class BookingRepository {
         },
       ).timeout(const Duration(seconds: 30));
       if (response.statusCode == 200) {
-        return _mapResponse(response);
+        return mapResponse(response.body);
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -88,10 +88,10 @@ class BookingRepository {
     return null;
   }
 
-  List<BookingEntry> _mapResponse(Response response) {
+  List<BookingEntry> mapResponse(String responseBody) {
     final List<BookingEntry> listOfBookings = <BookingEntry>[];
 
-    final List<dom.Element> rows = parse(response.body)
+    final List<dom.Element> rows = parse(responseBody)
         .getElementsByTagName('table')[0]
         .getElementsByTagName('tr');
 

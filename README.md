@@ -1,3 +1,7 @@
+## ***As of 6 Feb 2023, the zrs system of Leiden University will not be available any more.
+Therefore, the Gorlaeus Bookings app can not retrieve booking data and will be removed from the
+stores. A mode with demo data is implemented in this repository.***
+
 <img align="right" src="resources/app-icon.png" alt="Gorlaeus Bookings" height="65"/>
 
 # Gorlaeus Bookings
